@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "description": "Libraries and services that compose the web3.storage read pipeline",
+  "author": "Vasco Santos <santos.vasco10@gmail.com>",
+  "license": "Apache-2.0 OR MIT",
+  "scripts": {
+    "test": "run-s test:*",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "rm -rf node_modules pnpm-lock.yml packages/*/{pnpm-lock.yml,.next,out,coverage,.nyc_output,worker,dist,node_modules}"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.*": "prettier --ignore-unknown --write"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "lint-staged": "^12.3.7",
+    "npm-run-all": "^4.1.5",
+    "prettier": "2.5.1",
+    "rimraf": "^3.0.2",
+    "simple-git-hooks": "^2.7.0"
+  },
+  "resolutions": {
+    "prettier": "2.5.1"
+  },
+  "engines": {
+    "node": "16.x"
+  }
+}
