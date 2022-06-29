@@ -1,0 +1,3 @@
+export const TIMEOUT_CODE = 'TIMEOUT'
+export const ABORT_ON_END_CODE = 'ABORT_ON_END'
+export const DEFAULT_REQUEST_TIMEOUT = 60000
