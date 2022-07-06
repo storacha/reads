@@ -1,16 +1,33 @@
 import { test } from './utils/setup.js'
+import { addFixtures } from './utils/fixtures.js'
+import { GenericContainer, Wait } from 'testcontainers'
 import pDefer from 'p-defer'
 import pSettle from 'p-settle'
 
 import { createGatewayRacer } from '../lib/index.js'
 import { ABORT_CODE, TIMEOUT_CODE } from '../lib/constants.js'
 
-test.before((t) => {
+test.before(async (t) => {
+  const container = await new GenericContainer('ipfs/go-ipfs:v0.13.0')
+    .withExposedPorts(
+      8080, 5001
+    )
+    .withWaitStrategy(Wait.forLogMessage('Daemon is ready'))
+    .start()
+
+  // Add fixtures
+  await addFixtures(container.getMappedPort(5001))
+
   t.context = {
+    container,
     gwRacer: createGatewayRacer(
-      ['http://127.0.0.1:9081', 'http://localhost:9082', 'http://localhost:9083']
+      [`http://127.0.0.1:${container.getMappedPort(8080)}`, 'http://localhost:9082', 'http://localhost:9083']
     )
   }
+})
+
+test.after(async (t) => {
+  await t.context.container.stop()
 })
 
 test('Gets response from cid only', async (t) => {
