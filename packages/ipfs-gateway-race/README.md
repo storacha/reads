@@ -27,7 +27,7 @@ interface IpfsGatewayRaceGetOptions {
   pathname?: string
   headers?: Headers
   noAbortRequestsOnWinner?: boolean
-  onRaceEnd?: (gwRequests: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
+  onRaceEnd?: (gwResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
 }
 
 get(cid: string,  options: IpfsGatewayRaceGetOptions): Promise<Response>
