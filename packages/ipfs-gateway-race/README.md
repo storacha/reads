@@ -26,8 +26,8 @@ const gwRacer = createGatewayRacer(
 interface IpfsGatewayRaceGetOptions {
   pathname?: string
   headers?: Headers
-  notAbortRaceContestantsOnWinner?: boolean
-  onRaceEnd?: (gwRequests: GatewayRequests[], winnerResponse: GatewayResponse | undefined) => void
+  noAbortRequestsOnWinner?: boolean
+  onRaceEnd?: (gwRequests: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
 }
 
 get(cid: string,  options: IpfsGatewayRaceGetOptions): Promise<Response>

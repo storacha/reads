@@ -3,7 +3,7 @@ import pDefer from 'p-defer'
 import pSettle from 'p-settle'
 
 import { createGatewayRacer } from '../lib/index.js'
-import { ABORT_ON_END_CODE, TIMEOUT_CODE } from '../lib/constants.js'
+import { ABORT_CODE, TIMEOUT_CODE } from '../lib/constants.js'
 
 test.before((t) => {
   t.context = {
@@ -52,7 +52,7 @@ test('Aborts other race contestants once there is a winner', async (t) => {
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
       t.is(responses.filter(r => r.value?.response).length, 1)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
-      t.is(responses.filter(r => r.value?.aborted && r.value?.reason === ABORT_ON_END_CODE).length, gwRequests.length - 1)
+      t.is(responses.filter(r => r.value?.aborted && r.value?.reason === ABORT_CODE).length, gwRequests.length - 1)
       defer.resolve()
     }
   })
@@ -76,10 +76,10 @@ test('Disables abort of other race contestants once there is a winner', async (t
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
       t.is(responses.filter(r => r.value?.response).length, gwRequests.length)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
-      t.is(responses.filter(r => r.value?.aborted && r.value?.reason === ABORT_ON_END_CODE).length, 0)
+      t.is(responses.filter(r => r.value?.aborted && r.value?.reason === ABORT_CODE).length, 0)
       defer.resolve()
     },
-    notAbortRaceContestantsOnWinner: true
+    noAbortRequestsOnWinner: true
   })
 
   t.is(response.status, 200)
@@ -106,7 +106,7 @@ test('A subset of gateways in the race can fail', async t => {
       t.is(responses.filter(r => r.value?.response.status === 200).length, gwRequests.length - 1)
       defer.resolve()
     },
-    notAbortRaceContestantsOnWinner: true
+    noAbortRequestsOnWinner: true
   })
 
   t.is(response.status, 200)
@@ -117,7 +117,8 @@ test('Can decrease race timeout to not have winner', async t => {
   const defer = pDefer()
   t.plan(6)
   const gwRacer = createGatewayRacer(
-    ['http://127.0.0.1:9081', 'http://localhost:9082', 'http://localhost:9083'],
+    // only race the slow one.
+    ['http://localhost:9082', 'http://localhost:9082'],
     { timeout: 10 }
   )
 
@@ -137,7 +138,7 @@ test('Can decrease race timeout to not have winner', async t => {
         t.is(responses.filter(r => r.value?.aborted && r.value?.reason === TIMEOUT_CODE).length, gwRequests.length)
         defer.resolve()
       },
-      notAbortRaceContestantsOnWinner: true
+      noAbortRequestsOnWinner: true
     })
   })
 

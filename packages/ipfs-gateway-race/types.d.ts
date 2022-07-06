@@ -5,8 +5,8 @@ export interface IpfsGatewayRacerOptions {
 export interface IpfsGatewayRaceGetOptions {
   pathname?: string
   headers?: Headers
-  notAbortRaceContestantsOnWinner?: boolean
-  onRaceEnd?: (gwRequests: GatewayRequests[], winnerResponse: GatewayResponse | undefined) => void
+  noAbortRequestsOnWinner?: boolean
+  onRaceEnd?: (gatewayResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
 }
 
 // Gateway Race Responses
@@ -25,6 +25,4 @@ interface GatewayResponseFailure {
 
 export type GatewayResponse = GatewayResponseFailure | GatewayResponseSuccess
 
-// Gateway requests
-
-export type GatewayRequests = Promise<GatewayResponse>
+export type GatewayResponsePromise = Promise<GatewayResponse>

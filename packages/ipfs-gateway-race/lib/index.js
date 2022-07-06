@@ -10,7 +10,7 @@ import {
 } from './errors.js'
 import {
   TIMEOUT_CODE,
-  ABORT_ON_END_CODE,
+  ABORT_CODE,
   DEFAULT_REQUEST_TIMEOUT
 } from './constants.js'
 
@@ -27,11 +27,11 @@ const nop = () => {}
 export class IpfsGatewayRacer {
   /**
    * @param {string[]} ipfsGateways
-   * @param {IpfsGatewayRacerOptions} options
+   * @param {IpfsGatewayRacerOptions} [options]
    */
-  constructor (ipfsGateways, options) {
+  constructor (ipfsGateways, options = {}) {
     this.ipfsGateways = ipfsGateways
-    this.timeout = options.timeout
+    this.timeout = options.timeout || DEFAULT_REQUEST_TIMEOUT
   }
 
   /**
@@ -42,12 +42,12 @@ export class IpfsGatewayRacer {
   async get (cid, {
     pathname = '',
     headers = new Headers(),
-    notAbortRaceContestantsOnWinner = false,
+    noAbortRequestsOnWinner = false,
     onRaceEnd = nop
   } = {}
   ) {
     const raceWinnerController = new AbortController()
-    const gatewayReqs = this.ipfsGateways.map((gwUrl) =>
+    const gatewayResponsePromises = this.ipfsGateways.map((gwUrl) =>
       gatewayFetch(gwUrl, cid, pathname, {
         headers,
         timeout: this.timeout,
@@ -58,13 +58,13 @@ export class IpfsGatewayRacer {
     /** @type {GatewayResponse | undefined} */
     let winnerGwResponse
     try {
-      winnerGwResponse = await pAny(gatewayReqs, {
+      winnerGwResponse = await pAny(gatewayResponsePromises, {
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
         filter: (res) => res.response?.ok
       })
 
       // Abort race contestants once race has a winner
-      if (!notAbortRaceContestantsOnWinner) {
+      if (!noAbortRequestsOnWinner) {
         raceWinnerController.abort()
       }
 
@@ -79,7 +79,7 @@ export class IpfsGatewayRacer {
     } catch (err) {
       /** @type {PromiseResultGatewayResponseFailure[]} */
       // @ts-ignore Always failure given p-any throws
-      const responses = await pSettle(gatewayReqs)
+      const responses = await pSettle(gatewayResponsePromises)
 
       // Return the error response from gateway, error is not from nft.storage Gateway
       // @ts-ignore FilterError lacks proper types
@@ -104,7 +104,7 @@ export class IpfsGatewayRacer {
       throw err
     } finally {
       // Provide race data upstream
-      onRaceEnd(gatewayReqs, winnerGwResponse)
+      onRaceEnd(gatewayResponsePromises, winnerGwResponse)
     }
   }
 }
@@ -142,13 +142,12 @@ async function gatewayFetch (
   pathname,
   { headers, timeout = 60000, signal } = {}
 ) {
-  const ipfsUrl = new URL('ipfs', gwUrl)
   const timeoutController = new AbortController()
   const timer = setTimeout(() => timeoutController.abort(), timeout)
 
   let response
   try {
-    response = await fetch(`${ipfsUrl.toString()}/${cid}${pathname}`, {
+    response = await fetch(new URL(`ipfs/${cid}${pathname}`, gwUrl), {
       // Combine timeout signal with done signal
       signal: signal
         ? anySignal([
@@ -169,7 +168,7 @@ async function gatewayFetch (
       return {
         url: gwUrl,
         aborted: true,
-        reason: ABORT_ON_END_CODE
+        reason: ABORT_CODE
       }
     }
     throw error
