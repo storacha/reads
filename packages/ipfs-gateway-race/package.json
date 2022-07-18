@@ -16,7 +16,7 @@
     "prepare": "npm run build",
     "build": "npm run build:js && npm run build:types",
     "build:js": "ipjs build --main && npm run build:copy",
-    "build:copy": "cp -a tsconfig.json lib *.ts dist/",
+    "build:copy": "cp -a tsconfig.json lib *.ts dist/ && cd dist && clean-package --remove scripts",
     "build:types": "npm run build:copy && cd dist && tsc --build && cp -R types ..",
     "test": "npm run test:setup && npm-run-all -p -r mock:ipfs.io mock:cf-ipfs.com test:node",
     "test:node": "ava --verbose 'test/*.spec.js'",
@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "ava": "^3.15.0",
+    "clean-package": "^2.1.1",
     "ipfs-http-client": "^55.0.0",
     "ipfs-utils": "^9.0.4",
     "ipjs": "^5.2.0",
