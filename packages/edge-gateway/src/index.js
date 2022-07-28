@@ -10,7 +10,7 @@ import { errorHandler } from './error-handler.js'
 import { envAll } from './env.js'
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
-/** @typedef {{ waitUntil(p: Promise<any>): void }} Ctx */
+/** @typedef {ExecutionContext} Ctx */
 
 const router = Router()
 

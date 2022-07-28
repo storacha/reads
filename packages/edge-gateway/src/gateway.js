@@ -33,7 +33,7 @@ export async function gatewayGet(request, env, ctx) {
   }
 
   const reqUrl = new URL(request.url)
-  const cid = getCidFromSubdomainUrl(reqUrl)
+  const cid = await getCidFromSubdomainUrl(reqUrl)
   const pathname = reqUrl.pathname
 
   // Validation layer - root CID validation
