@@ -28,7 +28,7 @@ export interface EnvTransformed {
   IPNS_GATEWAY_HOSTNAME: string
   ipfsGateways: Array<string>
   sentry?: Toucan
-  log?: Logging
+  log: Logging
   gwRacer: IpfsGatewayRacer
 }
 

@@ -1,7 +1,6 @@
 /* global BRANCH, VERSION, COMMITHASH, SENTRY_RELEASE */
 import Toucan from 'toucan-js'
 
-// @ts-ignore needs to be shipped for types
 import { Logging } from '@web3-storage/worker-utils/loki'
 import { createGatewayRacer } from 'ipfs-gateway-race'
 
@@ -35,9 +34,10 @@ export function envAll(request, env, ctx) {
   })
 
   env.log = new Logging(request, ctx, {
+    // @ts-ignore TODO: url should be optional together with token
     url: env.LOKI_URL,
     token: env.LOKI_TOKEN,
-    debug: env.DEBUG,
+    debug: Boolean(env.DEBUG),
     version: env.VERSION,
     commit: env.COMMITHASH,
     branch: env.BRANCH,
