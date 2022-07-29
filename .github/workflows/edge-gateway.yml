@@ -13,6 +13,19 @@ on:
       - '.github/workflows/edge-gateway.yml'
       - 'pnpm-lock.yaml'
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: Test
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.32.x
+      - uses: actions/setup-node@v2
+      - run: pnpm install
+      - run: pnpm build:edge-gateway
+      - name: Lint
+        run: pnpm lint
   test:
     runs-on: ubuntu-latest
     name: Test

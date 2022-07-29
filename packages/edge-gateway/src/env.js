@@ -16,7 +16,7 @@ import pkg from '../package.json'
  * @param {Env} env
  * @param {Ctx} ctx
  */
-export function envAll(request, env, ctx) {
+export function envAll (request, env, ctx) {
   env.REQUEST_TIMEOUT = env.REQUEST_TIMEOUT || 20000
   env.IPFS_GATEWAY_HOSTNAME = env.GATEWAY_HOSTNAME
   env.IPNS_GATEWAY_HOSTNAME = env.GATEWAY_HOSTNAME.replace('ipfs', 'ipns')
@@ -30,7 +30,7 @@ export function envAll(request, env, ctx) {
   env.sentry = getSentry(request, env, ctx)
   env.ipfsGateways = JSON.parse(env.IPFS_GATEWAYS)
   env.gwRacer = createGatewayRacer(env.ipfsGateways, {
-    timeout: env.REQUEST_TIMEOUT,
+    timeout: env.REQUEST_TIMEOUT
   })
   env.startTime = Date.now()
 
@@ -44,7 +44,7 @@ export function envAll(request, env, ctx) {
     branch: env.BRANCH,
     worker: 'edge-gateway',
     env: env.ENV,
-    sentry: env.sentry,
+    sentry: env.sentry
   })
   env.log.time('request')
 }
@@ -56,7 +56,7 @@ export function envAll(request, env, ctx) {
  * @param {Env} env
  * @param {Ctx} ctx
  */
-function getSentry(request, env, ctx) {
+function getSentry (request, env, ctx) {
   if (!env.SENTRY_DSN) {
     return
   }
@@ -74,10 +74,10 @@ function getSentry(request, env, ctx) {
       iteratee: (frame) => ({
         ...frame,
         // @ts-ignore
-        filename: frame.filename.substring(1),
-      }),
+        filename: frame.filename.substring(1)
+      })
     },
     release: env.SENTRY_RELEASE,
-    pkg,
+    pkg
   })
 }

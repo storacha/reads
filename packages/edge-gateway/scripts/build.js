@@ -10,7 +10,7 @@ const pkg = JSON.parse(
   fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8')
 )
 
-export async function buildCmd(opts) {
+export async function buildCmd (opts) {
   const sentryRelease = `edge-gateway@${pkg.version}-${opts.env}+${git.short(
     __dirname
   )}`
@@ -27,10 +27,10 @@ export async function buildCmd(opts) {
       VERSION: JSON.stringify(pkg.version),
       COMMITHASH: JSON.stringify(git.long(__dirname)),
       BRANCH: JSON.stringify(git.branch(__dirname)),
-      global: 'globalThis',
+      global: 'globalThis'
     },
     minify: opts.env !== 'dev',
-    sourcemap: 'external',
+    sourcemap: 'external'
   })
 
   // Sentry release and sourcemap upload
@@ -39,22 +39,22 @@ export async function buildCmd(opts) {
       authToken: process.env.SENTRY_TOKEN,
       org: 'protocol-labs-it',
       project: 'edge-gateway',
-      dist: git.short(__dirname),
+      dist: git.short(__dirname)
     })
 
     await cli.releases.new(sentryRelease)
     await cli.releases.setCommits(sentryRelease, {
       auto: true,
       ignoreEmpty: true,
-      ignoreMissing: true,
+      ignoreMissing: true
     })
     await cli.releases.uploadSourceMaps(sentryRelease, {
       include: [path.join(__dirname, '..', 'dist')],
-      ext: ['map', 'mjs'],
+      ext: ['map', 'mjs']
     })
     await cli.releases.finalize(sentryRelease)
     await cli.releases.newDeploy(sentryRelease, {
-      env: opts.env,
+      env: opts.env
     })
   }
 }

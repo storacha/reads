@@ -9,7 +9,7 @@ test.before(async (t) => {
     .withExposedPorts(
       {
         container: 8080,
-        host: 9081,
+        host: 9081
       },
       5001
     )
@@ -21,14 +21,14 @@ test.before(async (t) => {
 
   t.context = {
     container,
-    mf: getMiniflare(),
+    mf: getMiniflare()
   }
 })
 
 test.beforeEach((t) => {
   t.context = {
     ...t.context,
-    mf: getMiniflare(),
+    mf: getMiniflare()
   }
 })
 
@@ -93,7 +93,7 @@ test('Only tracks analytics for race events', async (t) => {
     'https://bafybeic2hr75ukgwhnasdl3sucxyfedfyp3dijq3oakzx6o24urcs4eige.ipfs.localhost:8787/'
 
   const response = await mf.dispatchFetch(url, {
-    headers: { 'Cache-Control': 'only-if-cached' },
+    headers: { 'Cache-Control': 'only-if-cached' }
   })
   await response.waitUntil()
 

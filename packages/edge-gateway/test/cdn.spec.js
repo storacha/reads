@@ -10,7 +10,7 @@ test.before(async (t) => {
     .withExposedPorts(
       {
         container: 8080,
-        host: 9081,
+        host: 9081
       },
       5001
     )
@@ -22,14 +22,14 @@ test.before(async (t) => {
 
   t.context = {
     container,
-    mf: getMiniflare(),
+    mf: getMiniflare()
   }
 })
 
 test.beforeEach((t) => {
   t.context = {
     ...t.context,
-    mf: getMiniflare(),
+    mf: getMiniflare()
   }
 })
 
@@ -93,7 +93,7 @@ test('Fail to resolve when only-if-cached and content is not cached', async (t) 
   const { mf } = t.context
 
   const response = await mf.dispatchFetch(url, {
-    headers: { 'Cache-Control': 'only-if-cached' },
+    headers: { 'Cache-Control': 'only-if-cached' }
   })
   await response.waitUntil()
   t.is(response.ok, false)
@@ -107,7 +107,7 @@ test('Get content from cache when existing and only-if-cached cache control is p
   const content = 'Hello perma cache!'
 
   const response = await mf.dispatchFetch(url, {
-    headers: { 'Cache-Control': 'only-if-cached' },
+    headers: { 'Cache-Control': 'only-if-cached' }
   })
   await response.waitUntil()
   t.is(await response.text(), content)
@@ -134,7 +134,7 @@ test('Should not get from cache if no-cache cache control header is provided', a
   try {
     await mf.dispatchFetch(url, {
       headers: { 'Cache-Control': 'no-cache' },
-      signal: controller.signal,
+      signal: controller.signal
     })
     throw new Error('should not resolve')
   } catch (err) {
