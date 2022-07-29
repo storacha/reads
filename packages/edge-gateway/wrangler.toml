@@ -44,6 +44,21 @@ type = "service"
 service = "nftstorage-link-api-production"
 environment = "production"
 
+[[env.production.unsafe.bindings]]
+type = "analytics_engine"
+dataset = "PUBLIC_RACE_WINNER_PRODUCTION"
+name = "PUBLIC_RACE_WINNER"
+
+[[env.production.unsafe.bindings]]
+type = "analytics_engine"
+dataset = "PUBLIC_RACE_TTFB_PRODUCTION"
+name = "PUBLIC_RACE_TTFB"
+
+[[env.production.unsafe.bindings]]
+type = "analytics_engine"
+dataset = "PUBLIC_RACE_STATUS_CODE_PRODUCTION"
+name = "PUBLIC_RACE_STATUS_CODE"
+
 # Staging!
 [env.staging]
 # name = "gateway-nft-storage-staging"
@@ -70,6 +85,21 @@ binding = "API"
 type = "service"
 service = "nftstorage-link-api-staging"
 environment = "production"
+
+[[env.staging.unsafe.bindings]]
+type = "analytics_engine"
+dataset = "PUBLIC_RACE_WINNER_STAGING"
+name = "PUBLIC_RACE_WINNER"
+
+[[env.staging.unsafe.bindings]]
+type = "analytics_engine"
+dataset = "PUBLIC_RACE_TTFB_STAGING"
+name = "PUBLIC_RACE_TTFB"
+
+[[env.staging.unsafe.bindings]]
+type = "analytics_engine"
+dataset = "PUBLIC_RACE_STATUS_CODE_STAGING"
+name = "PUBLIC_RACE_STATUS_CODE"
 
 # Test!
 [env.test]

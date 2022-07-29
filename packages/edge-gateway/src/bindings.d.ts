@@ -4,6 +4,16 @@ import { IpfsGatewayRacer } from 'ipfs-gateway-race'
 
 export {}
 
+// CF Analytics Engine types not available yet
+export interface AnalyticsEngine {
+  writeDataPoint(event: AnalyticsEngineEvent): void
+}
+
+export interface AnalyticsEngineEvent {
+  readonly doubles?: number[]
+  readonly blobs?: (ArrayBuffer | string | null)[]
+}
+
 export interface EnvInput {
   ENV: string
   DEBUG: string
@@ -16,6 +26,9 @@ export interface EnvInput {
   LOKI_TOKEN?: string
   DENYLIST: KVNamespace
   API: Fetcher
+  PUBLIC_RACE_WINNER: AnalyticsEngine
+  PUBLIC_RACE_TTFB: AnalyticsEngine
+  PUBLIC_RACE_STATUS_CODE: AnalyticsEngine
 }
 
 export interface EnvTransformed {
@@ -30,6 +43,7 @@ export interface EnvTransformed {
   sentry?: Toucan
   log: Logging
   gwRacer: IpfsGatewayRacer
+  startTime: number
 }
 
 export type Env = EnvInput & EnvTransformed

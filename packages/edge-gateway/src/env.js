@@ -32,6 +32,7 @@ export function envAll(request, env, ctx) {
   env.gwRacer = createGatewayRacer(env.ipfsGateways, {
     timeout: env.REQUEST_TIMEOUT,
   })
+  env.startTime = Date.now()
 
   env.log = new Logging(request, ctx, {
     // @ts-ignore TODO: url should be optional together with token
