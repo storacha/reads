@@ -9,7 +9,7 @@ import { InvalidUrlError } from '../errors.js'
  *
  * @param {URL} url
  */
-export async function getCidFromSubdomainUrl(url) {
+export async function getCidFromSubdomainUrl (url) {
   // Replace "ipfs-staging" by "ipfs" if needed
   const host = url.hostname.replace('ipfs-staging', 'ipfs')
   const splitHost = host.split('.ipfs.')
@@ -33,7 +33,7 @@ export async function getCidFromSubdomainUrl(url) {
  *
  * @param {string} cid
  */
-export async function normalizeCid(cid) {
+export async function normalizeCid (cid) {
   const baseDecoder = await getMultibaseDecoder(cid)
   const c = CID.parse(cid, baseDecoder)
   return c.toV1().toString()
@@ -44,10 +44,10 @@ export async function normalizeCid(cid) {
  *
  * @param {string} cid
  */
-async function getMultibaseDecoder(cid) {
+async function getMultibaseDecoder (cid) {
   const multibaseCodecs = Object.values(bases)
   const basicBases = new Multibases({
-    bases: multibaseCodecs,
+    bases: multibaseCodecs
   })
 
   const multibasePrefix = cid[0]

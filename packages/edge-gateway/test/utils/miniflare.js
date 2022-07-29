@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { Miniflare } from 'miniflare'
 
-export function getMiniflare() {
+export function getMiniflare () {
   let envPath = path.join(process.cwd(), '../../.env')
   if (!fs.statSync(envPath, { throwIfNoEntry: false })) {
     // @ts-ignore
@@ -24,21 +24,21 @@ export function getMiniflare() {
     mounts: {
       api: {
         scriptPath: './test/utils/scripts/api.js',
-        modules: true,
-      },
+        modules: true
+      }
     },
     serviceBindings: {
-      API: 'api',
+      API: 'api'
     },
     bindings: {
       PUBLIC_RACE_WINNER: createAnalyticsEngine(),
       PUBLIC_RACE_TTFB: createAnalyticsEngine(),
-      PUBLIC_RACE_STATUS_CODE: createAnalyticsEngine(),
-    },
+      PUBLIC_RACE_STATUS_CODE: createAnalyticsEngine()
+    }
   })
 }
 
-export function createAnalyticsEngine() {
+export function createAnalyticsEngine () {
   /** @type {Map<string,import('../../src/bindings').AnalyticsEngineEvent>} */
   const store = new Map()
 
@@ -51,6 +51,6 @@ export function createAnalyticsEngine() {
         event
       )
     },
-    _store: store,
+    _store: store
   }
 }

@@ -14,7 +14,7 @@ import { TimeoutError } from './errors.js'
 import {
   CF_CACHE_MAX_OBJECT_SIZE,
   RESOLUTION_LAYERS,
-  RESOLUTION_IDENTIFIERS,
+  RESOLUTION_IDENTIFIERS
 } from './constants.js'
 
 /**
@@ -37,7 +37,7 @@ import {
  * @param {Env} env
  * @param {import('./index').Ctx} ctx
  */
-export async function gatewayGet(request, env, ctx) {
+export async function gatewayGet (request, env, ctx) {
   // Redirect to dweb.link if ipns request
   // TODO: integrate with w3name
   if (request.url.includes(env.IPNS_GATEWAY_HOSTNAME)) {
@@ -85,7 +85,7 @@ export async function gatewayGet(request, env, ctx) {
       ctx.waitUntil(
         reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url)
       )
-    },
+    }
   })
 
   const winnerUrl = await winnerUrlPromise.promise
@@ -122,7 +122,7 @@ export async function gatewayGet(request, env, ctx) {
  * @param {Cache} cache
  * @return {Promise<CdnResponse | undefined>}
  */
-async function getFromCdn(request, env, cache) {
+async function getFromCdn (request, env, cache) {
   // Should skip cache if instructed by headers
   if ((request.headers.get('Cache-Control') || '').includes('no-cache')) {
     return undefined
@@ -133,12 +133,12 @@ async function getFromCdn(request, env, cache) {
       // Request from cache API
       getFromCacheZone(request, cache),
       // Get from API Perma Cache Binding.
-      getFromPermaCache(request, env),
+      getFromPermaCache(request, env)
     ]
 
     // @ts-ignore p-any Promise types differ from CF promise types
     const res = await pAny(cdnRequests, {
-      filter: (/** @type {CdnResponse} */ res) => !!res,
+      filter: (/** @type {CdnResponse} */ res) => !!res
     })
     return res
   } catch (err) {
@@ -157,7 +157,7 @@ async function getFromCdn(request, env, cache) {
  * @param {Cache} cache
  * @return {Promise<CdnResponse | undefined>}
  */
-async function getFromCacheZone(request, cache) {
+async function getFromCacheZone (request, cache) {
   const response = await cache.match(request)
 
   if (!response) {
@@ -166,7 +166,7 @@ async function getFromCacheZone(request, cache) {
 
   return {
     response,
-    resolutionIdentifier: RESOLUTION_IDENTIFIERS.CACHE_ZONE,
+    resolutionIdentifier: RESOLUTION_IDENTIFIERS.CACHE_ZONE
   }
 }
 
@@ -177,13 +177,13 @@ async function getFromCacheZone(request, cache) {
  * @param {Env} env
  * @return {Promise<CdnResponse | undefined>}
  */
-async function getFromPermaCache(request, env) {
+async function getFromPermaCache (request, env) {
   const response = await env.API.fetch(
     `${env.EDGE_GATEWAY_API_URL}/perma-cache/${encodeURIComponent(
       request.url
     )}`,
     {
-      headers: request.headers,
+      headers: request.headers
     }
   )
 
@@ -193,7 +193,7 @@ async function getFromPermaCache(request, env) {
 
   return {
     response,
-    resolutionIdentifier: RESOLUTION_IDENTIFIERS.PERMA_CACHE,
+    resolutionIdentifier: RESOLUTION_IDENTIFIERS.PERMA_CACHE
   }
 }
 
@@ -203,7 +203,7 @@ async function getFromPermaCache(request, env) {
  * @param {KVNamespace} datastore
  * @param {string} cid
  */
-async function getFromDenyList(datastore, cid) {
+async function getFromDenyList (datastore, cid) {
   if (!datastore) {
     return undefined
   }
@@ -225,7 +225,7 @@ async function getFromDenyList(datastore, cid) {
  * @param {Response} response
  * @param {Cache} cache
  */
-async function putToCache(request, response, cache) {
+async function putToCache (request, response, cache) {
   const contentLengthMb = Number(response.headers.get('content-length'))
 
   // Cache request in Cloudflare CDN if smaller than CF_CACHE_MAX_OBJECT_SIZE
@@ -240,13 +240,13 @@ async function putToCache(request, response, cache) {
  * @param {ResolutionLayer} resolutionLayer
  * @param {string} resolutionIdentifier
  */
-function getResponseWithCustomHeaders(
+function getResponseWithCustomHeaders (
   response,
   resolutionLayer,
   resolutionIdentifier
 ) {
   const clonedResponse = new Response(response.body, {
-    headers: response.headers,
+    headers: response.headers
   })
 
   clonedResponse.headers.set('x-dotstorage-resolution-layer', resolutionLayer)
@@ -262,7 +262,7 @@ function getResponseWithCustomHeaders(
  * @param {GatewayResponsePromise[]} gatewayResponsePromises
  * @param {string | undefined} winnerUrl
  */
-async function reportRaceResults(env, gatewayResponsePromises, winnerUrl) {
+async function reportRaceResults (env, gatewayResponsePromises, winnerUrl) {
   if (!env.PUBLIC_RACE_WINNER) {
     env.log.warn('No bindings for PUBLIC_RACE_WINNER Analytics')
     return
@@ -278,7 +278,7 @@ async function reportRaceResults(env, gatewayResponsePromises, winnerUrl) {
 
       return {
         ...gwResponse,
-        duration: Date.now() - env.startTime,
+        duration: Date.now() - env.startTime
       }
     })
   )
@@ -287,7 +287,7 @@ async function reportRaceResults(env, gatewayResponsePromises, winnerUrl) {
   if (winnerUrl) {
     env.PUBLIC_RACE_WINNER.writeDataPoint({
       blobs: [winnerUrl],
-      doubles: [1],
+      doubles: [1]
     })
   }
 
@@ -299,14 +299,14 @@ async function reportRaceResults(env, gatewayResponsePromises, winnerUrl) {
     ) {
       env.PUBLIC_RACE_TTFB.writeDataPoint({
         blobs: [gwResponse.value?.url],
-        doubles: [gwResponse.value?.duration],
+        doubles: [gwResponse.value?.duration]
       })
     }
 
     // Track count for status code per gateway
     env.PUBLIC_RACE_STATUS_CODE.writeDataPoint({
       blobs: [gwResponse.value?.url, `${gwResponse.value?.response?.status}`],
-      doubles: [1],
+      doubles: [1]
     })
   })
 }

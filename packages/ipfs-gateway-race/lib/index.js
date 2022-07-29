@@ -8,7 +8,7 @@ import { NotFoundError, TimeoutError } from './errors.js'
 import {
   TIMEOUT_CODE,
   ABORT_CODE,
-  DEFAULT_REQUEST_TIMEOUT,
+  DEFAULT_REQUEST_TIMEOUT
 } from './constants.js'
 
 const nop = () => {}
@@ -27,7 +27,7 @@ export class IpfsGatewayRacer {
    * @param {string[]} ipfsGateways
    * @param {IpfsGatewayRacerOptions} [options]
    */
-  constructor(ipfsGateways, options = {}) {
+  constructor (ipfsGateways, options = {}) {
     this.ipfsGateways = ipfsGateways
     this.timeout = options.timeout || DEFAULT_REQUEST_TIMEOUT
   }
@@ -37,13 +37,13 @@ export class IpfsGatewayRacer {
    * @param {IpfsGatewayRaceGetOptions} [options]
    * @return {Promise<Response>}
    */
-  async get(
+  async get (
     cid,
     {
       pathname = '',
       headers = new Headers(),
       noAbortRequestsOnWinner = false,
-      onRaceEnd = nop,
+      onRaceEnd = nop
     } = {}
   ) {
     const raceWinnerController = new AbortController()
@@ -52,7 +52,7 @@ export class IpfsGatewayRacer {
       gatewayFetch(gwUrl, cid, pathname, {
         headers,
         timeout: this.timeout,
-        signal: raceWinnerController.signal,
+        signal: raceWinnerController.signal
       })
     )
 
@@ -61,7 +61,7 @@ export class IpfsGatewayRacer {
     try {
       winnerGwResponse = await pAny(gatewayResponsePromises, {
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
-        filter: (res) => res.response?.ok,
+        filter: (res) => res.response?.ok
       })
 
       // Abort race contestants once race has a winner
@@ -116,9 +116,9 @@ export class IpfsGatewayRacer {
  * @param {IpfsGatewayRacerOptions} [options]
  * @returns
  */
-export function createGatewayRacer(ipfsGateways, options = {}) {
+export function createGatewayRacer (ipfsGateways, options = {}) {
   return new IpfsGatewayRacer(ipfsGateways, {
-    timeout: options.timeout || DEFAULT_REQUEST_TIMEOUT,
+    timeout: options.timeout || DEFAULT_REQUEST_TIMEOUT
   })
 }
 
@@ -133,7 +133,7 @@ export function createGatewayRacer(ipfsGateways, options = {}) {
  * @param {number} [options.timeout]
  * @param {AbortSignal} [options.signal]
  */
-async function gatewayFetch(
+async function gatewayFetch (
   gwUrl,
   cid,
   pathname,
@@ -149,20 +149,20 @@ async function gatewayFetch(
       signal: signal
         ? anySignal([timeoutController.signal, signal])
         : timeoutController.signal,
-      headers,
+      headers
     })
   } catch (error) {
     if (timeoutController.signal.aborted) {
       return {
         url: gwUrl,
         aborted: true,
-        reason: TIMEOUT_CODE,
+        reason: TIMEOUT_CODE
       }
     } else if (signal?.aborted) {
       return {
         url: gwUrl,
         aborted: true,
-        reason: ABORT_CODE,
+        reason: ABORT_CODE
       }
     }
     throw error
@@ -173,7 +173,7 @@ async function gatewayFetch(
   /** @type {GatewayResponse} */
   const gwResponse = {
     response,
-    url: gwUrl,
+    url: gwUrl
   }
   return gwResponse
 }

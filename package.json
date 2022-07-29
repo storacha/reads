@@ -8,6 +8,8 @@
   "license": "Apache-2.0 OR MIT",
   "scripts": {
     "lint": "run-s lint:*",
+    "lint:edge-gateway": "pnpm --filter edge-gateway lint",
+    "lint:ipfs-gateway-race": "pnpm --filter ipfs-gateway-race lint",
     "build": "run-s build:*",
     "build:edge-gateway": "pnpm --filter edge-gateway build",
     "build:ipfs-gateway-race": "pnpm --filter ipfs-gateway-race build",
@@ -22,23 +24,14 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.*": "prettier --ignore-unknown --write"
-  },
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "semi": false,
-    "singleQuote": true
+    "*.*": "standard"
   },
   "devDependencies": {
     "lint-staged": "^12.3.7",
     "npm-run-all": "^4.1.5",
-    "prettier": "2.5.1",
     "rimraf": "^3.0.2",
-    "simple-git-hooks": "^2.7.0"
-  },
-  "resolutions": {
-    "prettier": "2.5.1"
+    "simple-git-hooks": "^2.7.0",
+    "wrangler": "^2.0.23"
   },
   "engines": {
     "node": "16.x"

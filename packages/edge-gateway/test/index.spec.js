@@ -13,7 +13,7 @@ test.before(async (t) => {
     .withExposedPorts(
       {
         container: 8080,
-        host: 9081,
+        host: 9081
       },
       5001
     )
@@ -25,7 +25,7 @@ test.before(async (t) => {
 
   t.context = {
     container,
-    mf: getMiniflare(),
+    mf: getMiniflare()
   }
 })
 
