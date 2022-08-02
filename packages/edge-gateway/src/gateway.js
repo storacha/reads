@@ -25,7 +25,7 @@ import {
  * @typedef {import('ipfs-gateway-race').GatewayResponsePromise} GatewayResponsePromise
  * @typedef {{ value: GatewayResponse & { duration: number} }} GatewayRaceResponses
  *
- * @typedef {Object} CdnResponse
+ * @typedef {Object} ProxiedResponse
  * @property {Response} response
  * @property {string} resolutionIdentifier
  */
@@ -73,7 +73,17 @@ export async function gatewayGet (request, env, ctx) {
     throw new TimeoutError()
   }
 
-  // 2nd layer resolution - Public Gateways race
+  // 2nd layer
+  const dotstorageRes = await getFromDotstorage(request, cid, { pathname })
+  if (dotstorageRes) {
+    return getResponseWithCustomHeaders(
+      dotstorageRes.response,
+      RESOLUTION_LAYERS.DOTSTORAGE_RACE,
+      dotstorageRes.resolutionIdentifier
+    )
+  }
+
+  // 3rd layer resolution - Public Gateways race
   const winnerUrlPromise = pDefer()
   const winnerGwResponse = await env.gwRacer.get(cid, {
     pathname,
@@ -120,7 +130,7 @@ export async function gatewayGet (request, env, ctx) {
  * @param {Request} request
  * @param {Env} env
  * @param {Cache} cache
- * @return {Promise<CdnResponse | undefined>}
+ * @return {Promise<ProxiedResponse | undefined>}
  */
 async function getFromCdn (request, env, cache) {
   // Should skip cache if instructed by headers
@@ -138,7 +148,7 @@ async function getFromCdn (request, env, cache) {
 
     // @ts-ignore p-any Promise types differ from CF promise types
     const res = await pAny(cdnRequests, {
-      filter: (/** @type {CdnResponse} */ res) => !!res
+      filter: (/** @type {ProxiedResponse} */ res) => !!res
     })
     return res
   } catch (err) {
@@ -151,11 +161,57 @@ async function getFromCdn (request, env, cache) {
 }
 
 /**
+ * @param {Request} request
+ * @param {string} cid
+ * @param {{ pathname?: string}} [options]
+ * @return {Promise<ProxiedResponse | undefined>}
+ */
+async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
+  try {
+    // Get onlyIfCached hosts provided
+    /** @type {string[]} */
+    const hosts = []
+    // @ts-ignore custom entry in cf object
+    if (request.cf?.onlyIfCachedGateways) {
+      /** @type {URL[]} */
+      // @ts-ignore custom entry in cf object
+      const onlyIfCachedGateways = (JSON.parse(request.cf?.onlyIfCachedGateways))
+        .map((/** @type {string} */ gw) => new URL(gw))
+
+      onlyIfCachedGateways.forEach((gw) => hosts.push(gw.host))
+    }
+
+    // Add only if cached header
+    const headers = getHeaders(request)
+    headers.set('Cache-Control', 'only-if-cached')
+
+    const proxiedResponse = await pAny(hosts.map(async (host) => {
+      const response = await fetch(
+        `https://${cid}.ipfs.${host}${pathname}`,
+        { headers }
+      )
+
+      if (!response.ok) {
+        throw new Error()
+      }
+
+      return {
+        response,
+        resolutionIdentifier: host
+      }
+    }))
+
+    return proxiedResponse
+  } catch (_) {}
+  return undefined
+}
+
+/**
  * CDN url resolution.
  *
  * @param {Request} request
  * @param {Cache} cache
- * @return {Promise<CdnResponse | undefined>}
+ * @return {Promise<ProxiedResponse | undefined>}
  */
 async function getFromCacheZone (request, cache) {
   const response = await cache.match(request)
@@ -175,7 +231,7 @@ async function getFromCacheZone (request, cache) {
  *
  * @param {Request} request
  * @param {Env} env
- * @return {Promise<CdnResponse | undefined>}
+ * @return {Promise<ProxiedResponse | undefined>}
  */
 async function getFromPermaCache (request, env) {
   const response = await env.API.fetch(
