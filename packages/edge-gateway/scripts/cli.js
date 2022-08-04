@@ -5,6 +5,7 @@ import sade from 'sade'
 import { buildCmd } from './build.js'
 import { ipfsCmd } from './ipfs.js'
 import { denylistSyncCmd, denylistAddCmd } from './denylist.js'
+import { heartbeatCmd } from './heartbeat.js'
 
 const env = process.env.ENV || 'dev'
 const prog = sade('edge-gateway')
@@ -19,6 +20,10 @@ prog
   .option('--start', 'Start docker container', false)
   .option('--stop', 'Stop and clean all dockers artifacts', false)
   .action(ipfsCmd)
+  .command('heartbeat', 'Ping opsgenie heartbeat')
+  .option('--token', 'Opsgenie Token')
+  .option('--name', 'Heartbeat Name')
+  .action(heartbeatCmd)
   .command('denylist sync')
   .describe('Sync the gateway deny list with various sources.')
   .option('--env', 'Wrangler environment to use.', env)
