@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.0...edge-gateway-v1.0.1) (2022-08-09)
+
+
+### Bug Fixes
+
+* docs for metrics ([024dc39](https://github.com/web3-storage/reads/commit/024dc39499529ad5af6f41acbf02e2f18c7c49d7))
+
 ## 1.0.0 (2022-08-04)
 
 
