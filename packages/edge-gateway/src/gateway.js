@@ -360,9 +360,11 @@ async function reportRaceResults (env, gatewayResponsePromises, winnerUrl) {
     }
 
     // Track count for status code per gateway
-    env.PUBLIC_RACE_STATUS_CODE.writeDataPoint({
-      blobs: [gwResponse.value?.url, `${gwResponse.value?.response?.status}`],
-      doubles: [1]
-    })
+    if (gwResponse.value?.response?.status && gwResponse.value?.url) {
+      env.PUBLIC_RACE_STATUS_CODE.writeDataPoint({
+        blobs: [gwResponse.value.url, `${gwResponse.value.response.status}`],
+        doubles: [1]
+      })
+    }
   })
 }
