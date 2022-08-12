@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.2...edge-gateway-v1.0.3) (2022-08-12)
+
+
+### Bug Fixes
+
+* avoid storing counts for non defined status codes ([#34](https://github.com/web3-storage/reads/issues/34)) ([2927505](https://github.com/web3-storage/reads/commit/29275056c2f7dc3fc2c970fc03ed23e67cdcfc7e))
+
 ## [1.0.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.1...edge-gateway-v1.0.2) (2022-08-12)
 
 
