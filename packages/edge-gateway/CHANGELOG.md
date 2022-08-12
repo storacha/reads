@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.1...edge-gateway-v1.0.2) (2022-08-12)
+
+
+### Bug Fixes
+
+* use dag haus cf dedicated gw ([#32](https://github.com/web3-storage/reads/issues/32)) ([34c4b16](https://github.com/web3-storage/reads/commit/34c4b161e13bbb92b53eab3b60c985c4197d1fb6))
+
 ## [1.0.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.0...edge-gateway-v1.0.1) (2022-08-09)
 
 
