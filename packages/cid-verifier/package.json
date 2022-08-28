@@ -1,0 +1,47 @@
+{
+  "name": "cid-verifier",
+  "version": "1.0.0",
+  "description": "Verify that a CID's content is safe for the web",
+  "private": true,
+  "type": "module",
+  "main": "./dist/worker.js",
+  "scripts": {
+    "lint": "standard",
+    "build": "tsc && node scripts/cli.js build",
+    "dev": "miniflare dist/worker.js --watch --debug -m",
+    "test": "npm run test:setup && npm-run-all -p -r mock:google-cloud.io test:worker",
+    "test:worker": "ava --verbose test/*.spec.js",
+    "test:setup": "npm run build",
+    "mock:google-cloud.io": "smoke -p 9111 test/mocks/google-cloud.io"
+  },
+  "dependencies": {
+    "@web3-storage/worker-utils": "^0.3.0-dev",
+    "itty-router": "^2.4.5",
+    "multiformats": "^9.6.4",
+    "p-retry": "^5.0.0",
+    "toucan-js": "^2.5.0",
+    "uint8arrays": "^3.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.7.1",
+    "@sentry/cli": "^1.71.0",
+    "@types/git-rev-sync": "^2.0.0",
+    "@web-std/fetch": "^4.0.0",
+    "ava": "^3.15.0",
+    "esbuild": "^0.14.2",
+    "git-rev-sync": "^3.0.1",
+    "miniflare": "^2.5.0",
+    "npm-run-all": "^4.1.5",
+    "sade": "^1.7.4",
+    "smoke": "^3.1.1",
+    "standard": "^17.0.0",
+    "typescript": "4.7.3"
+  },
+  "standard": {
+    "ignore": [
+      "dist"
+    ]
+  },
+  "author": "jsdevel <jsdevel@kogo.io>",
+  "license": "Apache-2.0 OR MIT"
+}

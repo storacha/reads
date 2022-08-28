@@ -25,10 +25,15 @@ export function getMiniflare () {
       api: {
         scriptPath: './test/utils/scripts/api.js',
         modules: true
+      },
+      cid_verifier: {
+        scriptPath: './test/utils/scripts/cid-verifier.js',
+        modules: true
       }
     },
     serviceBindings: {
-      API: 'api'
+      API: 'api',
+      CID_VERIFIER: 'cid_verifier'
     },
     bindings: {
       PUBLIC_RACE_WINNER: createAnalyticsEngine(),

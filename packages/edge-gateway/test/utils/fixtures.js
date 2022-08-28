@@ -24,6 +24,10 @@ export async function addFixtures (port) {
     // bafkreifbh4or5yoti7bahifd3gwx5m2qiwmrvpxsx3nsquf7r4wwkiruve
     client.add('Hello dot.storage! 😎😎😎', {
       rawLeaves: true
+    }),
+    // bafkreibx45dh23bkcli5qxevg2zq5pa7dbzpdd45h4uugk6qgjlyifulj4
+    client.add('MALICIOUS', {
+      rawLeaves: true
     })
   ])
 
@@ -38,5 +42,6 @@ export async function addFixtures (port) {
     }
     // eslint-disable-next-line no-empty
   )) {
+    // console.log(_);
   }
 }

@@ -28,7 +28,10 @@ export class TimeoutError extends Error {
 }
 TimeoutError.CODE = 'ERROR_TIMEOUT'
 
-export const createErrorHtmlContent = (/** @type {number} */ status, /** @type {string} */ message) => `<html>
+export const createErrorHtmlContent = (
+  /** @type {number} */ status,
+  /** @type {string} */ message
+) => `<html>
 <head><title>${status} ${message}</title></head>
 <body>
 <div style="text-align:center">

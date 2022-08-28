@@ -17,6 +17,8 @@ export interface AnalyticsEngineEvent {
 export interface EnvInput {
   ENV: string
   DEBUG: string
+  CID_VERIFIER_URL: string
+  CID_VERIFIER: Fetcher
   IPFS_GATEWAYS: string
   GATEWAY_HOSTNAME: string
   EDGE_GATEWAY_API_URL: string

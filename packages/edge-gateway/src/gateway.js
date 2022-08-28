@@ -3,13 +3,11 @@
 
 import pAny, { AggregateError } from 'p-any'
 import pDefer from 'p-defer'
-import pRetry from 'p-retry'
 import pSettle from 'p-settle'
 import { FilterError } from 'p-some'
 
 import { getCidFromSubdomainUrl } from './utils/cid.js'
 import { getHeaders } from './utils/headers.js'
-import { toDenyListAnchor } from './utils/deny-list.js'
 import { TimeoutError } from './errors.js'
 import {
   CF_CACHE_MAX_OBJECT_SIZE,
@@ -51,11 +49,9 @@ export async function gatewayGet (request, env, ctx) {
   const cid = await getCidFromSubdomainUrl(reqUrl)
   const pathname = reqUrl.pathname
 
-  // Validation layer - root CID validation
-  const denyListRootCidEntry = await getFromDenyList(env.DENYLIST, cid)
-  if (denyListRootCidEntry) {
-    const { status, reason } = JSON.parse(denyListRootCidEntry)
-    return new Response(reason || '', { status: status || 410 })
+  const cidVerificationResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/verification?cid=${cid}`)
+  if (cidVerificationResponse.status !== 204) {
+    return cidVerificationResponse
   }
 
   // 1st layer resolution - CDN
@@ -105,10 +101,16 @@ export async function gatewayGet (request, env, ctx) {
     const resourceCid = decodeURIComponent(
       winnerGwResponse.headers.get('etag') || ''
     )
-    const denyListResource = await getFromDenyList(env.DENYLIST, resourceCid)
-    if (denyListResource) {
-      const { status, reason } = JSON.parse(denyListResource)
-      return new Response(reason || '', { status: status || 410 })
+
+    const cidResourceVerificationResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
+    if (cidResourceVerificationResponse.status !== 204) {
+      return cidResourceVerificationResponse
+    }
+
+    // we always give cid-verifier the chance to validate HTML content
+    if (winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
+      // fire and forget.  let cid-verifier process this cid and url if it needs to
+      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${resourceCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
     }
   }
 
@@ -174,9 +176,10 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
     // @ts-ignore custom entry in cf object
     if (request.cf?.onlyIfCachedGateways) {
       /** @type {URL[]} */
-      // @ts-ignore custom entry in cf object
-      const onlyIfCachedGateways = (JSON.parse(request.cf?.onlyIfCachedGateways))
-        .map((/** @type {string} */ gw) => new URL(gw))
+      const onlyIfCachedGateways = JSON.parse(
+        // @ts-ignore custom entry in cf object
+        request.cf?.onlyIfCachedGateways
+      ).map((/** @type {string} */ gw) => new URL(gw))
 
       onlyIfCachedGateways.forEach((gw) => hosts.push(gw.host))
     }
@@ -185,21 +188,22 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
     const headers = getHeaders(request)
     headers.set('Cache-Control', 'only-if-cached')
 
-    const proxiedResponse = await pAny(hosts.map(async (host) => {
-      const response = await fetch(
-        `https://${cid}.ipfs.${host}${pathname}`,
-        { headers }
-      )
+    const proxiedResponse = await pAny(
+      hosts.map(async (host) => {
+        const response = await fetch(`https://${cid}.ipfs.${host}${pathname}`, {
+          headers
+        })
 
-      if (!response.ok) {
-        throw new Error()
-      }
+        if (!response.ok) {
+          throw new Error()
+        }
 
-      return {
-        response,
-        resolutionIdentifier: host
-      }
-    }))
+        return {
+          response,
+          resolutionIdentifier: host
+        }
+      })
+    )
 
     return proxiedResponse
   } catch (_) {}
@@ -254,27 +258,6 @@ async function getFromPermaCache (request, env) {
 }
 
 /**
- * Get a given entry from the deny list if CID exists.
- *
- * @param {KVNamespace} datastore
- * @param {string} cid
- */
-async function getFromDenyList (datastore, cid) {
-  if (!datastore) {
-    return undefined
-  }
-
-  const anchor = await toDenyListAnchor(cid)
-  // TODO: Remove once https://github.com/nftstorage/nftstorage.link/issues/51 is fixed
-  return await pRetry(
-    // TODO: in theory we should check each subcomponent of the pathname also.
-    // https://github.com/nftstorage/nft.storage/issues/1737
-    () => datastore.get(anchor),
-    { retries: 5 }
-  )
-}
-
-/**
  * Put receives response to cache.
  *
  * @param {Request} request
@@ -304,7 +287,10 @@ function getResponseWithCustomHeaders (
   const clonedResponse = new Response(response.body, response)
 
   clonedResponse.headers.set('x-dotstorage-resolution-layer', resolutionLayer)
-  clonedResponse.headers.set('x-dotstorage-resolution-id', resolutionIdentifier)
+  clonedResponse.headers.set(
+    'x-dotstorage-resolution-id',
+    resolutionIdentifier
+  )
 
   return clonedResponse
 }
