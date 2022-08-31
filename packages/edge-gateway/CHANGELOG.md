@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.4](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.3...edge-gateway-v1.0.4) (2022-08-31)
+
+
+### Bug Fixes
+
+* edge gateway keep status code ([#38](https://github.com/web3-storage/reads/issues/38)) ([2947d8d](https://github.com/web3-storage/reads/commit/2947d8db435e2f4975cc3a2787a5203b92c7697e))
+* worker routes with zone id ([#40](https://github.com/web3-storage/reads/issues/40)) ([3b8b210](https://github.com/web3-storage/reads/commit/3b8b210a7dfebd16766a574424cc39d15d2113ba))
+
 ## [1.0.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.2...edge-gateway-v1.0.3) (2022-08-12)
 
 
