@@ -301,9 +301,7 @@ function getResponseWithCustomHeaders (
   resolutionLayer,
   resolutionIdentifier
 ) {
-  const clonedResponse = new Response(response.body, {
-    headers: response.headers
-  })
+  const clonedResponse = new Response(response.body, response)
 
   clonedResponse.headers.set('x-dotstorage-resolution-layer', resolutionLayer)
   clonedResponse.headers.set('x-dotstorage-resolution-id', resolutionIdentifier)
