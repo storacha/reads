@@ -1,6 +1,6 @@
 {
   "name": "edge-gateway",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "IPFS edge gateway for dotstorage",
   "private": true,
   "type": "module",
