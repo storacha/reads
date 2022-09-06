@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.5](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.4...edge-gateway-v1.0.5) (2022-09-06)
+
+
+### Bug Fixes
+
+* add cid to local denylist ([#42](https://github.com/web3-storage/reads/issues/42)) ([814d96e](https://github.com/web3-storage/reads/commit/814d96e1c0b864c04f71405949ae5118fcd2b82f))
+* stracktraces frames ([#47](https://github.com/web3-storage/reads/issues/47)) ([f134f63](https://github.com/web3-storage/reads/commit/f134f634e7b5ddbe4c5dd60f2f812ebb9081c053))
+
 ## [1.0.4](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.3...edge-gateway-v1.0.4) (2022-08-31)
 
 
