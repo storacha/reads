@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.1.0...edge-gateway-v1.1.1) (2022-09-07)
+
+
+### Bug Fixes
+
+* temporary remove pinata ([#50](https://github.com/web3-storage/reads/issues/50)) ([afc6f80](https://github.com/web3-storage/reads/commit/afc6f804e99630bf0c40b9b54185db94efe8d86b))
+
 ## [1.1.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.5...edge-gateway-v1.1.0) (2022-09-07)
 
 
