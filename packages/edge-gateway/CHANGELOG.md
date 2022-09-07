@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.5...edge-gateway-v1.1.0) (2022-09-07)
+
+
+### Features
+
+* use new pinata dedicated gateway ([#41](https://github.com/web3-storage/reads/issues/41)) ([f224bb4](https://github.com/web3-storage/reads/commit/f224bb447e77ffc5134bb5ae20633ddd2885eb74))
+
 ## [1.0.5](https://github.com/web3-storage/reads/compare/edge-gateway-v1.0.4...edge-gateway-v1.0.5) (2022-09-06)
 
 
