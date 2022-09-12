@@ -12,6 +12,9 @@
 - Add secrets
 
   ```sh
+    wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry
+    wrangler secret put LOKI_URL --env $(whoami) # Get from Loki
+    wrangler secret put LOKI_TOKEN --env $(whoami) # Get from Loki
     wrangler secret put GOOGLE_CLOUD_API_URL --env $(whoami) # Get from 1password
     wrangler secret put GOOGLE_CLOUD_API_KEY --env $(whoami) # Get from 1password
   ```
