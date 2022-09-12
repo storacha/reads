@@ -18,7 +18,7 @@ GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS = [ "CONFIDENCE_LEVEL_UNSPECIFIED", "SAFE
 # name = "dotstorage-cid-verifier-production"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 routes = [
-  "cid-verifier.dag.haus/*"
+  { pattern = "cid-verifier.dag.haus/*", zone_id = "f2f8a5b1c557202c6e3d0ce0e98e4c8e" }
 ]
 kv_namespaces = [
   { binding = "CID_VERIFIER_RESULTS", id = "9be91fbb7fe34afea6629732981fc8e9" },
@@ -34,7 +34,7 @@ ENV = "production"
 # name = "dotstorage-cid-verifier-staging"
 account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
 routes = [
-  "cid-verifier-staging.dag.haus/*"
+  { pattern = "cid-verifier-staging.dag.haus/*", zone_id = "f2f8a5b1c557202c6e3d0ce0e98e4c8e" }
 ]
 kv_namespaces = [
   { binding = "CID_VERIFIER_RESULTS", id = "c742e87b92da4a77bdce7de8105778ff" },
