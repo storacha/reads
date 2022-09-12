@@ -140,7 +140,7 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
             { retries: 5 }
           )
           // @ts-ignore
-          env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'log')
+          env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'info')
         }
       } catch (e) {
         // @ts-ignore
