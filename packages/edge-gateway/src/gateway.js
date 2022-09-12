@@ -97,7 +97,7 @@ export async function gatewayGet (request, env, ctx) {
   const winnerUrl = await winnerUrlPromise.promise
 
   // Validation layer - resource CID
-  const resourceCid = decodeURIComponent(winnerGwResponse.headers.get('etag') || '')
+  const resourceCid = getCidFromEtag(winnerGwResponse.headers.get('etag') || '')
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
     const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
     if (cidResourceDenylistResponse.status !== 204) {
@@ -291,6 +291,28 @@ function getResponseWithCustomHeaders (
   )
 
   return clonedResponse
+}
+
+/**
+ * Extracting resource CID from etag based on
+ * https://github.com/ipfs/specs/blob/main/http-gateways/PATH_GATEWAY.md#etag-response-header
+ *
+ * @param {string} etag
+ */
+function getCidFromEtag (etag) {
+  let resourceCid = decodeURIComponent(etag)
+
+  // Handle weak etag
+  resourceCid.replace('W/', '')
+  resourceCid.replaceAll('"', '')
+
+  // Handle directory index generated
+  if (etag.includes('DirIndex')) {
+    const split = resourceCid.split('-')
+    resourceCid = split[split.length - 1]
+  }
+
+  return etag
 }
 
 /**
