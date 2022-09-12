@@ -49,9 +49,9 @@ export async function gatewayGet (request, env, ctx) {
   const cid = await getCidFromSubdomainUrl(reqUrl)
   const pathname = reqUrl.pathname
 
-  const cidVerificationResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/verification?cid=${cid}`)
-  if (cidVerificationResponse.status !== 204) {
-    return cidVerificationResponse
+  const cidDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${cid}`)
+  if (cidDenylistResponse.status !== 204) {
+    return cidDenylistResponse
   }
 
   // 1st layer resolution - CDN
@@ -99,14 +99,14 @@ export async function gatewayGet (request, env, ctx) {
   // Validation layer - resource CID
   const resourceCid = decodeURIComponent(winnerGwResponse.headers.get('etag') || '')
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
-    const cidResourceVerificationResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
-    if (cidResourceVerificationResponse.status !== 204) {
-      return cidResourceVerificationResponse
+    const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
+    if (cidResourceDenylistResponse.status !== 204) {
+      return cidResourceDenylistResponse
     }
   }
 
   // Ask CID verifier to validate HTML content
-  if (winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
+  if (winnerGwResponse && winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
     const verifyCid = pathname !== '/' ? resourceCid : cid
     // fire and forget. Let cid-verifier process this cid and url if it needs to
     env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
