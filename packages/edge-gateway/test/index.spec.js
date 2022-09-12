@@ -101,10 +101,3 @@ test('Gets content with other base encodings', async (t) => {
   await response.waitUntil()
   t.is(await response.text(), 'Hello dot.storage! 😎')
 })
-
-test('Sends HTML files to cid-verifier', async (t) => {
-  const { mf } = t.context
-  const res = await mf.dispatchFetch(`https://bafybeih74zqc6kamjpruyra4e4pblnwdpickrvk4hvturisbtveghflovq.ipfs.localhost:8787/sample.html`)
-  t.is(res.status, 200)
-  t.is(await res.text(), 'malicious')
-})

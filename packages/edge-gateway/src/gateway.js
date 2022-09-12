@@ -97,21 +97,19 @@ export async function gatewayGet (request, env, ctx) {
   const winnerUrl = await winnerUrlPromise.promise
 
   // Validation layer - resource CID
-  if (winnerGwResponse && pathname !== '/') {
-    const resourceCid = decodeURIComponent(
-      winnerGwResponse.headers.get('etag') || ''
-    )
-
+  const resourceCid = decodeURIComponent(winnerGwResponse.headers.get('etag') || '')
+  if (winnerGwResponse && pathname !== '/' && resourceCid) {
     const cidResourceVerificationResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
     if (cidResourceVerificationResponse.status !== 204) {
       return cidResourceVerificationResponse
     }
+  }
 
-    // we always give cid-verifier the chance to validate HTML content
-    if (winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
-      // fire and forget.  let cid-verifier process this cid and url if it needs to
-      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${resourceCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
-    }
+  // Ask CID verifier to validate HTML content
+  if (winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
+    const verifyCid = pathname !== '/' ? resourceCid : cid
+    // fire and forget. Let cid-verifier process this cid and url if it needs to
+    env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
   }
 
   // Cache response

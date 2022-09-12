@@ -28,7 +28,8 @@ export function getMiniflare () {
       },
       cid_verifier: {
         scriptPath: './test/utils/scripts/cid-verifier.js',
-        modules: true
+        modules: true,
+        kvNamespaces: ['TEST_NAMESPACE']
       }
     },
     serviceBindings: {

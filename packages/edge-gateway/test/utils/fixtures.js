@@ -41,7 +41,19 @@ export async function addFixtures (port) {
       cidVersion: 1
     }
     // eslint-disable-next-line no-empty
-  )) {
-    // console.log(_);
-  }
+  )) {}
+
+  // bafybeiaekuoonpqpmems3uapy27zsas5p6ylku53lzkaufnvt4s5n6a7au - /
+  // bafkreib6uzgr2noyzup3uuqcp6gafddnx6n3iinkyflbrkhdhfpcoggc5u - /sample.html
+  // bafkreibv3ecfm3wpoawshuqhir3cn2w4dewlr6jit3hfx6cjqgmzbsq22y - /malware.txt
+  // eslint-disable-next-line no-unused-vars
+  for await (const _ of client.addAll(
+    globSource(path.join(__dirname, '../fixtures/website'), '**/*'),
+    {
+      rawLeaves: true,
+      wrapWithDirectory: true,
+      cidVersion: 1
+    }
+    // eslint-disable-next-line no-empty
+  )) {}
 }
