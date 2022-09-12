@@ -23,6 +23,20 @@ module.exports = async ({ params, headers }) => {
       headers: responseHeaders,
       body: 'Hello dot.storage! 😎👻'
     }
+  } else if (
+    cid === 'bafkreib6uzgr2noyzup3uuqcp6gafddnx6n3iinkyflbrkhdhfpcoggc5u'
+  ) {
+    return {
+      statusCode: 200,
+      headers: {
+        ...headers,
+        'Content-Type': 'text/html; charset=utf-8'
+      },
+      body: `
+      <!DOCTYPE html>
+      <html />
+      `
+    }
   }
 
   return {

@@ -24,6 +24,10 @@ export async function addFixtures (port) {
     // bafkreifbh4or5yoti7bahifd3gwx5m2qiwmrvpxsx3nsquf7r4wwkiruve
     client.add('Hello dot.storage! 😎😎😎', {
       rawLeaves: true
+    }),
+    // bafkreibx45dh23bkcli5qxevg2zq5pa7dbzpdd45h4uugk6qgjlyifulj4
+    client.add('MALICIOUS', {
+      rawLeaves: true
     })
   ])
 
@@ -37,6 +41,19 @@ export async function addFixtures (port) {
       cidVersion: 1
     }
     // eslint-disable-next-line no-empty
-  )) {
-  }
+  )) {}
+
+  // bafybeiaekuoonpqpmems3uapy27zsas5p6ylku53lzkaufnvt4s5n6a7au - /
+  // bafkreib6uzgr2noyzup3uuqcp6gafddnx6n3iinkyflbrkhdhfpcoggc5u - /sample.html
+  // bafkreibv3ecfm3wpoawshuqhir3cn2w4dewlr6jit3hfx6cjqgmzbsq22y - /malware.txt
+  // eslint-disable-next-line no-unused-vars
+  for await (const _ of client.addAll(
+    globSource(path.join(__dirname, '../fixtures/website'), '**/*'),
+    {
+      rawLeaves: true,
+      wrapWithDirectory: true,
+      cidVersion: 1
+    }
+    // eslint-disable-next-line no-empty
+  )) {}
 }
