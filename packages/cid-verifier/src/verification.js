@@ -1,5 +1,7 @@
 /* eslint-env serviceworker, browser */
 /* global Response */
+import pRetry from 'p-retry'
+
 import { getFromDenyList } from './utils/denylist'
 import { ServiceUnavailableError } from './errors'
 
@@ -121,15 +123,22 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
 
         const evaluateJson = await googleCloudResponse.json()
         const stringifiedJSON = JSON.stringify(evaluateJson)
-        await env.CID_VERIFIER_RESULTS.put(resultKey, stringifiedJSON, { metadata: { value: stringifiedJSON } })
+
+        await pRetry(
+          () => env.CID_VERIFIER_RESULTS.put(resultKey, stringifiedJSON, { metadata: { value: stringifiedJSON } }),
+          { retries: 5 }
+        )
         // @ts-ignore
         // if any score isn't what we consider to be safe we add it to the DENYLIST
         const threats = evaluateJson?.scores?.filter(score => !env.GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS.includes(score.confidenceLevel)).map(score => score.threatType)
         if (threats.length) {
-          await env.DENYLIST.put(cid, JSON.stringify({
-            status: 403,
-            reason: threats.join(', ')
-          }))
+          await pRetry(
+            () => env.DENYLIST.put(cid, JSON.stringify({
+              status: 403,
+              reason: threats.join(', ')
+            })),
+            { retries: 5 }
+          )
           // @ts-ignore
           env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'log')
         }
@@ -138,7 +147,10 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
         env.log.log(e, 'error')
         throw e
       } finally {
-        await env.CID_VERIFIER_RESULTS.delete(lockKey)
+        await pRetry(
+          () => env.CID_VERIFIER_RESULTS.delete(lockKey),
+          { retries: 5 }
+        )
       }
     }
   }
