@@ -312,7 +312,7 @@ function getCidFromEtag (etag) {
     resourceCid = split[split.length - 1]
   }
 
-  return etag
+  return resourceCid
 }
 
 /**
