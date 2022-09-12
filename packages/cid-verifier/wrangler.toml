@@ -28,6 +28,7 @@ kv_namespaces = [
 [env.production.vars]
 DEBUG = "false"
 ENV = "production"
+GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS = [ "CONFIDENCE_LEVEL_UNSPECIFIED", "SAFE" ]
 
 # Staging!
 [env.staging]
@@ -44,6 +45,7 @@ kv_namespaces = [
 [env.staging.vars]
 DEBUG = "true"
 ENV = "staging"
+GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS = [ "CONFIDENCE_LEVEL_UNSPECIFIED", "SAFE" ]
 
 # Test!
 [env.test]
