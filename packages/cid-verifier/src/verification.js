@@ -84,11 +84,15 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
     const googleEvaluateLock = cidVerifyResults[lockKey]
 
     if (!googleEvaluateResult && !googleEvaluateLock) {
-      await fetchGoogleMalwareResults(cid, url, env)
+      const threats = await fetchGoogleMalwareResults(cid, url, env)
+
+      if (threats.length) {
+        env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'info')
+      }
       return new Response('cid malware detection processed', { status: 201 })
     }
 
-    return new Response('cid malware detection processed', { status: 202 })
+    return new Response('cid malware detection already processed', { status: 202 })
 
     /**
      * Fetch malware results for the url from Google's Evaluate API.
@@ -98,6 +102,8 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
      * @param {import('./env').Env} env
      */
     async function fetchGoogleMalwareResults (cid, url, env) {
+      /** @type {string[]} */
+      let threats = []
       try {
         await env.CID_VERIFIER_RESULTS.put(lockKey, 'true', { metadata: { value: 'true' } })
         const googleCloudResponse = await fetch(
@@ -128,9 +134,10 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
           () => env.CID_VERIFIER_RESULTS.put(resultKey, stringifiedJSON, { metadata: { value: stringifiedJSON } }),
           { retries: 5 }
         )
+
         // @ts-ignore
         // if any score isn't what we consider to be safe we add it to the DENYLIST
-        const threats = evaluateJson?.scores?.filter(score => !env.GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS.includes(score.confidenceLevel)).map(score => score.threatType)
+        threats = evaluateJson?.scores?.filter(score => !env.GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS.includes(score.confidenceLevel)).map(score => score.threatType)
         if (threats.length) {
           const anchor = await toDenyListAnchor(cid)
           await pRetry(
@@ -140,8 +147,6 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
             })),
             { retries: 5 }
           )
-          // @ts-ignore
-          env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'info')
         }
       } catch (e) {
         // @ts-ignore
@@ -153,6 +158,8 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
           { retries: 5 }
         )
       }
+
+      return threats
     }
   }
 )

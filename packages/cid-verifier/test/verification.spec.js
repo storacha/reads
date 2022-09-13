@@ -129,13 +129,13 @@ test('POST / handles no results', async (t) => {
 test('POST / handles pending results', async (t) => {
   const { mf } = t.context
   const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${pendingCid}&url=${maliciousUrl}`, { method: 'POST' })
-  t.is(await response.text(), 'cid malware detection processed')
+  t.is(await response.text(), 'cid malware detection already processed')
   t.is(response.status, 202)
 })
 
 test('POST / handles overriding existing malware cid', async (t) => {
   const { mf } = t.context
   const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${malwareCid}&url=${maliciousUrl}`, { method: 'POST' })
-  t.is(await response.text(), 'cid malware detection processed')
+  t.is(await response.text(), 'cid malware detection already processed')
   t.is(response.status, 202)
 })
