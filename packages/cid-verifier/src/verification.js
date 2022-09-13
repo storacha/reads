@@ -132,9 +132,9 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
         // if any score isn't what we consider to be safe we add it to the DENYLIST
         const threats = evaluateJson?.scores?.filter(score => !env.GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS.includes(score.confidenceLevel)).map(score => score.threatType)
         if (threats.length) {
+          const anchor = await toDenyListAnchor(cid)
           await pRetry(
-            async () => env.DENYLIST.put(cid, JSON.stringify({
-              anchor: await toDenyListAnchor(cid),
+            () => env.DENYLIST.put(anchor, JSON.stringify({
               status: 403,
               reason: threats.join(', ')
             })),
