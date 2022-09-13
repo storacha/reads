@@ -109,7 +109,9 @@ export async function gatewayGet (request, env, ctx) {
   if (winnerGwResponse && winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
     const verifyCid = pathname !== '/' ? resourceCid : cid
     // fire and forget. Let cid-verifier process this cid and url if it needs to
-    env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
+    ctx.waitUntil(
+      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
+    )
   }
 
   // Cache response
