@@ -2,7 +2,7 @@
 /* global Response */
 import pRetry from 'p-retry'
 
-import { getFromDenyList } from './utils/denylist'
+import { getFromDenyList, toDenyListAnchor } from './utils/denylist'
 import { ServiceUnavailableError } from './errors'
 
 const GOOGLE_EVALUATE = 'google-evaluate'
@@ -133,7 +133,8 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
         const threats = evaluateJson?.scores?.filter(score => !env.GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS.includes(score.confidenceLevel)).map(score => score.threatType)
         if (threats.length) {
           await pRetry(
-            () => env.DENYLIST.put(cid, JSON.stringify({
+            async () => env.DENYLIST.put(cid, JSON.stringify({
+              anchor: await toDenyListAnchor(cid),
               status: 403,
               reason: threats.join(', ')
             })),
