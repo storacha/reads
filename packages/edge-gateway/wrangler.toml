@@ -34,7 +34,7 @@ kv_namespaces = [
 ]
 
 [env.production.vars]
-IPFS_GATEWAYS = "[\"https://ipfs.io\", \"https://cf.dag.haus\"]"
+IPFS_GATEWAYS = "[\"https://ipfs.io\", \"https://cf.dag.haus\", \"https://pinata.dag.haus\"]"
 GATEWAY_HOSTNAME = 'ipfs.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
