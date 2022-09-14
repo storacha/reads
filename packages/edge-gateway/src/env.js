@@ -34,6 +34,8 @@ export function envAll (request, env, ctx) {
   })
   env.startTime = Date.now()
 
+  env.isCidVerifierEnabled = env.CID_VERIFIER_ENABLED === 'true'
+
   env.log = new Logging(request, ctx, {
     // @ts-ignore TODO: url should be optional together with token
     url: env.LOKI_URL,

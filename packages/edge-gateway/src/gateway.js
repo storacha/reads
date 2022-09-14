@@ -106,7 +106,10 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // Ask CID verifier to validate HTML content
-  if (winnerGwResponse && winnerGwResponse.headers.get('content-type')?.includes('text/html')) {
+  if (
+    env.isCidVerifierEnabled &&
+    winnerGwResponse && winnerGwResponse.headers.get('content-type')?.includes('text/html')
+  ) {
     const verifyCid = pathname !== '/' ? resourceCid : cid
     // fire and forget. Let cid-verifier process this cid and url if it needs to
     ctx.waitUntil(
