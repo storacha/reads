@@ -37,16 +37,18 @@ export default {
    * @param {Ctx} ctx
    */
   async fetch (request, env, ctx) {
+    // Needs request cloned to avoid worker bindings to have request mutated on follow up requests
+    const req = request.clone()
     try {
-      const res = await router.handle(request, env, ctx)
+      const res = await router.handle(req, env, ctx)
       env.log.timeEnd('request')
       return env.log.end(res)
     } catch (/** @type {any} */ error) {
       if (env.log) {
         env.log.timeEnd('request')
-        return env.log.end(serverError(error, request, env))
+        return env.log.end(serverError(error, req, env))
       }
-      return serverError(error, request, env)
+      return serverError(error, req, env)
     }
   }
 }
