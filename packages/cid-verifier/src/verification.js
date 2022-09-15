@@ -2,6 +2,7 @@
 /* global Response */
 import pRetry from 'p-retry'
 
+import { normalizeCid } from './utils/cid'
 import { getFromDenyList, toDenyListAnchor } from './utils/denylist'
 import { ServiceUnavailableError } from './errors'
 
@@ -39,9 +40,18 @@ function withRequiredQueryParams (params, fn) {
   return async function (request, env) {
     const searchParams = (new URL(request.url)).searchParams
 
-    for (const param of params) {
-      if (!searchParams.get(param)) {
-        return new Response(`${param} is a required query param`, { status: 400 })
+    for (const paramName of params) {
+      const paramValue = searchParams.get(paramName)
+      if (!paramValue) {
+        return new Response(`${paramName} is a required query param`, { status: 400 })
+      }
+
+      if (paramName === 'cid') {
+        try {
+          await normalizeCid(paramValue)
+        } catch (e) {
+          return new Response('cid query param is invalid', { status: 400 })
+        }
       }
     }
 
@@ -72,9 +82,9 @@ export const verificationGet = withRequiredQueryParams(['cid'],
 /**
  * Process CID with malware verification parties.
  */
-export const verificationPost = withRequiredQueryParams(['cid', 'url'],
+export const verificationPost = withRequiredQueryParams(['cid'],
   async function verificationPost (params, request, env) {
-    const [cid, url] = params
+    const [cid] = params
     const resultKey = `${cid}/${GOOGLE_EVALUATE}`
     const lockKey = `${cid}/${GOOGLE_EVALUATE}.lock`
     const cidVerifyResults = await getResults(cid, env)
@@ -84,7 +94,7 @@ export const verificationPost = withRequiredQueryParams(['cid', 'url'],
     const googleEvaluateLock = cidVerifyResults[lockKey]
 
     if (!googleEvaluateResult && !googleEvaluateLock) {
-      const threats = await fetchGoogleMalwareResults(cid, url, env)
+      const threats = await fetchGoogleMalwareResults(cid, `https://${cid}.${env.IPFS_GATEWAY_TLD}`, env)
 
       if (threats.length) {
         env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'info')

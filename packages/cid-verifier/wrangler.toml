@@ -29,6 +29,7 @@ kv_namespaces = [
 DEBUG = "false"
 ENV = "production"
 GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS = [ "CONFIDENCE_LEVEL_UNSPECIFIED", "SAFE", "LOW", "MEDIUM" ]
+IPFS_GATEWAY_TLD = 'ipfs.w3s.link'
 
 # Staging!
 [env.staging]
@@ -46,6 +47,7 @@ kv_namespaces = [
 DEBUG = "true"
 ENV = "staging"
 GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS = [ "CONFIDENCE_LEVEL_UNSPECIFIED", "SAFE", "LOW", "MEDIUM" ]
+IPFS_GATEWAY_TLD = 'ipfs-staging.w3s.link'
 
 # Test!
 [env.test]
@@ -58,6 +60,7 @@ kv_namespaces = [
 [env.test.vars]
 GOOGLE_CLOUD_API_URL = 'http://127.0.0.1:9111'
 GOOGLE_CLOUD_API_KEY = 'TEST'
+IPFS_GATEWAY_TLD = 'ipfs.link.test'
 DEBUG = "true"
 ENV = "test"
 GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS = [ "CONFIDENCE_LEVEL_UNSPECIFIED", "SAFE" ]

@@ -1,17 +1,23 @@
+// @ts-ignore
+import Hash from 'ipfs-only-hash'
 import { test, getMiniflare } from './utils/setup.js'
 import { toDenyListAnchor } from '../src/utils/denylist.js'
 
+/**
+ * @param {string} s
+ */
+const createTestCid = async (s) => await Hash.of(s, { cidVersion: 1 })
+
 // TODO: use valid cids and test 400 scenarios
-const cidInDenyList = 'asdfasdf'
-const cidInDenyListBlockedForLeganReasons = 'blocked for legal reasons'
-const pendingCid = 'pending'
-const emptyCid = 'empty'
-const notMalwareCid = 'notMalware'
-const malwareCid = 'malware'
-const newCid = 'newCid'
-const maliciousUrl = encodeURIComponent('http://malicious/url')
-const safeUrl = encodeURIComponent('http://safe/url')
-const errorUrl = encodeURIComponent('http://error/url')
+const cidInDenyList = await createTestCid('asdfasdf')
+const cidInDenyListBlockedForLeganReasons = await createTestCid('blocked for legal reasons')
+const pendingCid = await createTestCid('pending')
+const emptyCid = await createTestCid('empty')
+const notMalwareCid = await createTestCid('notMalware')
+const malwareCid = await createTestCid('malware')
+const maliciousCid = await createTestCid('malicious')
+const safeCid = await createTestCid('safe')
+const errorCid = await createTestCid('error')
 
 // Create a new Miniflare environment for each test
 test.before(async (t) => {
@@ -63,6 +69,13 @@ test('GET /denylist handles no cid', async (t) => {
   t.is(response.status, 400)
 })
 
+test('GET /denylist handles invalid cid', async (t) => {
+  const { mf } = t.context
+  const response = await mf.dispatchFetch('http://localhost:8787/denylist?cid=invalid')
+  t.is(await response.text(), 'cid query param is invalid')
+  t.is(response.status, 400)
+})
+
 test('GET /denylist handles no results', async (t) => {
   const { mf } = t.context
   const response = await mf.dispatchFetch(`http://localhost:8787/denylist?cid=${emptyCid}`)
@@ -91,51 +104,44 @@ test('POST / handles no cid', async (t) => {
   t.is(response.status, 400)
 })
 
-test('POST / handles no url', async (t) => {
+test('POST / handles invalid cid', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch('http://localhost:8787/?cid=asdf', { method: 'POST' })
-  t.is(await response.text(), 'url is a required query param')
+  const response = await mf.dispatchFetch('http://localhost:8787/?cid=invalid', { method: 'POST' })
+  t.is(await response.text(), 'cid query param is invalid')
   t.is(response.status, 400)
 })
 
 test('POST / handles malicious urls', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${newCid}&url=${maliciousUrl}`, { method: 'POST' })
+  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${maliciousCid}`, { method: 'POST' })
   t.is(await response.text(), 'cid malware detection processed')
   t.is(response.status, 201)
 })
 
 test('POST / handles safe urls', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${Math.random()}&url=${safeUrl}`, { method: 'POST' })
+  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${safeCid}`, { method: 'POST' })
   t.is(await response.text(), 'cid malware detection processed')
   t.is(response.status, 201)
 })
 
 test('POST / handles invalid or error urls', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${Math.random()}&url=${errorUrl}`, { method: 'POST' })
-  t.is(await response.text(), 'GOOGLE CLOUD UNABLE TO VERIFY URL "http://error/url" status code "400"')
+  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${errorCid}`, { method: 'POST' })
+  t.is(await response.text(), `GOOGLE CLOUD UNABLE TO VERIFY URL "https://${errorCid}.ipfs.link.test" status code "400"`)
   t.is(response.status, 503)
-})
-
-test('POST / handles no results', async (t) => {
-  const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${newCid}&url=${maliciousUrl}`, { method: 'POST' })
-  t.is(await response.text(), 'cid malware detection processed')
-  t.is(response.status, 201)
 })
 
 test('POST / handles pending results', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${pendingCid}&url=${maliciousUrl}`, { method: 'POST' })
+  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${pendingCid}`, { method: 'POST' })
   t.is(await response.text(), 'cid malware detection already processed')
   t.is(response.status, 202)
 })
 
 test('POST / handles overriding existing malware cid', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${malwareCid}&url=${maliciousUrl}`, { method: 'POST' })
+  const response = await mf.dispatchFetch(`http://localhost:8787/?cid=${malwareCid}`, { method: 'POST' })
   t.is(await response.text(), 'cid malware detection already processed')
   t.is(response.status, 202)
 })

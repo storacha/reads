@@ -9,6 +9,7 @@ export interface EnvInput {
   GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS: Array<string>;
   GOOGLE_CLOUD_API_URL: string;
   GOOGLE_CLOUD_API_KEY: string;
+  IPFS_GATEWAY_TLD: string;
   SENTRY_DSN?: string;
   LOKI_URL?: string;
   LOKI_TOKEN?: string;
