@@ -39,6 +39,7 @@ GATEWAY_HOSTNAME = 'ipfs.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "false"
+CID_VERIFIER_ENABLED = "false"
 ENV = "production"
 
 # TODO: Should point to general API in the future
@@ -90,6 +91,7 @@ GATEWAY_HOSTNAME = 'ipfs-staging.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier-staging.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "true"
+CID_VERIFIER_ENABLED = "true"
 ENV = "staging"
 
 # TODO: Should point to general API in the future
@@ -130,4 +132,5 @@ GATEWAY_HOSTNAME = 'ipfs.localhost:8787'
 CID_VERIFIER_URL = 'http://cid-verifier.localhost:8787'
 EDGE_GATEWAY_API_URL = 'http://localhost:8787'
 DEBUG = "true"
+CID_VERIFIER_ENABLED = "true"
 ENV = "test"
