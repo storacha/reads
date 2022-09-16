@@ -57,6 +57,7 @@ test('Returns 403 when requested resource CID is recorded as malicious', async (
 test('Request cid-verifier to validate response when HTML file is requested with root cid+path', async (t) => {
   const { mf } = t.context
   const htmlDirectoryRootCid = 'bafybeiaekuoonpqpmems3uapy27zsas5p6ylku53lzkaufnvt4s5n6a7au'
+  const htmlResourceCid = 'bafkreib6uzgr2noyzup3uuqcp6gafddnx6n3iinkyflbrkhdhfpcoggc5u'
 
   const res = await mf.dispatchFetch(`https://${htmlDirectoryRootCid}.ipfs.localhost:8787/sample.html`)
   t.is(res.status, 200)
@@ -65,7 +66,7 @@ test('Request cid-verifier to validate response when HTML file is requested with
   // Validate call in progress to verify CID
   const TEST_NAMESPACE = await mf.getKVNamespace('TEST_NAMESPACE')
 
-  const kvKey = `${htmlDirectoryRootCid}/test.lock`
+  const kvKey = `${htmlResourceCid}/test.lock`
   await pWaitFor(async () => {
     const value = await TEST_NAMESPACE.get(kvKey)
     return value === 'LOCK'

@@ -113,7 +113,7 @@ export async function gatewayGet (request, env, ctx) {
     const verifyCid = pathname !== '/' ? resourceCid : cid
     // fire and forget. Let cid-verifier process this cid and url if it needs to
     ctx.waitUntil(
-      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}&url=${encodeURIComponent(request.url)}`, { method: 'POST' })
+      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}`, { method: 'POST' })
     )
   }
 
