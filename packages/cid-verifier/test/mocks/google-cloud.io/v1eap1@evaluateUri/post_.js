@@ -1,8 +1,10 @@
+const Hash = require('ipfs-only-hash')
+
 /**
  * https://github.com/sinedied/smoke#javascript-mocks
  */
-module.exports = ({ body: { uri } }) => {
-  if (uri === 'http://malicious/url') {
+module.exports = async ({ body: { uri } }) => {
+  if (uri === `https://${await Hash.of('malicious', { cidVersion: 1 })}.ipfs.link.test`) {
     return {
       statusCode: 200,
       body: {
@@ -22,7 +24,7 @@ module.exports = ({ body: { uri } }) => {
         ]
       }
     }
-  } else if (uri === 'http://safe/url') {
+  } else if (uri === `https://${await Hash.of('safe', { cidVersion: 1 })}.ipfs.link.test`) {
     return {
       statusCode: 200,
       body: {

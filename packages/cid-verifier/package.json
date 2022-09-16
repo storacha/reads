@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@web3-storage/worker-utils": "^0.3.0-dev",
+    "ipfs-core-utils": "^0.15.0",
     "itty-router": "^2.4.5",
     "multiformats": "^9.6.4",
     "p-retry": "^5.0.0",
@@ -30,12 +31,16 @@
     "ava": "^3.15.0",
     "esbuild": "^0.14.2",
     "git-rev-sync": "^3.0.1",
+    "ipfs-only-hash": "^4.0.0",
     "miniflare": "^2.5.0",
     "npm-run-all": "^4.1.5",
     "sade": "^1.7.4",
     "smoke": "^3.1.1",
     "standard": "^17.0.0",
     "typescript": "4.7.3"
+  },
+  "peerDependencies": {
+    "undici": "^5.8.0"
   },
   "standard": {
     "ignore": [
