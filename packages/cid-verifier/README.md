@@ -23,7 +23,7 @@
 
 ## High level architecture
 
-TODO
+![High level Architecture](./reads-pipeline-cid-verifier.jpg)
 
 ## Contributing
 
