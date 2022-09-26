@@ -80,21 +80,10 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // 3rd layer resolution - Public Gateways race
-  const winnerUrlPromise = pDefer()
-  const winnerGwResponse = await env.gwRacer.get(cid, {
-    pathname,
-    headers: getHeaders(request),
-    noAbortRequestsOnWinner: true,
-    onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
-      winnerUrlPromise.resolve(winnerGwResponse?.url)
-
-      ctx.waitUntil(
-        reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url)
-      )
-    }
-  })
-
-  const winnerUrl = await winnerUrlPromise.promise
+  const {
+    response: winnerGwResponse,
+    url: winnerUrl
+  } = await getFromGatewayRacer(cid, pathname, getHeaders(request), env, ctx)
 
   // Validation layer - resource CID
   const resourceCid = getCidFromEtag(winnerGwResponse.headers.get('etag') || '')
@@ -211,6 +200,59 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
     return proxiedResponse
   } catch (_) {}
   return undefined
+}
+
+/**
+ *
+ * @param {string} cid
+ * @param {string} pathname
+ * @param {Headers} headers
+ * @param {Env} env
+ * @param {import('./index').Ctx} ctx
+ */
+async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
+  const winnerUrlPromise = pDefer()
+  let response
+
+  // Trigger first tier resolution
+  response = await env.gwRacerL1.get(cid, {
+    pathname,
+    headers,
+    noAbortRequestsOnWinner: true,
+    onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
+      if (winnerGwResponse) {
+        winnerUrlPromise.resolve(winnerGwResponse.url)
+        ctx.waitUntil(
+          reportRaceResults(env, gatewayResponsePromises, winnerGwResponse.url)
+        )
+      } else {
+        ctx.waitUntil(
+          reportRaceResults(env, gatewayResponsePromises, undefined)
+        )
+
+        // Trigger second tier resolution
+        response = await env.gwRacerL2.get(cid, {
+          pathname,
+          headers,
+          noAbortRequestsOnWinner: true,
+          onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
+            winnerUrlPromise.resolve(winnerGwResponse?.url)
+
+            ctx.waitUntil(
+              reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url)
+            )
+          }
+        })
+      }
+    }
+  })
+
+  const url = await winnerUrlPromise.promise
+
+  return {
+    response,
+    url
+  }
 }
 
 /**

@@ -34,7 +34,8 @@ kv_namespaces = [
 ]
 
 [env.production.vars]
-IPFS_GATEWAYS = "[\"https://ipfs.io\", \"https://cf.dag.haus\", \"https://pinata.dag.haus\"]"
+IPFS_GATEWAYS_RACE_L1 = "[\"https://ipfs.io\"]"
+IPFS_GATEWAYS_RACE_L2 = "[\"https://cf.dag.haus\", \"https://w3link.mypinata.cloud\"]"
 GATEWAY_HOSTNAME = 'ipfs.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
@@ -86,7 +87,8 @@ kv_namespaces = [
 ]
 
 [env.staging.vars]
-IPFS_GATEWAYS = "[\"https://ipfs.io\", \"https://cf.dag.haus\", \"https://pinata.dag.haus\"]"
+IPFS_GATEWAYS_RACE_L1 = "[\"https://ipfs.io\"]"
+IPFS_GATEWAYS_RACE_L2 = "[\"https://cf.dag.haus\", \"https://w3link.mypinata.cloud\"]"
 GATEWAY_HOSTNAME = 'ipfs-staging.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier-staging.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
@@ -127,7 +129,8 @@ name = "PUBLIC_RACE_STATUS_CODE"
 workers_dev = true
 
 [env.test.vars]
-IPFS_GATEWAYS = "[\"http://127.0.0.1:9081\", \"http://localhost:9082\", \"http://localhost:9083\"]"
+IPFS_GATEWAYS_RACE_L1 = "[\"http://127.0.0.1:9081\"]"
+IPFS_GATEWAYS_RACE_L2 = "[\"http://localhost:9082\", \"http://localhost:9083\"]"
 GATEWAY_HOSTNAME = 'ipfs.localhost:8787'
 CID_VERIFIER_URL = 'http://cid-verifier.localhost:8787'
 EDGE_GATEWAY_API_URL = 'http://localhost:8787'
