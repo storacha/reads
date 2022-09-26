@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.2.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.1.1...edge-gateway-v1.2.0) (2022-09-26)
+
+
+### Features
+
+* 2 tier race for edge gateway ([#78](https://github.com/web3-storage/reads/issues/78)) ([1661166](https://github.com/web3-storage/reads/commit/1661166708ee977ac07e58df17fe66ffde040574))
+* adding google malware detection ([#36](https://github.com/web3-storage/reads/issues/36)) ([bacaeae](https://github.com/web3-storage/reads/commit/bacaeaea4d4610672b48c5d422100fccf78918ca))
+* edge gateway with cid verifier behind env var ([#73](https://github.com/web3-storage/reads/issues/73)) ([d3ae9f6](https://github.com/web3-storage/reads/commit/d3ae9f65bab0b4f7843f2301f8ce2345c2d1e603))
+
+
+### Bug Fixes
+
+* edge gateway package denylist binding for cron ([#61](https://github.com/web3-storage/reads/issues/61)) ([7700f46](https://github.com/web3-storage/reads/commit/7700f4600cc481e9417cfb60a7d98718a9b56319))
+* edge gateway should wait until cid verifier ([#63](https://github.com/web3-storage/reads/issues/63)) ([0cc74e3](https://github.com/web3-storage/reads/commit/0cc74e3c30402e40eb4a5237af460a6a267cc98a))
+* edge gateway to provide only cid to cid provider post ([#75](https://github.com/web3-storage/reads/issues/75)) ([bf6e740](https://github.com/web3-storage/reads/commit/bf6e740e42a52c36782af887f771c97f307a334f))
+* edge gateway to use denylist route ([#57](https://github.com/web3-storage/reads/issues/57)) ([ed7f418](https://github.com/web3-storage/reads/commit/ed7f41819a2fb1395f2d19fca7dfd242caf74abd))
+* handle etag formats to get resource cid ([#58](https://github.com/web3-storage/reads/issues/58)) ([ee3d024](https://github.com/web3-storage/reads/commit/ee3d02492c8a005f2b214181f0b18c7b66b73d88))
+* return value cid from etag ([#59](https://github.com/web3-storage/reads/issues/59)) ([1cdb6b7](https://github.com/web3-storage/reads/commit/1cdb6b7e6ee407ca190fd81d4b4eb13c1ec48e8a))
+* revert pinata gateway removal ([#52](https://github.com/web3-storage/reads/issues/52)) ([db996d6](https://github.com/web3-storage/reads/commit/db996d6f15873d75d3d1434e0921fbf031a1a08b))
+
 ## [1.1.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.1.0...edge-gateway-v1.1.1) (2022-09-07)
 
 
