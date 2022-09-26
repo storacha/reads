@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { Miniflare } from 'miniflare'
 
-export function getMiniflare () {
+export function getMiniflare (bindings = {}) {
   let envPath = path.join(process.cwd(), '../../.env')
   if (!fs.statSync(envPath, { throwIfNoEntry: false })) {
     // @ts-ignore
@@ -39,7 +39,8 @@ export function getMiniflare () {
     bindings: {
       PUBLIC_RACE_WINNER: createAnalyticsEngine(),
       PUBLIC_RACE_TTFB: createAnalyticsEngine(),
-      PUBLIC_RACE_STATUS_CODE: createAnalyticsEngine()
+      PUBLIC_RACE_STATUS_CODE: createAnalyticsEngine(),
+      ...bindings
     }
   })
 }

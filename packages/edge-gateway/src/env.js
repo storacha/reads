@@ -28,8 +28,12 @@ export function envAll (request, env, ctx) {
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
   env.sentry = getSentry(request, env, ctx)
-  env.ipfsGateways = JSON.parse(env.IPFS_GATEWAYS)
-  env.gwRacer = createGatewayRacer(env.ipfsGateways, {
+  env.ipfsGatewaysL1 = JSON.parse(env.IPFS_GATEWAYS_RACE_L1)
+  env.ipfsGatewaysL2 = JSON.parse(env.IPFS_GATEWAYS_RACE_L2)
+  env.gwRacerL1 = createGatewayRacer(env.ipfsGatewaysL1, {
+    timeout: env.REQUEST_TIMEOUT
+  })
+  env.gwRacerL2 = createGatewayRacer(env.ipfsGatewaysL2, {
     timeout: env.REQUEST_TIMEOUT
   })
   env.startTime = Date.now()

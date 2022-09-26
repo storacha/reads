@@ -36,7 +36,7 @@ test.after(async (t) => {
   await t.context.container?.stop()
 })
 
-test('Gets content', async (t) => {
+test('Gets content from first tier gateway race', async (t) => {
   const { mf } = t.context
 
   const response = await mf.dispatchFetch(
@@ -66,8 +66,63 @@ test('Gets content', async (t) => {
 
   // Number of winner events: 1
   t.is(analyticsWinnerEvents.length, 1)
-  // Number of ttfb/status code events: 3
-  t.is(analyticsTtfbEvents.length, 3)
+  // Number of ttfb/status code events: 1
+  t.is(analyticsTtfbEvents.length, 1)
+  t.is(analyticsStatusCodeEvents.length, 1)
+
+  // Winner selected
+  t.is(
+    analyticsWinnerEvents[0].blobs?.includes(
+      response.headers.get('x-dotstorage-resolution-id')
+    ),
+    true
+  )
+
+  // Number of status code events with status code 200
+  t.is(
+    analyticsStatusCodeEvents.filter((event) => event.blobs?.includes('200'))
+      .length,
+    bindings.ipfsGatewaysL1.length
+  )
+})
+
+test('Gets content from second tier gateway race', async (t) => {
+  const mf = getMiniflare({
+    IPFS_GATEWAYS_RACE_L1: '["http://localhost:9083"]',
+    IPFS_GATEWAYS_RACE_L2: '["http://localhost:9082", "http://127.0.0.1:9081"]'
+  })
+
+  // Only :9081 will be able to resolve this
+  const response = await mf.dispatchFetch(
+    'https://bafkreifbh4or5yoti7bahifd3gwx5m2qiwmrvpxsx3nsquf7r4wwkiruve.ipfs.localhost:8787'
+  )
+  await response.waitUntil()
+
+  // Validate x-dotstorage headers
+  t.assert(response.headers.get('x-dotstorage-resolution-id'))
+
+  const bindings = await mf.getBindings()
+
+  // Validate Analytics Engine Events
+  /** @type {Map<string,import('../src/bindings').AnalyticsEngineEvent>} */
+  const analyticsWinnerStore = bindings.PUBLIC_RACE_WINNER._store
+  /** @type {Map<string,import('../src/bindings').AnalyticsEngineEvent>} */
+  const analyticsTtfbStore = bindings.PUBLIC_RACE_TTFB._store
+  /** @type {Map<string,import('../src/bindings').AnalyticsEngineEvent>} */
+  const analyticsStatusCodeStore = bindings.PUBLIC_RACE_STATUS_CODE._store
+
+  // Events
+  const analyticsWinnerEvents = Array.from(analyticsWinnerStore.values())
+  const analyticsTtfbEvents = Array.from(analyticsTtfbStore.values())
+  const analyticsStatusCodeEvents = Array.from(
+    analyticsStatusCodeStore.values()
+  )
+
+  // Number of winner events: 1
+  t.is(analyticsWinnerEvents.length, 1)
+
+  // Number of ttfb/status code events: 2/3 (first gateway returns 524, so no TTFB)
+  t.is(analyticsTtfbEvents.length, 2)
   t.is(analyticsStatusCodeEvents.length, 3)
 
   // Winner selected
@@ -82,7 +137,7 @@ test('Gets content', async (t) => {
   t.is(
     analyticsStatusCodeEvents.filter((event) => event.blobs?.includes('200'))
       .length,
-    bindings.ipfsGateways.length
+    2
   )
 })
 

@@ -126,7 +126,12 @@ test('Get content from cache when existing and only-if-cached cache control is p
 test('Should not get from cache if no-cache cache control header is provided', async (t) => {
   const url =
     'https://bafybeic2hr75ukgwhnasdl3sucxyfedfyp3dijq3oakzx6o24urcs4eige.ipfs.localhost:8787/'
-  const { mf } = t.context
+
+  // Not block on waiting for local daemon only as L1
+  const mf = getMiniflare({
+    IPFS_GATEWAYS_RACE_L1: '["http://localhost:9083"]',
+    IPFS_GATEWAYS_RACE_L2: '["http://localhost:9082"]'
+  })
 
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), 2000)
