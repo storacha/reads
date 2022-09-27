@@ -89,7 +89,8 @@ export async function gatewayGet (request, env, ctx) {
   const resourceCid = getCidFromEtag(winnerGwResponse.headers.get('etag') || '')
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
     const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
-    if (cidResourceDenylistResponse.status !== 204) {
+    // Ignore if CID received from gateway in etag header is invalid by any reason
+    if (cidResourceDenylistResponse.status !== 204 && cidResourceDenylistResponse.status !== 400) {
       return cidResourceDenylistResponse
     }
   }
@@ -350,8 +351,8 @@ function getCidFromEtag (etag) {
   let resourceCid = decodeURIComponent(etag)
 
   // Handle weak etag
-  resourceCid.replace('W/', '')
-  resourceCid.replaceAll('"', '')
+  resourceCid = resourceCid.replace('W/', '')
+  resourceCid = resourceCid.replaceAll('"', '')
 
   // Handle directory index generated
   if (etag.includes('DirIndex')) {
