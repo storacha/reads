@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.0...edge-gateway-v1.2.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* public gateways might give us invalid etags ([#79](https://github.com/web3-storage/reads/issues/79)) ([0717443](https://github.com/web3-storage/reads/commit/07174430389f4261d8cb378813e48e12185e03f2))
+
 ## [1.2.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.1.1...edge-gateway-v1.2.0) (2022-09-26)
 
 
