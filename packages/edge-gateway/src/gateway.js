@@ -214,39 +214,46 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
 async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
   const winnerUrlPromise = pDefer()
   let response
+  let winnerResponseFetched = false
 
-  // Trigger first tier resolution
-  response = await env.gwRacerL1.get(cid, {
-    pathname,
-    headers,
-    noAbortRequestsOnWinner: true,
-    onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
-      if (winnerGwResponse) {
-        winnerUrlPromise.resolve(winnerGwResponse.url)
-        ctx.waitUntil(
-          reportRaceResults(env, gatewayResponsePromises, winnerGwResponse.url)
-        )
-      } else {
-        ctx.waitUntil(
-          reportRaceResults(env, gatewayResponsePromises, undefined)
-        )
-
-        // Trigger second tier resolution
-        response = await env.gwRacerL2.get(cid, {
-          pathname,
-          headers,
-          noAbortRequestsOnWinner: true,
-          onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
-            winnerUrlPromise.resolve(winnerGwResponse?.url)
-
-            ctx.waitUntil(
-              reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url)
-            )
-          }
-        })
+  try {
+    // Trigger first tier resolution
+    response = await env.gwRacerL1.get(cid, {
+      pathname,
+      headers,
+      noAbortRequestsOnWinner: true,
+      onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
+        if (winnerGwResponse) {
+          winnerResponseFetched = true
+          winnerUrlPromise.resolve(winnerGwResponse.url)
+          ctx.waitUntil(
+            reportRaceResults(env, gatewayResponsePromises, winnerGwResponse.url)
+          )
+        } else {
+          ctx.waitUntil(
+            reportRaceResults(env, gatewayResponsePromises, undefined)
+          )
+        }
       }
+    })
+    if (!winnerResponseFetched) {
+      throw new Error('no winner in the first race')
     }
-  })
+  } catch (err) {
+    // Trigger second tier resolution
+    response = await env.gwRacerL2.get(cid, {
+      pathname,
+      headers,
+      noAbortRequestsOnWinner: true,
+      onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
+        winnerUrlPromise.resolve(winnerGwResponse?.url)
+
+        ctx.waitUntil(
+          reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url)
+        )
+      }
+    })
+  }
 
   const url = await winnerUrlPromise.promise
 
