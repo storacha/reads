@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.1...edge-gateway-v1.2.2) (2022-10-07)
+
+
+### Bug Fixes
+
+* error handling on race ([#82](https://github.com/web3-storage/reads/issues/82)) ([6555ae4](https://github.com/web3-storage/reads/commit/6555ae4342db8f66ba1e2e382cbc08394d7224ba))
+
 ## [1.2.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.0...edge-gateway-v1.2.1) (2022-09-27)
 
 
