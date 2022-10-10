@@ -95,11 +95,13 @@ export const verificationPost = withRequiredQueryParams(['cid'],
 
     if (!googleEvaluateResult && !googleEvaluateLock) {
       const threats = await fetchGoogleMalwareResults(cid, `https://${cid}.${env.IPFS_GATEWAY_TLD}`, env)
+      const response = new Response('cid malware detection processed', { status: 201 })
 
       if (threats.length) {
         env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'info')
+        env.log.end(response)
       }
-      return new Response('cid malware detection processed', { status: 201 })
+      return response
     }
 
     return new Response('cid malware detection already processed', { status: 202 })
