@@ -43,7 +43,8 @@ export class IpfsGatewayRacer {
       pathname = '',
       headers = new Headers(),
       noAbortRequestsOnWinner = false,
-      onRaceEnd = nop
+      onRaceEnd = nop,
+      gatewaySignals = {}
     } = {}
   ) {
     const raceWinnerController = new AbortController()
@@ -52,7 +53,10 @@ export class IpfsGatewayRacer {
       gatewayFetch(gwUrl, cid, pathname, {
         headers,
         timeout: this.timeout,
-        signal: raceWinnerController.signal
+        // Combine internal race winner controller signal with custom user signal
+        signal: gatewaySignals[gwUrl]
+          ? anySignal([raceWinnerController.signal, gatewaySignals[gwUrl]])
+          : raceWinnerController.signal
       })
     )
 

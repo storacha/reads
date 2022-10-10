@@ -218,20 +218,22 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
 
   try {
     // Trigger first tier resolution
+    const { gatewayControllers, gatewaySignals } = getRaceContestantsControllers(env.ipfsGatewaysL1)
     response = await env.gwRacerL1.get(cid, {
       pathname,
       headers,
       noAbortRequestsOnWinner: true,
+      gatewaySignals,
       onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
         if (winnerGwResponse) {
           winnerResponseFetched = true
           winnerUrlPromise.resolve(winnerGwResponse.url)
           ctx.waitUntil(
-            reportRaceResults(env, gatewayResponsePromises, winnerGwResponse.url)
+            reportRaceResults(env, gatewayResponsePromises, winnerGwResponse.url, gatewayControllers)
           )
         } else {
           ctx.waitUntil(
-            reportRaceResults(env, gatewayResponsePromises, undefined)
+            reportRaceResults(env, gatewayResponsePromises, undefined, gatewayControllers)
           )
         }
       }
@@ -241,15 +243,17 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
     }
   } catch (err) {
     // Trigger second tier resolution
+    const { gatewayControllers, gatewaySignals } = getRaceContestantsControllers(env.ipfsGatewaysL2)
     response = await env.gwRacerL2.get(cid, {
       pathname,
       headers,
       noAbortRequestsOnWinner: true,
+      gatewaySignals,
       onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
         winnerUrlPromise.resolve(winnerGwResponse?.url)
 
         ctx.waitUntil(
-          reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url)
+          reportRaceResults(env, gatewayResponsePromises, winnerGwResponse?.url, gatewayControllers)
         )
       }
     })
@@ -376,8 +380,9 @@ function getCidFromEtag (etag) {
  * @param {Env} env
  * @param {GatewayResponsePromise[]} gatewayResponsePromises
  * @param {string | undefined} winnerUrl
+ * @param {Record<string, AbortController>} gatewayControllers
  */
-async function reportRaceResults (env, gatewayResponsePromises, winnerUrl) {
+async function reportRaceResults (env, gatewayResponsePromises, winnerUrl, gatewayControllers) {
   if (!env.PUBLIC_RACE_WINNER) {
     env.log.warn('No bindings for PUBLIC_RACE_WINNER Analytics')
     return
@@ -397,6 +402,13 @@ async function reportRaceResults (env, gatewayResponsePromises, winnerUrl) {
       }
     })
   )
+
+  // Abort all on going requests except for the winner
+  for (const [gatewayUrl, controller] of Object.entries(gatewayControllers)) {
+    if (winnerUrl !== gatewayUrl) {
+      controller.abort()
+    }
+  }
 
   // Count winners
   if (winnerUrl) {
@@ -426,4 +438,25 @@ async function reportRaceResults (env, gatewayResponsePromises, winnerUrl) {
       })
     }
   })
+}
+
+/**
+ * Gets abortControllers and signals for each race contestant request.
+ * @param {string[]} gatewayUrls
+ */
+function getRaceContestantsControllers (gatewayUrls) {
+  /** @type {Record<string, AbortSignal>} */
+  const gatewaySignals = {}
+  /** @type {Record<string, AbortController>} */
+  const gatewayControllers = {}
+  gatewayUrls.forEach(gateway => {
+    const abortController = new AbortController()
+    gatewayControllers[gateway] = abortController
+    gatewaySignals[gateway] = abortController.signal
+  })
+
+  return {
+    gatewayControllers,
+    gatewaySignals
+  }
 }
