@@ -42,7 +42,7 @@ export const verificationGet = withCidPathParam(
   async function (cid, request, env) {
     const threats = await getStoredThreats(cid, env)
     if (threats?.length) {
-      return new Response(threats.join(', '), { status: 403 })
+      return new Response(null, { status: 403 })
     }
 
     return new Response('', { status: 204 })

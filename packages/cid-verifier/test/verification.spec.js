@@ -78,7 +78,6 @@ test('GET /:cid handles successful results', async (t) => {
 test('GET /:cid handles malware cid', async (t) => {
   const { mf } = t.context
   const response = await mf.dispatchFetch(`http://localhost:8787/${malwareCid}`, { headers })
-  t.is(await response.text(), 'MALWARE')
   t.is(response.status, 403)
 })
 
