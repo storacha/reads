@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.2.0...ipfs-gateway-race-v1.2.1) (2022-10-11)
+
+
+### Bug Fixes
+
+* abort race contestants when all fulfill ([#48](https://github.com/web3-storage/reads/issues/48)) ([60163c2](https://github.com/web3-storage/reads/commit/60163c27eef8135ceef62c9ce478ffee6eb0f902))
+
 ## [1.2.0](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.1.0...ipfs-gateway-race-v1.2.0) (2022-07-29)
 
 
