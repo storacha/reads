@@ -13,3 +13,12 @@ export const RESOLUTION_IDENTIFIERS = {
   CACHE_ZONE: 'cache-zone',
   PERMA_CACHE: 'perma-cache'
 }
+
+export const DEFAULT_RACE_L1_GATEWAYS = [
+  'https://ipfs.io'
+]
+
+export const DEFAULT_RACE_L2_GATEWAYS = [
+  'https://cf.dag.haus',
+  'https://w3link.mypinata.cloud'
+]

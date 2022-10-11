@@ -5,6 +5,10 @@ import { Logging } from '@web3-storage/worker-utils/loki'
 import { createGatewayRacer } from 'ipfs-gateway-race'
 
 import pkg from '../package.json'
+import {
+  DEFAULT_RACE_L1_GATEWAYS,
+  DEFAULT_RACE_L2_GATEWAYS
+} from './constants.js'
 
 /**
  * @typedef {import('./bindings').Env} Env
@@ -27,15 +31,8 @@ export function envAll (request, env, ctx) {
   env.COMMITHASH = COMMITHASH
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
+  setGatewayRace(env)
   env.sentry = getSentry(request, env, ctx)
-  env.ipfsGatewaysL1 = JSON.parse(env.IPFS_GATEWAYS_RACE_L1)
-  env.ipfsGatewaysL2 = JSON.parse(env.IPFS_GATEWAYS_RACE_L2)
-  env.gwRacerL1 = createGatewayRacer(env.ipfsGatewaysL1, {
-    timeout: env.REQUEST_TIMEOUT
-  })
-  env.gwRacerL2 = createGatewayRacer(env.ipfsGatewaysL2, {
-    timeout: env.REQUEST_TIMEOUT
-  })
   env.startTime = Date.now()
 
   env.isCidVerifierEnabled = env.CID_VERIFIER_ENABLED === 'true'
@@ -53,6 +50,50 @@ export function envAll (request, env, ctx) {
     sentry: env.sentry
   })
   env.log.time('request')
+}
+
+/**
+ * @param {Env} env
+ */
+function setGatewayRace (env) {
+  /**
+   * @param {string} input
+   */
+  function getListFromInput (input) {
+    const list = JSON.parse(input)
+    // Validate is array and has URLs
+    if (!Array.isArray(list)) {
+      throw new Error('invalid environment variable')
+    }
+    list.map(gwUrl => new URL(gwUrl))
+    return list
+  }
+
+  // Set Layer 1
+  let l1Gateways
+  try {
+    l1Gateways = getListFromInput(env.IPFS_GATEWAYS_RACE_L1)
+  } catch (_) {
+    env.log && env.log.warn(`Invalid JSON string with race L1 Gateways: ${env.IPFS_GATEWAYS_RACE_L1}`)
+    l1Gateways = DEFAULT_RACE_L1_GATEWAYS
+  }
+  env.ipfsGatewaysL1 = l1Gateways
+  env.gwRacerL1 = createGatewayRacer(l1Gateways, {
+    timeout: env.REQUEST_TIMEOUT
+  })
+
+  // Set Layer 2
+  let l2Gateways
+  try {
+    l2Gateways = getListFromInput(env.IPFS_GATEWAYS_RACE_L2)
+  } catch (_) {
+    env.log && env.log.warn(`Invalid JSON string with race L2 Gateways: ${env.IPFS_GATEWAYS_RACE_L2}`)
+    l2Gateways = DEFAULT_RACE_L2_GATEWAYS
+  }
+  env.ipfsGatewaysL2 = l2Gateways
+  env.gwRacerL2 = createGatewayRacer(l2Gateways, {
+    timeout: env.REQUEST_TIMEOUT
+  })
 }
 
 /**
