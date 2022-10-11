@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/web3-storage/reads/compare/cid-verifier-v1.0.0...cid-verifier-v1.0.1) (2022-10-11)
+
+
+### Bug Fixes
+
+* cid verifier only logs when malware flagged ([#85](https://github.com/web3-storage/reads/issues/85)) ([283c179](https://github.com/web3-storage/reads/commit/283c179ff829f84efa824c97fd8f279621975b65))
+
 ## 1.0.0 (2022-09-16)
 
 
