@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.4](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.3...edge-gateway-v1.2.4) (2022-10-11)
+
+
+### Bug Fixes
+
+* not abort when no winner ([#95](https://github.com/web3-storage/reads/issues/95)) ([5a286c1](https://github.com/web3-storage/reads/commit/5a286c1796d0cb19cdef231ab1d312f1b5d73be4))
+
 ## [1.2.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.2...edge-gateway-v1.2.3) (2022-10-11)
 
 
