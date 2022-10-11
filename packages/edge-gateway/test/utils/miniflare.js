@@ -40,6 +40,7 @@ export function getMiniflare (bindings = {}) {
       PUBLIC_RACE_WINNER: createAnalyticsEngine(),
       PUBLIC_RACE_TTFB: createAnalyticsEngine(),
       PUBLIC_RACE_STATUS_CODE: createAnalyticsEngine(),
+      REQUEST_TIMEOUT: 3000,
       ...bindings
     }
   })
