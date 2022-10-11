@@ -7,6 +7,7 @@ export interface IpfsGatewayRaceGetOptions {
   headers?: Headers
   noAbortRequestsOnWinner?: boolean
   onRaceEnd?: (gatewayResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
+  gatewaySignals?: Record<string, AbortSignal>
 }
 
 // Gateway Race Responses

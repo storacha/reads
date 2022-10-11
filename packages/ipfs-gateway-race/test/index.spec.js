@@ -18,11 +18,11 @@ test.before(async (t) => {
   // Add fixtures
   await addFixtures(container.getMappedPort(5001))
 
+  const gateways = [`http://127.0.0.1:${container.getMappedPort(8080)}`, 'http://localhost:9082', 'http://localhost:9083']
   t.context = {
     container,
-    gwRacer: createGatewayRacer(
-      [`http://127.0.0.1:${container.getMappedPort(8080)}`, 'http://localhost:9082', 'http://localhost:9083']
-    )
+    gateways,
+    gwRacer: createGatewayRacer(gateways)
   }
 })
 
@@ -101,6 +101,49 @@ test('Disables abort of other race contestants once there is a winner', async (t
 
   t.is(response.status, 200)
   await defer.promise
+})
+
+test('Can abort other race contestants only after all promises are resolved and read winner', async (t) => {
+  const { gwRacer, gateways } = t.context
+  const defer = pDefer()
+  t.plan(3)
+
+  /** @type {Record<string, AbortSignal>} */
+  const gatewaySignals = {}
+  /** @type {Record<string, AbortController>} */
+  const gatewayControllers = {}
+  gateways.forEach(gateway => {
+    const abortController = new AbortController()
+    gatewayControllers[gateway] = abortController
+    gatewaySignals[gateway] = abortController.signal
+  })
+
+  const cid = 'bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u'
+  const response = await gwRacer.get(cid, {
+    onRaceEnd: async (gwRequests, winnerGwResponse) => {
+      t.assert(winnerGwResponse)
+
+      // Wait for all request promises to fulfill
+      await pSettle(gwRequests)
+
+      // Abort all on going requests except for the winner
+      for (const [gatewayUrl, controller] of Object.entries(gatewayControllers)) {
+        if (winnerGwResponse?.url !== gatewayUrl) {
+          controller.abort()
+        }
+      }
+
+      defer.resolve()
+    },
+    noAbortRequestsOnWinner: true,
+    gatewaySignals
+  })
+
+  t.is(response.status, 200)
+  await defer.promise
+
+  // Can still read winner response after other race contestants are aborted
+  t.is(await response.text(), 'Hello dot.storage! 😎')
 })
 
 test('A subset of gateways in the race can fail', async t => {
