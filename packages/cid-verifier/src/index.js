@@ -41,8 +41,7 @@ export default {
     const req = request.clone()
     try {
       const res = await router.handle(req, env, ctx)
-      env.log.timeEnd('request')
-      return env.log.end(res)
+      return res
     } catch (/** @type {any} */ error) {
       if (env.log) {
         env.log.timeEnd('request')
