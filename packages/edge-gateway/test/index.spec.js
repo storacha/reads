@@ -101,3 +101,16 @@ test('Gets content with other base encodings', async (t) => {
   await response.waitUntil()
   t.is(await response.text(), 'Hello dot.storage! 😎')
 })
+
+test('Gets response error when all fail to resolve', async (t) => {
+  const { mf } = t.context
+
+  const cidStr = 'bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr54uqu'
+
+  const response = await mf.dispatchFetch(
+    `https://${cidStr}.ipfs.localhost:8787`
+  )
+  await response.waitUntil()
+  const body = await response.text()
+  t.assert(body)
+})

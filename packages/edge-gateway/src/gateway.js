@@ -403,15 +403,15 @@ async function reportRaceResults (env, gatewayResponsePromises, winnerUrl, gatew
     })
   )
 
-  // Abort all on going requests except for the winner
-  for (const [gatewayUrl, controller] of Object.entries(gatewayControllers)) {
-    if (winnerUrl !== gatewayUrl) {
-      controller.abort()
-    }
-  }
-
-  // Count winners
   if (winnerUrl) {
+    // Abort all on going requests except for the winner
+    for (const [gatewayUrl, controller] of Object.entries(gatewayControllers)) {
+      if (winnerUrl !== gatewayUrl) {
+        controller.abort()
+      }
+    }
+
+    // Count winners
     env.PUBLIC_RACE_WINNER.writeDataPoint({
       blobs: [winnerUrl],
       doubles: [1]
