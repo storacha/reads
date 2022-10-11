@@ -1,6 +1,8 @@
 import { Multibases } from 'ipfs-core-utils/multibases'
 import { bases } from 'multiformats/basics'
 import { CID } from 'multiformats/cid'
+import * as uint8arrays from 'uint8arrays'
+import { sha256 } from 'multiformats/hashes/sha2'
 
 import { InvalidUrlError } from '../errors.js'
 
@@ -54,4 +56,15 @@ async function getMultibaseDecoder (cid) {
   const base = await basicBases.getBase(multibasePrefix)
 
   return base.decoder
+}
+
+/**
+ * Get denylist anchor with badbits format.
+ *
+ * @param {string} cid
+ */
+export async function toDenyListAnchor (cid) {
+  const multihash = await sha256.digest(uint8arrays.fromString(`${cid}/`))
+  const digest = multihash.bytes.subarray(2)
+  return uint8arrays.toString(digest, 'hex')
 }

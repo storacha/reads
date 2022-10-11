@@ -7,7 +7,10 @@ import pSettle from 'p-settle'
 import { FilterError } from 'p-some'
 import { gatewayFetch } from 'ipfs-gateway-race'
 
-import { getCidFromSubdomainUrl } from './utils/cid.js'
+import {
+  getCidFromSubdomainUrl,
+  toDenyListAnchor
+} from './utils/cid.js'
 import { getHeaders } from './utils/headers.js'
 import { TimeoutError } from './errors.js'
 import {
@@ -32,6 +35,9 @@ import {
  * @property {Response} response
  * @property {ResolutionLayer} resolutionLayer
  * @property {string} url
+ *
+ * @typedef {Object} OptionalCustomHeaders
+ * @property {string} [anchor]
  */
 
 /**
@@ -81,7 +87,10 @@ export async function gatewayGet (request, env, ctx) {
     return getResponseWithCustomHeaders(
       dotstorageRes.response,
       RESOLUTION_LAYERS.DOTSTORAGE_RACE,
-      dotstorageRes.resolutionIdentifier
+      dotstorageRes.resolutionIdentifier,
+      {
+        anchor: await toDenyListAnchor(cid)
+      }
     )
   }
 
@@ -93,7 +102,7 @@ export async function gatewayGet (request, env, ctx) {
   } = await getFromGatewayRacer(cid, pathname, getHeaders(request), env, ctx)
 
   // Validation layer - resource CID
-  const resourceCid = getCidFromEtag(winnerGwResponse.headers.get('etag') || '')
+  const resourceCid = pathname !== '/' ? getCidFromEtag(winnerGwResponse.headers.get('etag') || cid) : cid
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
     const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
     // Ignore if CID received from gateway in etag header is invalid by any reason
@@ -107,10 +116,9 @@ export async function gatewayGet (request, env, ctx) {
     env.isCidVerifierEnabled &&
     winnerGwResponse && winnerGwResponse.headers.get('content-type')?.includes('text/html')
   ) {
-    const verifyCid = pathname !== '/' ? resourceCid : cid
     // fire and forget. Let cid-verifier process this cid and url if it needs to
     ctx.waitUntil(
-      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${verifyCid}`, { method: 'POST' })
+      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${resourceCid}`, { method: 'POST' })
     )
   }
 
@@ -122,7 +130,10 @@ export async function gatewayGet (request, env, ctx) {
   return getResponseWithCustomHeaders(
     winnerGwResponse,
     raceResolutionLayer,
-    winnerUrl
+    winnerUrl,
+    {
+      anchor: await toDenyListAnchor(resourceCid)
+    }
   )
 }
 
@@ -358,15 +369,16 @@ async function putToCache (request, response, cache) {
 }
 
 /**
- *
  * @param {Response} response
  * @param {ResolutionLayer} resolutionLayer
  * @param {string} resolutionIdentifier
+ * @param {OptionalCustomHeaders} [options]
  */
 function getResponseWithCustomHeaders (
   response,
   resolutionLayer,
-  resolutionIdentifier
+  resolutionIdentifier,
+  options = {}
 ) {
   const clonedResponse = new Response(response.body, response)
 
@@ -375,6 +387,14 @@ function getResponseWithCustomHeaders (
     'x-dotstorage-resolution-id',
     resolutionIdentifier
   )
+
+  // Add anchor
+  if (options.anchor) {
+    clonedResponse.headers.set(
+      'x-dotstorage-anchor',
+      options.anchor
+    )
+  }
 
   return clonedResponse
 }
