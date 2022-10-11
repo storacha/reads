@@ -43,6 +43,10 @@ export default {
       const res = await router.handle(req, env, ctx)
       return res
     } catch (/** @type {any} */ error) {
+      if (env.log) {
+        env.log.timeEnd('request')
+        return env.log.end(serverError(error, req, env))
+      }
       return serverError(error, req, env)
     }
   }
