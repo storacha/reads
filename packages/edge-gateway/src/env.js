@@ -31,8 +31,20 @@ export function envAll (request, env, ctx) {
   env.COMMITHASH = COMMITHASH
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
-  addGatewayRacersToEnv(env)
   env.sentry = getSentry(request, env, ctx)
+
+  // Set Layer 1 racer
+  env.ipfsGatewaysL1 = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L1, DEFAULT_RACE_L1_GATEWAYS, env)
+  env.gwRacerL1 = createGatewayRacer(env.ipfsGatewaysL1, {
+    timeout: env.REQUEST_TIMEOUT
+  })
+
+  // Set Layer 2 racer
+  env.ipfsGatewaysL2 = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L2, DEFAULT_RACE_L2_GATEWAYS, env)
+  env.gwRacerL2 = createGatewayRacer(env.ipfsGatewaysL2, {
+    timeout: env.REQUEST_TIMEOUT
+  })
+
   env.startTime = Date.now()
 
   env.isCidVerifierEnabled = env.CID_VERIFIER_ENABLED === 'true'
@@ -53,47 +65,25 @@ export function envAll (request, env, ctx) {
 }
 
 /**
+ * @param {string} input
+ * @param {string[]} defaultValue
  * @param {Env} env
  */
-function addGatewayRacersToEnv (env) {
-  /**
-   * @param {string} input
-   */
-  function parseGatewayUrls (input) {
-    const list = JSON.parse(input)
+function parseGatewayUrls (input, defaultValue, env) {
+  let list
+  try {
+    list = JSON.parse(input)
     // Validate is array and has URLs
     if (!Array.isArray(list)) {
       throw new Error('invalid gateways list environment variable')
     }
     list.forEach(gwUrl => new URL(gwUrl))
-    return list
+  } catch (err) {
+    env.log && env.log.warn(`Invalid JSON string with race Gateways: ${input}`)
+    list = defaultValue
   }
 
-  // Set Layer 1
-  let l1Gateways
-  try {
-    l1Gateways = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L1)
-  } catch (_) {
-    env.log && env.log.warn(`Invalid JSON string with race L1 Gateways: ${env.IPFS_GATEWAYS_RACE_L1}`)
-    l1Gateways = DEFAULT_RACE_L1_GATEWAYS
-  }
-  env.ipfsGatewaysL1 = l1Gateways
-  env.gwRacerL1 = createGatewayRacer(l1Gateways, {
-    timeout: env.REQUEST_TIMEOUT
-  })
-
-  // Set Layer 2
-  let l2Gateways
-  try {
-    l2Gateways = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L2)
-  } catch (_) {
-    env.log && env.log.warn(`Invalid JSON string with race L2 Gateways: ${env.IPFS_GATEWAYS_RACE_L2}`)
-    l2Gateways = DEFAULT_RACE_L2_GATEWAYS
-  }
-  env.ipfsGatewaysL2 = l2Gateways
-  env.gwRacerL2 = createGatewayRacer(l2Gateways, {
-    timeout: env.REQUEST_TIMEOUT
-  })
+  return list
 }
 
 /**
