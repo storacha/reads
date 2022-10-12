@@ -31,7 +31,7 @@ export function envAll (request, env, ctx) {
   env.COMMITHASH = COMMITHASH
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
-  setGatewayRace(env)
+  addGatewayRacersToEnv(env)
   env.sentry = getSentry(request, env, ctx)
   env.startTime = Date.now()
 
@@ -55,24 +55,24 @@ export function envAll (request, env, ctx) {
 /**
  * @param {Env} env
  */
-function setGatewayRace (env) {
+function addGatewayRacersToEnv (env) {
   /**
    * @param {string} input
    */
-  function getListFromInput (input) {
+  function parseGatewayUrls (input) {
     const list = JSON.parse(input)
     // Validate is array and has URLs
     if (!Array.isArray(list)) {
-      throw new Error('invalid environment variable')
+      throw new Error('invalid gateways list environment variable')
     }
-    list.map(gwUrl => new URL(gwUrl))
+    list.forEach(gwUrl => new URL(gwUrl))
     return list
   }
 
   // Set Layer 1
   let l1Gateways
   try {
-    l1Gateways = getListFromInput(env.IPFS_GATEWAYS_RACE_L1)
+    l1Gateways = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L1)
   } catch (_) {
     env.log && env.log.warn(`Invalid JSON string with race L1 Gateways: ${env.IPFS_GATEWAYS_RACE_L1}`)
     l1Gateways = DEFAULT_RACE_L1_GATEWAYS
@@ -85,7 +85,7 @@ function setGatewayRace (env) {
   // Set Layer 2
   let l2Gateways
   try {
-    l2Gateways = getListFromInput(env.IPFS_GATEWAYS_RACE_L2)
+    l2Gateways = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L2)
   } catch (_) {
     env.log && env.log.warn(`Invalid JSON string with race L2 Gateways: ${env.IPFS_GATEWAYS_RACE_L2}`)
     l2Gateways = DEFAULT_RACE_L2_GATEWAYS
