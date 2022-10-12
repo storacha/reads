@@ -2,6 +2,11 @@ import fs from 'fs'
 import path from 'path'
 import { Miniflare } from 'miniflare'
 
+export const secrets = {
+  IPFS_GATEWAYS_RACE_L1: '["http://127.0.0.1:9081"]',
+  IPFS_GATEWAYS_RACE_L2: '["http://localhost:9082", "http://localhost:9083"]'
+}
+
 export function getMiniflare (bindings = {}) {
   let envPath = path.join(process.cwd(), '../../.env')
   if (!fs.statSync(envPath, { throwIfNoEntry: false })) {
@@ -41,6 +46,7 @@ export function getMiniflare (bindings = {}) {
       PUBLIC_RACE_TTFB: createAnalyticsEngine(),
       PUBLIC_RACE_STATUS_CODE: createAnalyticsEngine(),
       REQUEST_TIMEOUT: 3000,
+      ...secrets,
       ...bindings
     }
   })
