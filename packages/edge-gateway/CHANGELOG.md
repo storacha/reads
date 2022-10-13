@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.4...edge-gateway-v1.3.0) (2022-10-13)
+
+
+### Features
+
+* add support for gateway race configuration via wrangler secret ([#100](https://github.com/web3-storage/reads/issues/100)) ([3bf013f](https://github.com/web3-storage/reads/commit/3bf013f0b016792058f3175f9119a2312ce0a99e))
+
 ## [1.2.4](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.3...edge-gateway-v1.2.4) (2022-10-11)
 
 
