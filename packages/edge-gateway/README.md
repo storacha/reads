@@ -15,8 +15,8 @@
     wrangler secret put SENTRY_DSN --env $(whoami) # Get from Sentry
     wrangler secret put LOKI_URL --env $(whoami) # Get from Loki
     wrangler secret put LOKI_TOKEN --env $(whoami) # Get from Loki
-    wrangler secret put IPFS_GATEWAYS_RACE_L1 --env $(whoami) # JSON String with array of IPFS Gateways URLs (eg. [\"https://ipfs.io\"])
-    wrangler secret put IPFS_GATEWAYS_RACE_L2 --env $(whoami) # JSON String with array of IPFS Gateways URLs (eg. [\"https://cf.dag.haus\", \"https://w3link.mypinata.cloud\"])
+    wrangler secret put IPFS_GATEWAYS_RACE_L1 --env $(whoami) # JSON String with array of IPFS Gateways URLs (eg. echo -e '["https://ipfs.io","https://dagula.dag.haus"]' | wrangler secret ...)
+    wrangler secret put IPFS_GATEWAYS_RACE_L2 --env $(whoami) # JSON String with array of IPFS Gateways URLs (eg. echo -e '["https://cf.dag.haus","https://w3link.mypinata.cloud"]' | wrangler secret ...)
   ```
 
 - `pnpm run publish` - Publish the worker under desired env. An alias for `wrangler publish --env $(whoami)`
