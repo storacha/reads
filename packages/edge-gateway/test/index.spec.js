@@ -5,7 +5,6 @@ import { test, getMiniflare } from './utils/setup.js'
 import { addFixtures } from './utils/fixtures.js'
 import { GenericContainer, Wait } from 'testcontainers'
 
-import { RESOLUTION_LAYERS } from '../src/constants.js'
 import { createErrorHtmlContent } from '../src/errors.js'
 
 test.before(async (t) => {
@@ -62,9 +61,8 @@ test('Gets content', async (t) => {
   t.is(response.headers.get('content-length'), '23')
 
   // Validate x-dotstorage headers
-  t.is(
-    response.headers.get('x-dotstorage-resolution-layer'),
-    RESOLUTION_LAYERS.PUBLIC_RACE
+  t.assert(
+    response.headers.get('x-dotstorage-resolution-layer')
   )
   t.assert(response.headers.get('x-dotstorage-resolution-id'))
 })
@@ -81,9 +79,8 @@ test('Gets content with path', async (t) => {
   t.is(response.headers.get('content-length'), '35')
   t.is(response.headers.get('content-type'), 'text/plain; charset=utf-8')
   // Validate x-dotstorage headers
-  t.is(
-    response.headers.get('x-dotstorage-resolution-layer'),
-    RESOLUTION_LAYERS.PUBLIC_RACE
+  t.assert(
+    response.headers.get('x-dotstorage-resolution-layer')
   )
   t.assert(response.headers.get('x-dotstorage-resolution-id'))
 })
