@@ -17,15 +17,20 @@ import {
 
 /**
  * @typedef {import('./env').Env} Env
- * @typedef {'cdn' | 'dotstorage-race' | 'public-race'} ResolutionLayer
+ * @typedef {'cdn' | 'dotstorage-race' | 'public-race-l1' | 'public-race-l2'} ResolutionLayer
  *
  * @typedef {import('ipfs-gateway-race').GatewayResponse} GatewayResponse
  * @typedef {import('ipfs-gateway-race').GatewayResponsePromise} GatewayResponsePromise
  * @typedef {{ value: GatewayResponse & { duration: number} }} GatewayRaceResponses
  *
- * @typedef {Object} ProxiedResponse
+ * @typedef {Object} ProxiedCDNResponse
  * @property {Response} response
  * @property {string} resolutionIdentifier
+ *
+ * @typedef {Object} ProxiedLayeredResponse
+ * @property {Response} response
+ * @property {ResolutionLayer} resolutionLayer
+ * @property {string} url
  */
 
 /**
@@ -82,7 +87,8 @@ export async function gatewayGet (request, env, ctx) {
   // 3rd layer resolution - Public Gateways race
   const {
     response: winnerGwResponse,
-    url: winnerUrl
+    url: winnerUrl,
+    resolutionLayer: raceResolutionLayer
   } = await getFromGatewayRacer(cid, pathname, getHeaders(request), env, ctx)
 
   // Validation layer - resource CID
@@ -114,7 +120,7 @@ export async function gatewayGet (request, env, ctx) {
 
   return getResponseWithCustomHeaders(
     winnerGwResponse,
-    RESOLUTION_LAYERS.PUBLIC_RACE,
+    raceResolutionLayer,
     winnerUrl
   )
 }
@@ -125,7 +131,7 @@ export async function gatewayGet (request, env, ctx) {
  * @param {Request} request
  * @param {Env} env
  * @param {Cache} cache
- * @return {Promise<ProxiedResponse | undefined>}
+ * @return {Promise<ProxiedCDNResponse | undefined>}
  */
 async function getFromCdn (request, env, cache) {
   // Should skip cache if instructed by headers
@@ -143,7 +149,7 @@ async function getFromCdn (request, env, cache) {
 
     // @ts-ignore p-any Promise types differ from CF promise types
     const res = await pAny(cdnRequests, {
-      filter: (/** @type {ProxiedResponse} */ res) => !!res
+      filter: (/** @type {ProxiedCDNResponse} */ res) => !!res
     })
     return res
   } catch (err) {
@@ -159,9 +165,10 @@ async function getFromCdn (request, env, cache) {
  * @param {Request} request
  * @param {string} cid
  * @param {{ pathname?: string}} [options]
- * @return {Promise<ProxiedResponse | undefined>}
+ * @return {Promise<ProxiedCDNResponse | undefined>}
  */
-async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
+async function getFromDotstorage (request, cid, options = {}) {
+  const pathname = options.pathname || ''
   try {
     // Get onlyIfCached hosts provided
     /** @type {string[]} */
@@ -181,7 +188,7 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
     const headers = getHeaders(request)
     headers.set('Cache-Control', 'only-if-cached')
 
-    const proxiedResponse = await pAny(
+    const proxiedCDNResponse = await pAny(
       hosts.map(async (host) => {
         const response = await fetch(`https://${cid}.ipfs.${host}${pathname}`, {
           headers
@@ -198,7 +205,7 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
       })
     )
 
-    return proxiedResponse
+    return proxiedCDNResponse
   } catch (_) {}
   return undefined
 }
@@ -210,11 +217,12 @@ async function getFromDotstorage (request, cid, { pathname = '' } = {}) {
  * @param {Headers} headers
  * @param {Env} env
  * @param {import('./index').Ctx} ctx
+ * @return {Promise<ProxiedLayeredResponse>}
  */
 async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
   const winnerUrlPromise = pDefer()
   let response
-  let winnerResponseFetched = false
+  let layerOneIsWinner = false
 
   try {
     // Trigger first tier resolution
@@ -226,7 +234,7 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
       gatewaySignals,
       onRaceEnd: async (gatewayResponsePromises, winnerGwResponse) => {
         if (winnerGwResponse) {
-          winnerResponseFetched = true
+          layerOneIsWinner = true
           winnerUrlPromise.resolve(winnerGwResponse.url)
           ctx.waitUntil(
             reportRaceResults(env, gatewayResponsePromises, winnerGwResponse.url, gatewayControllers)
@@ -238,7 +246,7 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
         }
       }
     })
-    if (!winnerResponseFetched) {
+    if (!layerOneIsWinner) {
       throw new Error('no winner in the first race')
     }
   } catch (err) {
@@ -263,7 +271,8 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
 
   return {
     response,
-    url
+    url,
+    resolutionLayer: layerOneIsWinner ? RESOLUTION_LAYERS.PUBLIC_RACE_L1 : RESOLUTION_LAYERS.PUBLIC_RACE_L2
   }
 }
 
@@ -272,7 +281,7 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
  *
  * @param {Request} request
  * @param {Cache} cache
- * @return {Promise<ProxiedResponse | undefined>}
+ * @return {Promise<ProxiedCDNResponse | undefined>}
  */
 async function getFromCacheZone (request, cache) {
   const response = await cache.match(request)
@@ -292,7 +301,7 @@ async function getFromCacheZone (request, cache) {
  *
  * @param {Request} request
  * @param {Env} env
- * @return {Promise<ProxiedResponse | undefined>}
+ * @return {Promise<ProxiedCDNResponse | undefined>}
  */
 async function getFromPermaCache (request, env) {
   const response = await env.API.fetch(

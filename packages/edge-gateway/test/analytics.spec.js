@@ -46,6 +46,7 @@ test('Gets content from first tier gateway race', async (t) => {
 
   // Validate x-dotstorage headers
   t.assert(response.headers.get('x-dotstorage-resolution-id'))
+  t.is(response.headers.get('x-dotstorage-resolution-layer'), 'public-race-l1')
 
   const bindings = await mf.getBindings()
 
@@ -100,6 +101,7 @@ test('Gets content from second tier gateway race', async (t) => {
 
   // Validate x-dotstorage headers
   t.assert(response.headers.get('x-dotstorage-resolution-id'))
+  t.is(response.headers.get('x-dotstorage-resolution-layer'), 'public-race-l2')
 
   const bindings = await mf.getBindings()
 
