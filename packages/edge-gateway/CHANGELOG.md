@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.3.0...edge-gateway-v1.4.0) (2022-10-14)
+
+
+### Features
+
+* track layer resolution header ([#103](https://github.com/web3-storage/reads/issues/103)) ([08f3a6d](https://github.com/web3-storage/reads/commit/08f3a6dd48f6368ddff2f04eaf645b60680b35d4))
+
 ## [1.3.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.2.4...edge-gateway-v1.3.0) (2022-10-13)
 
 
