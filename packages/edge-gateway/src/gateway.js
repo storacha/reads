@@ -5,6 +5,7 @@ import pAny, { AggregateError } from 'p-any'
 import pDefer from 'p-defer'
 import pSettle from 'p-settle'
 import { FilterError } from 'p-some'
+import { gatewayFetch } from 'ipfs-gateway-race'
 
 import { getCidFromSubdomainUrl } from './utils/cid.js'
 import { getHeaders } from './utils/headers.js'
@@ -75,7 +76,7 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // 2nd layer
-  const dotstorageRes = await getFromDotstorage(request, cid, { pathname })
+  const dotstorageRes = await getFromDotstorage(request, env, cid, { pathname })
   if (dotstorageRes) {
     return getResponseWithCustomHeaders(
       dotstorageRes.response,
@@ -163,16 +164,17 @@ async function getFromCdn (request, env, cache) {
 
 /**
  * @param {Request} request
+ * @param {Env} env
  * @param {string} cid
  * @param {{ pathname?: string}} [options]
  * @return {Promise<ProxiedCDNResponse | undefined>}
  */
-async function getFromDotstorage (request, cid, options = {}) {
+async function getFromDotstorage (request, env, cid, options = {}) {
   const pathname = options.pathname || ''
   try {
     // Get onlyIfCached hosts provided
     /** @type {string[]} */
-    const hosts = []
+    const onlyIfCachedHosts = []
     // @ts-ignore custom entry in cf object
     if (request.cf?.onlyIfCachedGateways) {
       /** @type {URL[]} */
@@ -181,15 +183,15 @@ async function getFromDotstorage (request, cid, options = {}) {
         request.cf?.onlyIfCachedGateways
       ).map((/** @type {string} */ gw) => new URL(gw))
 
-      onlyIfCachedGateways.forEach((gw) => hosts.push(gw.host))
+      onlyIfCachedGateways.forEach((gw) => onlyIfCachedHosts.push(gw.host))
     }
 
-    // Add only if cached header
-    const headers = getHeaders(request)
-    headers.set('Cache-Control', 'only-if-cached')
+    const proxiedCDNResponse = await pAny([
+      ...onlyIfCachedHosts.map(async (host) => {
+        // Add only if cached header
+        const headers = getHeaders(request)
+        headers.set('Cache-Control', 'only-if-cached')
 
-    const proxiedCDNResponse = await pAny(
-      hosts.map(async (host) => {
         const response = await fetch(`https://${cid}.ipfs.${host}${pathname}`, {
           headers
         })
@@ -202,8 +204,24 @@ async function getFromDotstorage (request, cid, options = {}) {
           response,
           resolutionIdentifier: host
         }
+      }),
+      ...env.cdnGateways.map(async (host) => {
+        const gwResponse = await gatewayFetch(host, cid, pathname, {
+          timeout: env.REQUEST_TIMEOUT
+        })
+
+        // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
+        if (!gwResponse?.response.ok) {
+          throw new Error()
+        }
+
+        return {
+          // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
+          response: gwResponse?.response,
+          resolutionIdentifier: host
+        }
       })
-    )
+    ])
 
     return proxiedCDNResponse
   } catch (_) {}

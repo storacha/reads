@@ -148,3 +148,27 @@ test('Should not get from cache if no-cache cache control header is provided', a
     clearTimeout(timer)
   }
 })
+
+test('should get from cdn gateways race if they can resolve', async (t) => {
+  const url =
+    'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787'
+
+  const mf = getMiniflare({
+    CDN_GATEWAYS_RACE: '["http://localhost:9082"]',
+    IPFS_GATEWAYS_RACE_L1: '["http://localhost:9083"]',
+    IPFS_GATEWAYS_RACE_L2: '["http://localhost:9081"]'
+  })
+
+  const response = await mf.dispatchFetch(
+    url
+  )
+  await response.waitUntil()
+  t.is(await response.text(), 'Hello dot.storage! 😎')
+
+  // Validate content headers
+  t.is(response.headers.get('content-length'), '23')
+
+  // Validate x-dotstorage headers
+  t.is(response.headers.get('x-dotstorage-resolution-layer'), 'dotstorage-race')
+  t.is(response.headers.get('x-dotstorage-resolution-id'), 'http://localhost:9082')
+})

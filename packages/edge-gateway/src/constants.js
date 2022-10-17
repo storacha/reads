@@ -15,6 +15,9 @@ export const RESOLUTION_IDENTIFIERS = {
   PERMA_CACHE: 'perma-cache'
 }
 
+/** @type {string[]} */
+export const DEFAULT_CDN_GATEWAYS = []
+
 export const DEFAULT_RACE_L1_GATEWAYS = [
   'https://ipfs.io'
 ]

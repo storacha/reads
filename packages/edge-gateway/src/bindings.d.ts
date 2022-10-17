@@ -20,6 +20,7 @@ export interface EnvInput {
   CID_VERIFIER_ENABLED: string
   CID_VERIFIER_URL: string
   CID_VERIFIER: Fetcher
+  CDN_GATEWAYS_RACE: string
   IPFS_GATEWAYS_RACE_L1: string
   IPFS_GATEWAYS_RACE_L2: string
   GATEWAY_HOSTNAME: string
@@ -43,6 +44,7 @@ export interface EnvTransformed {
   REQUEST_TIMEOUT: number
   IPFS_GATEWAY_HOSTNAME: string
   IPNS_GATEWAY_HOSTNAME: string
+  cdnGateways: Array<string>
   ipfsGatewaysL1: Array<string>
   ipfsGatewaysL2: Array<string>
   sentry?: Toucan
