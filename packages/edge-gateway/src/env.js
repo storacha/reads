@@ -7,7 +7,8 @@ import { createGatewayRacer } from 'ipfs-gateway-race'
 import pkg from '../package.json'
 import {
   DEFAULT_RACE_L1_GATEWAYS,
-  DEFAULT_RACE_L2_GATEWAYS
+  DEFAULT_RACE_L2_GATEWAYS,
+  DEFAULT_CDN_GATEWAYS
 } from './constants.js'
 
 /**
@@ -32,6 +33,9 @@ export function envAll (request, env, ctx) {
   env.SENTRY_RELEASE = SENTRY_RELEASE
 
   env.sentry = getSentry(request, env, ctx)
+
+  // Set CDN Gateways
+  env.cdnGateways = parseGatewayUrls(env.CDN_GATEWAYS_RACE, DEFAULT_CDN_GATEWAYS, env)
 
   // Set Layer 1 racer
   env.ipfsGatewaysL1 = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L1, DEFAULT_RACE_L1_GATEWAYS, env)

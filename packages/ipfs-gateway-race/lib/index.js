@@ -137,7 +137,7 @@ export function createGatewayRacer (ipfsGateways, options = {}) {
  * @param {number} [options.timeout]
  * @param {AbortSignal} [options.signal]
  */
-async function gatewayFetch (
+export async function gatewayFetch (
   gwUrl,
   cid,
   pathname,
