@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.2.1...ipfs-gateway-race-v1.3.0) (2022-10-18)
+
+
+### Features
+
+* dotstorage hosts resolution layer ([#105](https://github.com/web3-storage/reads/issues/105)) ([f24d290](https://github.com/web3-storage/reads/commit/f24d290d5737fbcae35582a7cc69b24d00853563))
+
 ## [1.2.1](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.2.0...ipfs-gateway-race-v1.2.1) (2022-10-11)
 
 
