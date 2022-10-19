@@ -13,7 +13,6 @@ import {
 } from './utils/cid.js'
 import { getHeaders } from './utils/headers.js'
 import { getCidForbiddenResponse } from './utils/verification.js'
-import { TimeoutError } from './errors.js'
 import {
   CF_CACHE_MAX_OBJECT_SIZE,
   RESOLUTION_LAYERS,
@@ -97,7 +96,7 @@ export async function gatewayGet (request, env, ctx) {
   } else if (
     (request.headers.get('Cache-Control') || '').includes('only-if-cached')
   ) {
-    throw new TimeoutError()
+    return new Response(null, { status: 412 })
   }
 
   // 2nd layer
