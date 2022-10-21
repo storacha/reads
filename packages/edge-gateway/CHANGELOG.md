@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.5.0...edge-gateway-v1.6.0) (2022-10-21)
+
+
+### Features
+
+* log anchor ([#98](https://github.com/web3-storage/reads/issues/98)) ([26351cd](https://github.com/web3-storage/reads/commit/26351cdcca7fab939d5282b8f81994b3ced15ff3))
+
 ## [1.5.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.4.0...edge-gateway-v1.5.0) (2022-10-18)
 
 
