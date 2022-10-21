@@ -59,6 +59,7 @@ test('Gets content', async (t) => {
 
   // Validate content headers
   t.is(response.headers.get('content-length'), '23')
+  t.is(response.headers.get('x-dotstorage-anchor'), 'd13421337e80609a2aa9412ee646b4f6d6cb088cd9314bca313249896b2d19d0')
 
   // Validate x-dotstorage headers
   t.assert(
@@ -78,6 +79,8 @@ test('Gets content with path', async (t) => {
   // Validate content headers
   t.is(response.headers.get('content-length'), '35')
   t.is(response.headers.get('content-type'), 'text/plain; charset=utf-8')
+  t.is(response.headers.get('x-dotstorage-anchor'), 'fd7c4bfd340f259e1276d8cbd61649ba02b3754fdba044f3bfdefa1bee680fc1')
+
   // Validate x-dotstorage headers
   t.assert(
     response.headers.get('x-dotstorage-resolution-layer')
