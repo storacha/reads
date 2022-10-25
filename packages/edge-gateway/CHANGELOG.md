@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.0...edge-gateway-v1.6.1) (2022-10-25)
+
+
+### Bug Fixes
+
+* dotstorage race requests should receive original request headers ([#112](https://github.com/web3-storage/reads/issues/112)) ([f10bee1](https://github.com/web3-storage/reads/commit/f10bee18630304dc80b78b859978826ab539cd0b))
+
 ## [1.6.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.5.0...edge-gateway-v1.6.0) (2022-10-21)
 
 
