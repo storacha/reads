@@ -89,7 +89,7 @@ GATEWAY_HOSTNAME = 'ipfs-staging.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier-staging.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "true"
-CID_VERIFIER_ENABLED = "true"
+CID_VERIFIER_ENABLED = "false"
 ENV = "staging"
 
 # TODO: Should point to general API in the future
