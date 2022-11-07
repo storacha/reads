@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.1...edge-gateway-v1.6.2) (2022-11-07)
+
+
+### Bug Fixes
+
+* disable cid verifier in staging ([#115](https://github.com/web3-storage/reads/issues/115)) ([674d1c1](https://github.com/web3-storage/reads/commit/674d1c120a3a340b924cb804f6a424fffc344978))
+
 ## [1.6.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.0...edge-gateway-v1.6.1) (2022-10-25)
 
 
