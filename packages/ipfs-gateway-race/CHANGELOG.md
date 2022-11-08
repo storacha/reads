@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.3.0...ipfs-gateway-race-v1.3.1) (2022-11-08)
+
+
+### Bug Fixes
+
+* end error response should be gateway timeout or bad gateway ([#99](https://github.com/web3-storage/reads/issues/99)) ([f7e67df](https://github.com/web3-storage/reads/commit/f7e67dffb2c952e0020b6e408a473cb2df6461e4))
+
 ## [1.3.0](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.2.1...ipfs-gateway-race-v1.3.0) (2022-10-18)
 
 
