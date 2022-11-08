@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.2...edge-gateway-v1.6.3) (2022-11-08)
+
+
+### Bug Fixes
+
+* end error response should be gateway timeout or bad gateway ([#99](https://github.com/web3-storage/reads/issues/99)) ([f7e67df](https://github.com/web3-storage/reads/commit/f7e67dffb2c952e0020b6e408a473cb2df6461e4))
+
 ## [1.6.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.1...edge-gateway-v1.6.2) (2022-11-07)
 
 
