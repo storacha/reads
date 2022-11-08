@@ -1,17 +1,32 @@
-export class TimeoutError extends Error {
+export class GatewayTimeoutError extends Error {
   /**
    * @param {string} message
    */
   constructor (message = 'Gateway Time-out') {
-    const status = 408
+    const status = 504
     super(message)
-    this.name = 'TimeoutError'
+    this.name = 'GatewayTimeoutError'
     this.status = status
-    this.code = TimeoutError.CODE
+    this.code = GatewayTimeoutError.CODE
     this.contentType = 'text/html'
   }
 }
-TimeoutError.CODE = 'ERROR_TIMEOUT'
+GatewayTimeoutError.CODE = 'ERROR_GATEWAY_TIMEOUT'
+
+export class BadGatewayError extends Error {
+  /**
+   * @param {string} message
+   */
+  constructor (message = 'Bad Gateway') {
+    const status = 502
+    super(message)
+    this.name = 'BadGatewayError'
+    this.status = status
+    this.code = BadGatewayError.CODE
+    this.contentType = 'text/html'
+  }
+}
+BadGatewayError.CODE = 'ERROR_BAD_GATEWAY'
 
 export class NotFoundError extends Error {
   /**

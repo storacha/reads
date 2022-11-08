@@ -4,7 +4,11 @@ import { FilterError } from 'p-some'
 import pSettle from 'p-settle'
 import fetch, { Headers } from '@web-std/fetch'
 
-import { NotFoundError, TimeoutError } from './errors.js'
+import {
+  NotFoundError,
+  GatewayTimeoutError,
+  BadGatewayError
+} from './errors.js'
 import {
   TIMEOUT_CODE,
   ABORT_CODE,
@@ -89,20 +93,10 @@ export class IpfsGatewayRacer {
       // Return the error response from gateway, error is not from nft.storage Gateway
       // @ts-ignore FilterError lacks proper types
       if (err instanceof FilterError || err instanceof AggregateError) {
-        const candidateResponse = responses.find((r) => r.value?.response)
-
-        // Return first response with upstream error
-        if (candidateResponse?.value?.response) {
-          return candidateResponse.value.response
+        if (responses.every(r => r.value?.aborted && r.value?.reason === TIMEOUT_CODE)) {
+          throw new GatewayTimeoutError()
         }
-
-        // Gateway timeout
-        if (
-          responses[0].value?.aborted &&
-          responses[0].value?.reason === TIMEOUT_CODE
-        ) {
-          throw new TimeoutError()
-        }
+        throw new BadGatewayError()
       }
 
       throw err
