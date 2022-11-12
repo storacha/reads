@@ -4,6 +4,7 @@ export const CF_CACHE_MAX_OBJECT_SIZE = 512 * Math.pow(1024, 2) // 512MB to byte
  * @type {Record<string, import('./gateway').ResolutionLayer>}
  */
 export const RESOLUTION_LAYERS = {
+  SHORTCUT: 'shortcut',
   CDN: 'cdn',
   DOTSTORAGE_RACE: 'dotstorage-race',
   PUBLIC_RACE_L1: 'public-race-l1',
@@ -11,6 +12,7 @@ export const RESOLUTION_LAYERS = {
 }
 
 export const RESOLUTION_IDENTIFIERS = {
+  IF_NONE_MATCH: 'if-none-match',
   CACHE_ZONE: 'cache-zone',
   PERMA_CACHE: 'perma-cache'
 }

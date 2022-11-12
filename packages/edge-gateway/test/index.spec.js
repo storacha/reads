@@ -114,3 +114,20 @@ test('Gets response error when all fail to resolve', async (t) => {
   const body = await response.text()
   t.assert(body)
 })
+
+test.only('Gets shortcut 304 response when if-none-match request header sent', async (t) => {
+  const { mf } = t.context
+  const cidStr = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+  const response = await mf.dispatchFetch(`https://${cidStr}.ipfs.localhost:8787`, {
+    headers: {
+      'if-none-match': `"${cidStr}"`
+    }
+  })
+  await response.waitUntil()
+  t.is(response.status, 304)
+  t.is(response.headers.get('etag'), `"${cidStr}"`)
+  t.is(response.headers.get('x-dotstorage-resolution-layer'), 'shortcut')
+  t.is(response.headers.get('x-dotstorage-resolution-id'), 'if-none-match')
+  const body = await response.text()
+  t.is(body, '')
+})

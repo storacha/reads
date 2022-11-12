@@ -69,7 +69,7 @@ export class IpfsGatewayRacer {
     try {
       winnerGwResponse = await pAny(gatewayResponsePromises, {
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
-        filter: (res) => res.response?.ok
+        filter: (res) => res.response?.ok || res.response?.status === 304
       })
 
       // Abort race contestants once race has a winner

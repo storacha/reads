@@ -21,7 +21,7 @@ import {
 
 /**
  * @typedef {import('./env').Env} Env
- * @typedef {'cdn' | 'dotstorage-race' | 'public-race-l1' | 'public-race-l2'} ResolutionLayer
+ * @typedef {'shortcut' | 'cdn' | 'dotstorage-race' | 'public-race-l1' | 'public-race-l2'} ResolutionLayer
  *
  * @typedef {import('ipfs-gateway-race').GatewayResponse} GatewayResponse
  * @typedef {import('ipfs-gateway-race').GatewayResponsePromise} GatewayResponsePromise
@@ -60,6 +60,23 @@ export async function gatewayGet (request, env, ctx) {
   const reqUrl = new URL(request.url)
   const cid = await getCidFromSubdomainUrl(reqUrl)
   const pathname = reqUrl.pathname
+
+  // return 304 "not modified" response if user sends us a cid etag in `if-none-mathch`
+  const reqEtag = request.headers.get('if-none-match')
+  if (reqEtag && (pathname === '' || pathname === '/')) {
+    const etag = `"${cid}"`
+    const weakEtag = `W/${etag}`
+    if (reqEtag === etag || reqEtag === weakEtag) {
+      const res = new Response(null, {
+        status: 304,
+        headers: new Headers({
+          'cache-control': 'public, max-age=29030400, immutable',
+          etag
+        })
+      })
+      return getResponseWithCustomHeaders(res, RESOLUTION_LAYERS.SHORTCUT, RESOLUTION_IDENTIFIERS.IF_NONE_MATCH)
+    }
+  }
 
   const cidDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${cid}`)
   if (cidDenylistResponse.status !== 204) {
@@ -123,7 +140,7 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // Cache response
-  if (winnerGwResponse && winnerGwResponse.ok) {
+  if (winnerGwResponse && (winnerGwResponse.ok || winnerGwResponse.status === 304)) {
     ctx.waitUntil(putToCache(request, winnerGwResponse, cache))
   }
 
@@ -207,7 +224,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
           headers
         })
 
-        if (!response.ok) {
+        if (!response.ok && response.status !== 304) {
           throw new Error()
         }
 
@@ -223,7 +240,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
-        if (!gwResponse?.response.ok) {
+        if (!gwResponse?.response.ok && !gwResponse?.response.status !== 304) {
           throw new Error()
         }
 
