@@ -20,7 +20,6 @@ export function envAll (request, env, ctx) {
   env.COMMITHASH = COMMITHASH
   env.SENTRY_RELEASE = SENTRY_RELEASE
   env.sentry = getSentry(request, env, ctx)
-  env.log.time('request')
 }
 
 /**
