@@ -29,13 +29,11 @@ routes = [
   { pattern = "*.ipns.dag.haus/*", zone_id = "f2f8a5b1c557202c6e3d0ce0e98e4c8e" },
   { pattern = "*.ipns.dag.haus", zone_id = "f2f8a5b1c557202c6e3d0ce0e98e4c8e" }
 ]
-kv_namespaces = [
-  { binding = "DENYLIST", id = "785cf627e913468ca5319523ae929def" }
-]
 
 [env.production.vars]
 GATEWAY_HOSTNAME = 'ipfs.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier.dag.haus'
+DENYLIST_URL = 'https://denylist.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "false"
 CID_VERIFIER_ENABLED = "false"
@@ -52,6 +50,12 @@ environment = "production"
 binding = "CID_VERIFIER"
 type = "service"
 service = "dotstorage-cid-verifier-production"
+environment = "production"
+
+[[env.production.services]]
+binding = "DENYLIST"
+type = "service"
+service = "dotstorage-denylist-production"
 environment = "production"
 
 [[env.production.unsafe.bindings]]
@@ -80,13 +84,13 @@ routes = [
   { pattern = "*.ipns-staging.dag.haus/*", zone_id = "f2f8a5b1c557202c6e3d0ce0e98e4c8e" },
   { pattern = "*.ipns-staging.dag.haus", zone_id = "f2f8a5b1c557202c6e3d0ce0e98e4c8e" }
 ]
-kv_namespaces = [
-  { binding = "DENYLIST", id = "f4eb0eca32e14e28b643604a82e00cb3" }
-]
 
 [env.staging.vars]
 GATEWAY_HOSTNAME = 'ipfs-staging.dag.haus'
 CID_VERIFIER_URL = 'https://cid-verifier-staging.dag.haus'
+DENYLIST_URL = 'https://denylist-staging.dag.haus'
+
+# TODO: Should point to general API in the future
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "true"
 CID_VERIFIER_ENABLED = "false"
@@ -103,6 +107,12 @@ environment = "production"
 binding = "CID_VERIFIER"
 type = "service"
 service = "dotstorage-cid-verifier-staging"
+environment = "production"
+
+[[env.staging.services]]
+binding = "DENYLIST"
+type = "service"
+service = "dotstorage-denylist-staging"
 environment = "production"
 
 [[env.staging.unsafe.bindings]]
@@ -127,6 +137,7 @@ workers_dev = true
 [env.test.vars]
 GATEWAY_HOSTNAME = 'ipfs.localhost:8787'
 CID_VERIFIER_URL = 'http://cid-verifier.localhost:8787'
+DENYLIST_URL = 'http://denylist.localhost:8787'
 EDGE_GATEWAY_API_URL = 'http://localhost:8787'
 DEBUG = "true"
 CID_VERIFIER_ENABLED = "true"

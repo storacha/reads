@@ -1,80 +1,50 @@
 /* eslint-env serviceworker, browser */
 /* global Response */
 import pRetry from 'p-retry'
-
 import { normalizeCid } from './utils/cid'
-import { getFromDenyList, toDenyListAnchor } from './utils/denylist'
+import {
+  GOOGLE_EVALUATE,
+  getStoredThreats,
+  getResults
+} from './utils/evaluate'
 import { ServiceUnavailableError } from './errors'
 
-const GOOGLE_EVALUATE = 'google-evaluate'
-
 /**
- * Get verification results from 3rd parties stored in KV.
- *
- * @param {string} cid
- * @param {import('./env').Env} env
- */
-async function getResults (cid, env) {
-  const datastore = env.CID_VERIFIER_RESULTS
-  if (!datastore) {
-    throw new Error('CID_VERIFIER_RESULTS db not ready')
-  }
-
-  return (await datastore.list({ prefix: cid }))?.keys?.reduce((acc, key) => {
-    // @ts-ignore
-    acc[key?.name] = key?.metadata?.value
-    return acc
-  }, {})
-}
-
-/**
- * @param {Array<string>} params
- * @param {(params: Array<string>, request: Request, env: import('./env').Env) => Promise<Response>} fn
+ * @param {(cid: string, request: import('itty-router').Request, env: import('./env').Env) => Promise<Response>} fn
  * @returns {import('itty-router').RouteHandler<Request>}
  */
-function withRequiredQueryParams (params, fn) {
+function withCidPathParam (fn) {
   /**
-   * @param {Request} request
+   * @param {import('itty-router').Request} request
    * @param {import('./env').Env} env
    */
   return async function (request, env) {
-    const searchParams = (new URL(request.url)).searchParams
+    const cid = request?.params?.cid
 
-    for (const paramName of params) {
-      const paramValue = searchParams.get(paramName)
-      if (!paramValue) {
-        return new Response(`${paramName} is a required query param`, { status: 400 })
-      }
-
-      if (paramName === 'cid') {
-        try {
-          await normalizeCid(paramValue)
-        } catch (e) {
-          return new Response('cid query param is invalid', { status: 400 })
-        }
-      }
+    if (!cid) {
+      return new Response('cid is a required path param', { status: 400 })
     }
 
-    return await fn(params.map(param => String(searchParams.get(param))), request, env)
+    try {
+      await normalizeCid(cid)
+    } catch (e) {
+      return new Response('cid path param is invalid', { status: 400 })
+    }
+
+    return await fn(cid, request, env)
   }
 }
 
-export const verificationGet = withRequiredQueryParams(['cid'],
+export const verificationGet = withCidPathParam(
   /**
    * Returns google malware result.
    */
-  async function (params, request, env) {
-    const [cid] = params
-
-    const denyListResource = await getFromDenyList(cid, env)
-    if (denyListResource) {
-      const { status } = JSON.parse(denyListResource)
-      if (status === 451) {
-        return new Response('BLOCKED FOR LEGAL REASONS', { status: 451 })
-      } else {
-        return new Response('MALWARE DETECTED', { status: 403 })
-      }
+  async function (cid, request, env) {
+    const threats = await getStoredThreats(cid, env)
+    if (threats?.length) {
+      return new Response(threats.join(', '), { status: 403 })
     }
+
     return new Response('', { status: 204 })
   }
 )
@@ -82,9 +52,8 @@ export const verificationGet = withRequiredQueryParams(['cid'],
 /**
  * Process CID with malware verification parties.
  */
-export const verificationPost = withRequiredQueryParams(['cid'],
-  async function verificationPost (params, request, env) {
-    const [cid] = params
+export const verificationPost = withCidPathParam(
+  async function verificationPost (cid, request, env) {
     const resultKey = `${cid}/${GOOGLE_EVALUATE}`
     const lockKey = `${cid}/${GOOGLE_EVALUATE}.lock`
     const cidVerifyResults = await getResults(cid, env)
@@ -97,7 +66,7 @@ export const verificationPost = withRequiredQueryParams(['cid'],
       const threats = await fetchGoogleMalwareResults(cid, `https://${cid}.${env.IPFS_GATEWAY_TLD}`, env)
       const response = new Response('cid malware detection processed', { status: 201 })
 
-      if (threats.length) {
+      if (threats?.length) {
         env.log.log(`MALWARE DETECTED for cid "${cid}" ${threats.join(', ')}`, 'info')
         env.log.end(response)
       }
@@ -146,20 +115,7 @@ export const verificationPost = withRequiredQueryParams(['cid'],
           () => env.CID_VERIFIER_RESULTS.put(resultKey, stringifiedJSON, { metadata: { value: stringifiedJSON } }),
           { retries: 5 }
         )
-
-        // @ts-ignore
-        // if any score isn't what we consider to be safe we add it to the DENYLIST
-        threats = evaluateJson?.scores?.filter(score => !env.GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS.includes(score.confidenceLevel)).map(score => score.threatType)
-        if (threats.length) {
-          const anchor = await toDenyListAnchor(cid)
-          await pRetry(
-            () => env.DENYLIST.put(anchor, JSON.stringify({
-              status: 403,
-              reason: threats.join(', ')
-            })),
-            { retries: 5 }
-          )
-        }
+        threats = await getStoredThreats(resultKey, env)
       } catch (e) {
         // @ts-ignore
         env.log.log(e, 'error')
