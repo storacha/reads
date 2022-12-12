@@ -50,7 +50,7 @@ import {
 export async function gatewayGet (request, env, ctx) {
   // Redirect to dweb.link if ipns request
   // TODO: integrate with w3name
-  if (request.url.includes(env.IPNS_GATEWAY_HOSTNAME)) {
+  if (request.url.includes(env.IPNS_GATEWAY_HOSTNAME) && true) {
     return Response.redirect(
       request.url.replace(env.IPNS_GATEWAY_HOSTNAME, 'ipns.dweb.link'),
       302
