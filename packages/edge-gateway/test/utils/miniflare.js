@@ -4,7 +4,8 @@ import { Miniflare } from 'miniflare'
 
 export const secrets = {
   IPFS_GATEWAYS_RACE_L1: '["http://127.0.0.1:9081"]',
-  IPFS_GATEWAYS_RACE_L2: '["http://localhost:9082", "http://localhost:9083"]'
+  IPFS_GATEWAYS_RACE_L2: '["http://localhost:9082", "http://localhost:9083"]',
+  CID_VERIFIER_AUTHORIZATION_TOKEN: 'em9vOnpvbw=='
 }
 
 export function getMiniflare (bindings = {}) {

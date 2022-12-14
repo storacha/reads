@@ -17,6 +17,7 @@
     wrangler secret put LOKI_TOKEN --env $(whoami) # Get from Loki
     wrangler secret put GOOGLE_CLOUD_API_URL --env $(whoami) # Get from 1password
     wrangler secret put GOOGLE_CLOUD_API_KEY --env $(whoami) # Get from 1password
+    wrangler secret put BASIC_AUTH_TOKENS --env $(whoami) # JSON String with array of allowable auth tokens (eg. echo -e '["Zm9vOmZvbw==","em9vOnpvbw=="]' | wrangler secret ...)
   ```
 
 - `pnpm run publish` - Publish the worker under desired env. An alias for `wrangler publish --env $(whoami)`

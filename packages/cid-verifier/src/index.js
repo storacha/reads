@@ -5,6 +5,7 @@ import { Router } from 'itty-router'
 import { verificationGet, verificationPost } from './verification.js'
 import { versionGet } from './version.js'
 
+import { withAuthToken } from './auth.js'
 import { addCorsHeaders, withCorsHeaders } from './cors.js'
 import { errorHandler } from './error-handler.js'
 import { envAll } from './env.js'
@@ -17,8 +18,8 @@ const router = Router()
 router
   .all('*', envAll)
   .get('/version', withCorsHeaders(versionGet))
-  .get('/denylist', withCorsHeaders(verificationGet))
-  .post('/', withCorsHeaders(verificationPost))
+  .get('/denylist', withCorsHeaders(withAuthToken(verificationGet)))
+  .post('/', withCorsHeaders(withAuthToken(verificationPost)))
 
 /**
  * @param {Error} error

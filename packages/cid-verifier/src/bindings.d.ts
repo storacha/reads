@@ -4,6 +4,7 @@ import { Logging } from "@web3-storage/worker-utils/loki";
 export {};
 
 export interface EnvInput {
+  BASIC_AUTH_TOKENS: Array<string>;
   ENV: string;
   DEBUG: string;
   GOOGLE_EVALUATE_SAFE_CONFIDENCE_LEVELS: Array<string>;
