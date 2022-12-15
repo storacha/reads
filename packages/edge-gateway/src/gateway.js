@@ -61,7 +61,7 @@ export async function gatewayGet (request, env, ctx) {
   const cid = await getCidFromSubdomainUrl(reqUrl)
   const pathname = reqUrl.pathname
 
-  // return 304 "not modified" response if user sends us a cid etag in `if-none-mathch`
+  // return 304 "not modified" response if user sends us a cid etag in `if-none-match`
   const reqEtag = request.headers.get('if-none-match')
   if (reqEtag && (pathname === '' || pathname === '/')) {
     const etag = `"${cid}"`
@@ -140,7 +140,7 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // Cache response
-  if (winnerGwResponse && (winnerGwResponse.ok || winnerGwResponse.status === 304)) {
+  if (winnerGwResponse && winnerGwResponse.ok) {
     ctx.waitUntil(putToCache(request, winnerGwResponse, cache))
   }
 
@@ -240,7 +240,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
-        if (!gwResponse?.response.ok && !gwResponse?.response.status !== 304) {
+        if (!gwResponse?.response.ok && gwResponse?.response.status !== 304) {
           throw new Error()
         }
 

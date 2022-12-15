@@ -13,6 +13,25 @@ module.exports = (request) => {
     }
   }
 
+  if (new URL(request.url).pathname === '/ipfs/bafybeigdcrbrc7rzrphb6d4jgvajtq27mlzb7pnutakzvrpq3bnkznl6em/repeat.txt') {
+    if (request.headers['if-none-match'] === 'W/"bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga"') {
+      return {
+        statusCode: 304,
+        headers: {
+          etag: 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+        },
+        body: ''
+      }
+    }
+    return {
+      statusCode: 200,
+      headers: {
+        etag: 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+      },
+      body: '🔁'
+    }
+  }
+
   return {
     statusCode: 200,
     headers: {

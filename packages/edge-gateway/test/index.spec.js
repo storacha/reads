@@ -115,7 +115,7 @@ test('Gets response error when all fail to resolve', async (t) => {
   t.assert(body)
 })
 
-test.only('Gets shortcut 304 response when if-none-match request header sent', async (t) => {
+test('Gets shortcut 304 response when if-none-match request header sent', async (t) => {
   const { mf } = t.context
   const cidStr = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
   const response = await mf.dispatchFetch(`https://${cidStr}.ipfs.localhost:8787`, {
@@ -128,6 +128,56 @@ test.only('Gets shortcut 304 response when if-none-match request header sent', a
   t.is(response.headers.get('etag'), `"${cidStr}"`)
   t.is(response.headers.get('x-dotstorage-resolution-layer'), 'shortcut')
   t.is(response.headers.get('x-dotstorage-resolution-id'), 'if-none-match')
+  const body = await response.text()
+  t.is(body, '')
+})
+
+test('Gets shortcut 304 response when if-none-match request header sent with weak etag', async (t) => {
+  const { mf } = t.context
+  const cidStr = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+  const response = await mf.dispatchFetch(`https://${cidStr}.ipfs.localhost:8787`, {
+    headers: {
+      'if-none-match': `W/"${cidStr}"`
+    }
+  })
+  await response.waitUntil()
+  t.is(response.status, 304)
+  t.is(response.headers.get('etag'), `"${cidStr}"`)
+  t.is(response.headers.get('x-dotstorage-resolution-layer'), 'shortcut')
+  t.is(response.headers.get('x-dotstorage-resolution-id'), 'if-none-match')
+  const body = await response.text()
+  t.is(body, '')
+})
+
+test('No 304 response when if-none-match request header sent with weak bad etag', async (t) => {
+  const { mf } = t.context
+  const cidStr = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+  const response = await mf.dispatchFetch(`https://${cidStr}.ipfs.localhost:8787`, {
+    headers: {
+      'if-none-match': `W/"${cidStr.substring(cidStr.length - 2)}"`
+    }
+  })
+  await response.waitUntil()
+  t.not(response.status, 304)
+  t.not(response.headers.get('x-dotstorage-resolution-layer'), 'shortcut')
+  t.not(response.headers.get('x-dotstorage-resolution-id'), 'if-none-match')
+})
+
+test('Gets 304 response from upstream when if-none-match request header sent with path', async (t) => {
+  const { mf } = t.context
+  const root = 'bafybeigdcrbrc7rzrphb6d4jgvajtq27mlzb7pnutakzvrpq3bnkznl6em'
+  const child = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+  const path = '/repeat.txt'
+  const response = await mf.dispatchFetch(`https://${root}.ipfs.localhost:8787${path}`, {
+    headers: {
+      'if-none-match': `W/"${child}"`
+    }
+  })
+  await response.waitUntil()
+  t.is(response.status, 304)
+  t.is(response.headers.get('etag'), `"${child}"`)
+  t.not(response.headers.get('x-dotstorage-resolution-layer'), 'shortcut')
+  t.not(response.headers.get('x-dotstorage-resolution-id'), 'if-none-match')
   const body = await response.text()
   t.is(body, '')
 })
