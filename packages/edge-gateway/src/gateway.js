@@ -78,7 +78,7 @@ export async function gatewayGet (request, env, ctx) {
     }
   }
 
-  const cidDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${cid}`)
+  const cidDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${cid}`, { headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
   if (cidDenylistResponse.status !== 204) {
     return cidDenylistResponse
   }
@@ -121,7 +121,7 @@ export async function gatewayGet (request, env, ctx) {
   // Validation layer - resource CID
   const resourceCid = pathname !== '/' ? getCidFromEtag(winnerGwResponse.headers.get('etag') || cid) : cid
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
-    const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`)
+    const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`, { headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
     // Ignore if CID received from gateway in etag header is invalid by any reason
     if (cidResourceDenylistResponse.status !== 204 && cidResourceDenylistResponse.status !== 400) {
       return cidResourceDenylistResponse
@@ -135,7 +135,7 @@ export async function gatewayGet (request, env, ctx) {
   ) {
     // fire and forget. Let cid-verifier process this cid and url if it needs to
     ctx.waitUntil(
-      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${resourceCid}`, { method: 'POST' })
+      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${resourceCid}`, { method: 'POST', headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
     )
   }
 

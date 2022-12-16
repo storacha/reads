@@ -17,6 +17,7 @@ export interface AnalyticsEngineEvent {
 export interface EnvInput {
   ENV: string
   DEBUG: string
+  CID_VERIFIER_AUTHORIZATION_TOKEN: string
   CID_VERIFIER_ENABLED: string
   CID_VERIFIER_URL: string
   CID_VERIFIER: Fetcher

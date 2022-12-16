@@ -20,6 +20,14 @@ export function getMiniflare () {
     // This will override the option in wrangler.toml.
     buildCommand: undefined,
     wranglerConfigEnv: 'test',
-    modules: true
+    modules: true,
+    bindings: {
+      BASIC_AUTH_TOKENS: [
+        // echo -n 'foo:foo' | base64
+        'Zm9vOmZvbw==',
+        // echo -n 'zoo:zoo' | base64
+        'em9vOnpvbw=='
+      ]
+    }
   })
 }

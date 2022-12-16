@@ -18,6 +18,7 @@
     wrangler secret put CDN_GATEWAYS_RACE --env $(whoami) # JSON String with array of CDN Gateways URLs (eg. echo -e '["https://freeway.dag.haus"]' | wrangler secret ...)
     wrangler secret put IPFS_GATEWAYS_RACE_L1 --env $(whoami) # JSON String with array of IPFS Gateways URLs (eg. echo -e '["https://ipfs.io","https://dagula.dag.haus"]' | wrangler secret ...)
     wrangler secret put IPFS_GATEWAYS_RACE_L2 --env $(whoami) # JSON String with array of IPFS Gateways URLs (eg. echo -e '["https://cf.dag.haus","https://w3link.mypinata.cloud"]' | wrangler secret ...)
+    wrangler secret put CID_VERIFIER_AUTHORIZATION_TOKEN --env $(whoami) # Get from 1Password
   ```
 
 - `pnpm run publish` - Publish the worker under desired env. An alias for `wrangler publish --env $(whoami)`
