@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.3.1...ipfs-gateway-race-v1.4.0) (2022-12-16)
+
+
+### Features
+
+* fast 304 for `if-none-match` requests ([#120](https://github.com/web3-storage/reads/issues/120)) ([389d652](https://github.com/web3-storage/reads/commit/389d652392fe0ce4df24873d1dfe18eef68f9374))
+
 ## [1.3.1](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.3.0...ipfs-gateway-race-v1.3.1) (2022-11-08)
 
 
