@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.3...edge-gateway-v1.7.0) (2022-12-16)
+
+
+### Features
+
+* fast 304 for `if-none-match` requests ([#120](https://github.com/web3-storage/reads/issues/120)) ([389d652](https://github.com/web3-storage/reads/commit/389d652392fe0ce4df24873d1dfe18eef68f9374))
+
 ## [1.6.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.2...edge-gateway-v1.6.3) (2022-11-08)
 
 
