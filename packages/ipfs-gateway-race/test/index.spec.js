@@ -1,5 +1,6 @@
 import { test } from './utils/setup.js'
 import { addFixtures } from './utils/fixtures.js'
+import { Headers } from '@web-std/fetch'
 import { GenericContainer, Wait } from 'testcontainers'
 import pDefer from 'p-defer'
 import pSettle from 'p-settle'
@@ -52,6 +53,29 @@ test('Gets response from cid and pathname', async (t) => {
   t.is(response.status, 200)
   t.is(response.headers.get('content-length'), '35')
   t.is(await response.text(), 'Hello gateway.nft.storage resource!')
+})
+
+/**
+ * Return on a 304 (from upstream or directly from our cache) where a
+ * valid `if-none-match: <cid>` header is sent on the request.
+ *
+ * An agent will send `if-none-match: <cid>` when they previously requested
+ * the content and we provided the cid as an etag on the response.
+ *
+ * > The If-None-Match HTTP request header makes the request conditional...
+ * > When the condition fails for GET and HEAD methods, then the server
+ * > must return HTTP status code 304 (Not Modified)
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match
+ */
+test('Gets 304 response from cid and valid if-none-match header', async (t) => {
+  const { gwRacer } = t.context
+  const cid = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+  const headers = new Headers({ 'if-none-match': `"${cid}"` })
+  const response = await gwRacer.get(cid, { headers })
+
+  t.assert(response)
+  t.is(response.status, 304)
+  t.is(await response.text(), '', '304 body should be empty')
 })
 
 test('Aborts other race contestants once there is a winner', async (t) => {

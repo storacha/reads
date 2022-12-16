@@ -15,15 +15,29 @@ module.exports = async ({ params, headers }) => {
       headers: responseHeaders,
       body: 'Hello dot.storage! 😎'
     }
-  } else if (
-    cid === 'bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr53uqu'
-  ) {
+  }
+
+  if (cid === 'bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr53uqu') {
     // Delays 300ms
     await new Promise((resolve) => setTimeout(resolve, 500))
     return {
       statusCode: 200,
       headers: responseHeaders,
       body: 'Hello dot.storage! 😎👻'
+    }
+  }
+
+  if (
+    cid === 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga' &&
+    headers['if-none-match'] === `"${cid}"`
+  ) {
+    return {
+      statusCode: 304,
+      body: undefined, // smoke ignores statusCode if body is not present!
+      headers: {
+        etag: cid,
+        'cache-control': 'public, max-age=29030400, immutable'
+      }
     }
   }
 
