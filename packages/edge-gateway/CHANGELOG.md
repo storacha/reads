@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.7.0...edge-gateway-v1.8.0) (2022-12-16)
+
+
+### Features
+
+* adding basic authentication to cid-verifier ([#128](https://github.com/web3-storage/reads/issues/128)) ([b8b9c94](https://github.com/web3-storage/reads/commit/b8b9c947cdab5573ee28c3bbf5da06db7e5a8f55)), closes [#66](https://github.com/web3-storage/reads/issues/66)
+
 ## [1.7.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.6.3...edge-gateway-v1.7.0) (2022-12-16)
 
 
