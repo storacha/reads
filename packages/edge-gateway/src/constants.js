@@ -1,5 +1,8 @@
 export const CF_CACHE_MAX_OBJECT_SIZE = 512 * Math.pow(1024, 2) // 512MB to bytes
 
+export const ACCEPTABLE_DENYLIST_STATUS_CODES = [204, 400, 404]
+export const ACCEPTABLE_CID_VERIFIER_STATUS_CODES = [204, 400, 404]
+
 /**
  * @type {Record<string, import('./gateway').ResolutionLayer>}
  */

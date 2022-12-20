@@ -13,13 +13,13 @@ export const denylistGet = async function (request, env) {
   const cid = request?.params?.cid
 
   if (!cid) {
-    return new Response('cid is a required query param', { status: 400 })
+    return new Response('cid is a required path param', { status: 400 })
   }
 
   try {
     await normalizeCid(cid)
   } catch (e) {
-    return new Response('cid query param is invalid', { status: 400 })
+    return new Response('cid path param is invalid', { status: 400 })
   }
 
   const denyListResource = await getFromDenyList(cid, env)

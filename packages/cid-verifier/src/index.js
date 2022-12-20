@@ -18,8 +18,8 @@ const router = Router()
 router
   .all('*', envAll)
   .get('/version', withCorsHeaders(versionGet))
-  .get('/denylist', withCorsHeaders(withAuthToken(verificationGet)))
-  .post('/', withCorsHeaders(withAuthToken(verificationPost)))
+  .get('/:cid', withCorsHeaders(withAuthToken(verificationGet)))
+  .post('/:cid', withCorsHeaders(withAuthToken(verificationPost)))
 
 /**
  * @param {Error} error

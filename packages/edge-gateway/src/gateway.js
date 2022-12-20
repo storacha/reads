@@ -12,6 +12,7 @@ import {
   toDenyListAnchor
 } from './utils/cid.js'
 import { getHeaders } from './utils/headers.js'
+import { getCidForbiddenResponse } from './utils/verification.js'
 import { TimeoutError } from './errors.js'
 import {
   CF_CACHE_MAX_OBJECT_SIZE,
@@ -78,9 +79,9 @@ export async function gatewayGet (request, env, ctx) {
     }
   }
 
-  const cidDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${cid}`, { headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
-  if (cidDenylistResponse.status !== 204) {
-    return cidDenylistResponse
+  const cidForbiddenResponse = await getCidForbiddenResponse(cid, env)
+  if (cidForbiddenResponse) {
+    return cidForbiddenResponse
   }
 
   // 1st layer resolution - CDN
@@ -121,10 +122,9 @@ export async function gatewayGet (request, env, ctx) {
   // Validation layer - resource CID
   const resourceCid = pathname !== '/' ? getCidFromEtag(winnerGwResponse.headers.get('etag') || cid) : cid
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
-    const cidResourceDenylistResponse = await env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/denylist?cid=${resourceCid}`, { headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
-    // Ignore if CID received from gateway in etag header is invalid by any reason
-    if (cidResourceDenylistResponse.status !== 204 && cidResourceDenylistResponse.status !== 400) {
-      return cidResourceDenylistResponse
+    const resourceCidForbiddenResponse = await getCidForbiddenResponse(resourceCid, env)
+    if (resourceCidForbiddenResponse) {
+      return resourceCidForbiddenResponse
     }
   }
 
@@ -135,7 +135,7 @@ export async function gatewayGet (request, env, ctx) {
   ) {
     // fire and forget. Let cid-verifier process this cid and url if it needs to
     ctx.waitUntil(
-      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/?cid=${resourceCid}`, { method: 'POST', headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
+      env.CID_VERIFIER.fetch(`${env.CID_VERIFIER_URL}/${resourceCid}`, { method: 'POST', headers: { Authorization: `basic ${env.CID_VERIFIER_AUTHORIZATION_TOKEN}` } })
     )
   }
 

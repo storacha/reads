@@ -36,11 +36,18 @@ export function getMiniflare (bindings = {}) {
         scriptPath: './test/utils/scripts/cid-verifier.js',
         modules: true,
         kvNamespaces: ['TEST_NAMESPACE']
+      },
+      denylist: {
+        scriptPath: './test/utils/scripts/denylist.js',
+        modules: true,
+        kvNamespaces: ['TEST_NAMESPACE1']
       }
+
     },
     serviceBindings: {
       API: 'api',
-      CID_VERIFIER: 'cid_verifier'
+      CID_VERIFIER: 'cid_verifier',
+      DENYLIST: 'denylist'
     },
     bindings: {
       PUBLIC_RACE_WINNER: createAnalyticsEngine(),

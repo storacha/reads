@@ -23,10 +23,10 @@ test.before(async (t) => {
   await denylistKv.put(await toDenyListAnchor(cidInDenyListBlockedForLeganReasons), JSON.stringify({ status: 451, reason: 'blocked for legal reasons' }))
 })
 
-test('GET / handles invalid cid query param', async (t) => {
+test('GET / handles invalid cid path param', async (t) => {
   const { mf } = t.context
   const response = await mf.dispatchFetch('http://localhost:8787/invalid')
-  t.is(await response.text(), 'cid query param is invalid')
+  t.is(await response.text(), 'cid path param is invalid')
   t.is(response.status, 400)
 })
 
