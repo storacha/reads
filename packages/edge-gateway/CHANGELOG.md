@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.8.0...edge-gateway-v1.9.0) (2022-12-21)
+
+
+### Features
+
+* using denylist from edge-gateway ([#126](https://github.com/web3-storage/reads/issues/126)) ([22c0123](https://github.com/web3-storage/reads/commit/22c012362ba15ac5f2ec6547374622c8c5e60302))
+
+
+### Bug Fixes
+
+* add kv bindings for denylist in edge gateway ([#136](https://github.com/web3-storage/reads/issues/136)) ([97dcbe2](https://github.com/web3-storage/reads/commit/97dcbe2ecfa214357d5ca805073bebe4363df6b0))
+
 ## [1.8.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.7.0...edge-gateway-v1.8.0) (2022-12-16)
 
 
