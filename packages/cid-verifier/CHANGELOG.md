@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/web3-storage/reads/compare/cid-verifier-v1.1.0...cid-verifier-v1.2.0) (2022-12-20)
+
+
+### Features
+
+* using denylist from edge-gateway ([#126](https://github.com/web3-storage/reads/issues/126)) ([22c0123](https://github.com/web3-storage/reads/commit/22c012362ba15ac5f2ec6547374622c8c5e60302))
+
 ## [1.1.0](https://github.com/web3-storage/reads/compare/cid-verifier-v1.0.1...cid-verifier-v1.1.0) (2022-12-16)
 
 
