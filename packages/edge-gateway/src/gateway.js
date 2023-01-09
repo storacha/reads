@@ -61,6 +61,7 @@ export async function gatewayGet (request, env, ctx) {
   const reqUrl = new URL(request.url)
   const cid = await getCidFromSubdomainUrl(reqUrl)
   const pathname = reqUrl.pathname
+  const search = reqUrl.search
 
   // return 304 "not modified" response if user sends us a cid etag in `if-none-match`
   const reqEtag = request.headers.get('if-none-match')
@@ -100,7 +101,7 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // 2nd layer
-  const dotstorageRes = await getFromDotstorage(request, env, cid, { pathname })
+  const dotstorageRes = await getFromDotstorage(request, env, cid, { pathname, search })
   if (dotstorageRes) {
     return getResponseWithCustomHeaders(
       dotstorageRes.response,
@@ -117,7 +118,7 @@ export async function gatewayGet (request, env, ctx) {
     response: winnerGwResponse,
     url: winnerUrl,
     resolutionLayer: raceResolutionLayer
-  } = await getFromGatewayRacer(cid, pathname, getHeaders(request), env, ctx)
+  } = await getFromGatewayRacer(cid, pathname, search, getHeaders(request), env, ctx)
 
   // Validation layer - resource CID
   const resourceCid = pathname !== '/' ? getCidFromEtag(winnerGwResponse.headers.get('etag') || cid) : cid
@@ -194,11 +195,12 @@ async function getFromCdn (request, env, cache) {
  * @param {Request} request
  * @param {Env} env
  * @param {string} cid
- * @param {{ pathname?: string}} [options]
+ * @param {{ pathname?: string, search?: string }} [options]
  * @return {Promise<ProxiedCDNResponse | undefined>}
  */
 async function getFromDotstorage (request, env, cid, options = {}) {
   const pathname = options.pathname || ''
+  const search = options.search || ''
   try {
     // Get onlyIfCached hosts provided
     /** @type {string[]} */
@@ -220,7 +222,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
         const headers = getHeaders(request)
         headers.set('Cache-Control', 'only-if-cached')
 
-        const response = await fetch(`https://${cid}.ipfs.${host}${pathname}`, {
+        const response = await fetch(`https://${cid}.ipfs.${host}${pathname}${search}`, {
           headers
         })
 
@@ -234,7 +236,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
         }
       }),
       ...env.cdnGateways.map(async (host) => {
-        const gwResponse = await gatewayFetch(host, cid, pathname, {
+        const gwResponse = await gatewayFetch(host, cid, pathname, search, {
           timeout: env.REQUEST_TIMEOUT,
           headers: request.headers
         })
@@ -261,12 +263,13 @@ async function getFromDotstorage (request, env, cid, options = {}) {
  *
  * @param {string} cid
  * @param {string} pathname
+ * @param {string} search
  * @param {Headers} headers
  * @param {Env} env
  * @param {import('./index').Ctx} ctx
  * @return {Promise<ProxiedLayeredResponse>}
  */
-async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
+async function getFromGatewayRacer (cid, pathname, search, headers, env, ctx) {
   const winnerUrlPromise = pDefer()
   let response
   let layerOneIsWinner = false
@@ -276,6 +279,7 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
     const { gatewayControllers, gatewaySignals } = getRaceContestantsControllers(env.ipfsGatewaysL1)
     response = await env.gwRacerL1.get(cid, {
       pathname,
+      search,
       headers,
       noAbortRequestsOnWinner: true,
       gatewaySignals,
@@ -301,6 +305,7 @@ async function getFromGatewayRacer (cid, pathname, headers, env, ctx) {
     const { gatewayControllers, gatewaySignals } = getRaceContestantsControllers(env.ipfsGatewaysL2)
     response = await env.gwRacerL2.get(cid, {
       pathname,
+      search,
       headers,
       noAbortRequestsOnWinner: true,
       gatewaySignals,

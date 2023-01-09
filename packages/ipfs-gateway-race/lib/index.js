@@ -45,6 +45,7 @@ export class IpfsGatewayRacer {
     cid,
     {
       pathname = '',
+      search = '',
       headers = new Headers(),
       noAbortRequestsOnWinner = false,
       onRaceEnd = nop,
@@ -54,7 +55,7 @@ export class IpfsGatewayRacer {
     const raceWinnerController = new AbortController()
     /** @type {GatewayResponsePromise[]} */
     const gatewayResponsePromises = this.ipfsGateways.map((gwUrl) =>
-      gatewayFetch(gwUrl, cid, pathname, {
+      gatewayFetch(gwUrl, cid, pathname, search, {
         headers,
         timeout: this.timeout,
         // Combine internal race winner controller signal with custom user signal
@@ -126,6 +127,7 @@ export function createGatewayRacer (ipfsGateways, options = {}) {
  * @param {string} gwUrl
  * @param {string} cid
  * @param {string} pathname
+ * @param {string} search
  * @param {Object} [options]
  * @param {Headers} [options.headers]
  * @param {number} [options.timeout]
@@ -135,6 +137,7 @@ export async function gatewayFetch (
   gwUrl,
   cid,
   pathname,
+  search,
   { headers, timeout = 60000, signal } = {}
 ) {
   const timeoutController = new AbortController()
@@ -142,7 +145,7 @@ export async function gatewayFetch (
 
   let response
   try {
-    response = await fetch(new URL(`ipfs/${cid}${pathname}`, gwUrl), {
+    response = await fetch(new URL(`ipfs/${cid}${pathname}${search}`, gwUrl), {
       // Combine timeout signal with done signal
       signal: signal
         ? anySignal([timeoutController.signal, signal])

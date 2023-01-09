@@ -52,7 +52,7 @@ test('Gets content', async (t) => {
   const { mf } = t.context
 
   const response = await mf.dispatchFetch(
-    'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787'
+    'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787?foo=test'
   )
   await response.waitUntil()
   t.is(await response.text(), 'Hello dot.storage! 😎')
