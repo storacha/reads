@@ -52,7 +52,7 @@ test('Gets content', async (t) => {
   const { mf } = t.context
 
   const response = await mf.dispatchFetch(
-    'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787?foo=test'
+    'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787'
   )
   await response.waitUntil()
   t.is(await response.text(), 'Hello dot.storage! 😎')
@@ -66,6 +66,16 @@ test('Gets content', async (t) => {
     response.headers.get('x-dotstorage-resolution-layer')
   )
   t.assert(response.headers.get('x-dotstorage-resolution-id'))
+})
+
+test('Gets content with query params', async (t) => {
+  const { mf } = t.context
+
+  const response = await mf.dispatchFetch(
+    'https://bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr55uqu.ipfs.localhost:8787?foo=test'
+  )
+  await response.waitUntil()
+  t.is(await response.text(), 'Hello dot.storage with query params! 😎😎😎')
 })
 
 test('Gets content with path', async (t) => {

@@ -1,7 +1,7 @@
 /**
  * https://github.com/sinedied/smoke#javascript-mocks
  */
-module.exports = async ({ params, headers }) => {
+module.exports = async ({ params, headers, query }) => {
   const cid = params.cid
 
   const responseHeaders = {
@@ -36,6 +36,20 @@ module.exports = async ({ params, headers }) => {
       <!DOCTYPE html>
       <html />
       `
+    }
+  } else if (cid === 'bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr55uqu') {
+    if (query.foo === 'test') {
+      return {
+        statusCode: 200,
+        headers: responseHeaders,
+        body: 'Hello dot.storage with query params! 😎😎😎'
+      }
+    }
+
+    return {
+      statusCode: 200,
+      headers: responseHeaders,
+      body: 'Hello dot.storage! 😎😎😎'
     }
   }
 
