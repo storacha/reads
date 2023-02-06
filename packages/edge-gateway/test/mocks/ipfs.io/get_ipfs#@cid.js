@@ -38,14 +38,6 @@ module.exports = async ({ params, headers, query }) => {
       `
     }
   } else if (cid === 'bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr55uqu') {
-    if (query.foo === 'test') {
-      return {
-        statusCode: 200,
-        headers: responseHeaders,
-        body: 'Hello dot.storage with query params! 😎😎😎'
-      }
-    }
-
     return {
       statusCode: 200,
       headers: responseHeaders,

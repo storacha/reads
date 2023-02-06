@@ -75,7 +75,7 @@ test('Gets content with query params', async (t) => {
     'https://bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr55uqu.ipfs.localhost:8787?foo=test'
   )
   await response.waitUntil()
-  t.is(await response.text(), 'Hello dot.storage with query params! 😎😎😎')
+  t.is(await response.text(), 'Hello dot.storage with query param foo=test! 😎😎😎')
 })
 
 test('Gets content with path', async (t) => {
