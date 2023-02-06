@@ -236,9 +236,10 @@ async function getFromDotstorage (request, env, cid, options = {}) {
         }
       }),
       ...env.cdnGateways.map(async (host) => {
-        const gwResponse = await gatewayFetch(host, cid, pathname, search, {
+        const gwResponse = await gatewayFetch(host, cid, pathname, {
           timeout: env.REQUEST_TIMEOUT,
-          headers: request.headers
+          headers: request.headers,
+          search
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
