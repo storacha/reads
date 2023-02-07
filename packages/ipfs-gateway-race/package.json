@@ -1,6 +1,6 @@
 {
   "name": "ipfs-gateway-race",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Races given IPFS Gateways to resolve provided CID",
   "main": "lib/index.js",
   "types": "./types/index.d.ts",
