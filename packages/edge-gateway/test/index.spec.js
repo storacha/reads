@@ -68,6 +68,16 @@ test('Gets content', async (t) => {
   t.assert(response.headers.get('x-dotstorage-resolution-id'))
 })
 
+test('Gets content with query params', async (t) => {
+  const { mf } = t.context
+
+  const response = await mf.dispatchFetch(
+    'https://bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr55uqu.ipfs.localhost:8787?foo=test'
+  )
+  await response.waitUntil()
+  t.is(await response.text(), 'Hello dot.storage with query param foo=test! 😎😎😎')
+})
+
 test('Gets content with path', async (t) => {
   const { mf } = t.context
 

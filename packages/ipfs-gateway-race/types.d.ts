@@ -4,6 +4,7 @@ export interface IpfsGatewayRacerOptions {
 
 export interface IpfsGatewayRaceGetOptions {
   pathname?: string
+  search?: string
   headers?: Headers
   noAbortRequestsOnWinner?: boolean
   onRaceEnd?: (gatewayResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void

@@ -1,7 +1,7 @@
 /**
  * https://github.com/sinedied/smoke#javascript-mocks
  */
-module.exports = async ({ params, headers }) => {
+module.exports = async ({ params, query, headers }) => {
   const cid = params.cid
 
   const responseHeaders = {
