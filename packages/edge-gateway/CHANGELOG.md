@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.0...edge-gateway-v1.9.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* proxying request query search (fixes [#133](https://github.com/web3-storage/reads/issues/133)) ([#137](https://github.com/web3-storage/reads/issues/137)) ([9f8c477](https://github.com/web3-storage/reads/commit/9f8c4773753b29e4bc36dd52ae0d67d18690b7c8))
+
 ## [1.9.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.8.0...edge-gateway-v1.9.0) (2022-12-21)
 
 
