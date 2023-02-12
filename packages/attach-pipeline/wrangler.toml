@@ -1,0 +1,74 @@
+# attach-pipeline wrangler config.
+name = "attach-pipeline"
+main = "./dist/worker.js"
+compatibility_date = "2022-10-01"
+compatibility_flags = [ "url_standard" ]
+no_bundle = true
+
+[build]
+command = "npm run build"
+
+# miniflare
+[vars]
+DEBUG = "true"
+ENV = "dev"
+
+# PROD!
+[env.production]
+# name = "attach-pipeline-production"
+account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
+route = { pattern = "https://attach-pipeline.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
+vars = { ENV = "production" }
+
+[[env.production.r2_buckets]]
+# what's it called in r2?
+bucket_name = "car-park-prod-0"
+# what's it called as a property of the env object
+binding = "CARPARK"
+
+[[env.production.queues.producers]]
+  queue = "attach-queue-production"
+  binding = "ATTACH_PIPELINE_QUEUE"
+
+[[env.production.queues.consumers]]
+  queue = "attach-queue-production"
+  max_batch_size = 1
+  max_batch_timeout = 100000
+## TODO: config
+
+# STAGING!
+[env.staging]
+# name = "attach-pipeline-staging"
+account_id = "fffa4b4363a7e5250af8357087263b3a" # Protocol Labs CF account
+route = { pattern = "https://attach-pipeline-staging.web3.storage/*", zone_id = "7eee3323c1b35b6650568604c65f441e" }
+vars = { ENV = "staging" }
+
+[[env.staging.r2_buckets]]
+# what's it called in r2?
+bucket_name = "car-park-attach-staging-0"
+# what's it called as a property of the env object
+binding = "CARPARK"
+
+[[env.staging.queues.producers]]
+  queue = "attach-queue-staging"
+  binding = "ATTACH_PIPELINE_QUEUE"
+
+[[env.staging.queues.consumers]]
+  queue = "attach-queue-staging"
+  max_batch_size = 1
+  max_batch_timeout = 100000
+## TODO: config
+
+# Test!
+[env.test]
+workers_dev = true
+
+[[env.test.queues.producers]]
+  queue = "attach-queue-test"
+  binding = "ATTACH_PIPELINE_QUEUE"
+
+[[env.test.queues.consumers]]
+  queue = "attach-queue-test"
+  max_batch_size = 1
+  max_batch_timeout = 300
+## TODO: config
