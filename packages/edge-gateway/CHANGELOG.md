@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.1...edge-gateway-v1.9.2) (2023-03-03)
+
+
+### Bug Fixes
+
+* edge gateway cache freeway response ([#143](https://github.com/web3-storage/reads/issues/143)) ([c587987](https://github.com/web3-storage/reads/commit/c587987671e93211421418bf38f5d11ba60a3e5e))
+* remove legacy binding from staging ([e3a9767](https://github.com/web3-storage/reads/commit/e3a9767974258f50cc42ef63dae6f68c75e57385))
+
 ## [1.9.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.0...edge-gateway-v1.9.1) (2023-02-07)
 
 
