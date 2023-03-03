@@ -37,6 +37,9 @@ export function envAll (request, env, ctx) {
   // Set CDN Gateways
   env.cdnGateways = parseGatewayUrls(env.CDN_GATEWAYS_RACE, DEFAULT_CDN_GATEWAYS, env)
 
+  // Set public IPFS gateway redirect URL if configured
+  env.ipfsGatewayRedirectHostname = env.IPFS_GATEWAY_REDIRECT_HOSTNAME
+
   // Set Layer 1 racer
   env.ipfsGatewaysL1 = parseGatewayUrls(env.IPFS_GATEWAYS_RACE_L1, DEFAULT_RACE_L1_GATEWAYS, env)
   env.gwRacerL1 = createGatewayRacer(env.ipfsGatewaysL1, {

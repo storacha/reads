@@ -115,7 +115,16 @@ export async function gatewayGet (request, env, ctx) {
     )
   }
 
-  // 3rd layer resolution - Public Gateways race
+  // 3rd layer resolution - Redirect to Public Gateway if set
+  if (env.ipfsGatewayRedirectHostname) {
+    const url = new URL(
+      `https://${cid}.ipfs.${env.ipfsGatewayRedirectHostname}${pathname}${search}`
+    )
+
+    return Response.redirect(url.toString(), 303)
+  }
+
+  // 4th layer resolution - Public Gateways race
   const {
     response: winnerGwResponse,
     url: winnerUrl,
