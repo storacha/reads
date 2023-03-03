@@ -32,7 +32,6 @@ export interface EnvInput {
   SENTRY_DSN?: string
   LOKI_URL?: string
   LOKI_TOKEN?: string
-  DENYLIST: KVNamespace
   API: Fetcher
   PUBLIC_RACE_WINNER: AnalyticsEngine
   PUBLIC_RACE_TTFB: AnalyticsEngine
