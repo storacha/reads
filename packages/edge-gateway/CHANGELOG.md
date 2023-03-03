@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.2...edge-gateway-v1.9.3) (2023-03-03)
+
+
+### Bug Fixes
+
+* remove legacy binding from prod ([9bac59d](https://github.com/web3-storage/reads/commit/9bac59d0e7b0f11fd1364c3127c64ffc6bd7d0f5))
+
 ## [1.9.2](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.1...edge-gateway-v1.9.2) (2023-03-03)
 
 
