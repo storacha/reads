@@ -41,7 +41,7 @@ importers:
       uint8arrays: ^3.0.0
     dependencies:
       '@web3-storage/worker-utils': 0.3.0-dev
-      ipfs-core-utils: 0.15.1_undici@5.5.1
+      ipfs-core-utils: 0.15.1
       itty-router: 2.6.1
       multiformats: 9.7.0
       p-retry: 5.1.1
@@ -87,7 +87,7 @@ importers:
       uint8arrays: ^3.0.0
     dependencies:
       '@web3-storage/worker-utils': 0.3.0-dev
-      ipfs-core-utils: 0.15.1_undici@5.5.1
+      ipfs-core-utils: 0.15.1
       itty-router: 2.6.1
       multiformats: 9.7.0
       p-retry: 5.1.1
@@ -146,7 +146,7 @@ importers:
       uint8arrays: ^3.0.0
     dependencies:
       '@web3-storage/worker-utils': 0.3.0-dev
-      ipfs-core-utils: 0.15.1_undici@5.5.1
+      ipfs-core-utils: 0.15.1
       ipfs-gateway-race: link:../ipfs-gateway-race
       itty-router: 2.6.1
       multiformats: 9.7.0
@@ -229,6 +229,7 @@ importers:
       standard: 17.0.0
       testcontainers: 8.11.0
       typescript: 4.7.4
+    publishDirectory: dist
 
 packages:
 
@@ -355,11 +356,11 @@ packages:
     dependencies:
       multiformats: 9.7.0
 
-  /@libp2p/interfaces/2.0.4_undici@5.5.1:
+  /@libp2p/interfaces/2.0.4:
     resolution: {integrity: sha512-MfwkTFyHJtvwNxkjOjzkXyIVvKFtEW2Q3IGRJPyPQMrtB6ll0rGMTlyJ3BQS1bcD0YkNhggFm+8XiU2/0LCBhQ==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      '@multiformats/multiaddr': 10.3.3_undici@5.5.1
+      '@multiformats/multiaddr': 10.3.3
       err-code: 3.0.1
       interface-datastore: 6.1.1
       it-pushable: 2.0.2
@@ -370,11 +371,11 @@ packages:
       - undici
     dev: false
 
-  /@libp2p/logger/1.1.6_undici@5.5.1:
+  /@libp2p/logger/1.1.6:
     resolution: {integrity: sha512-ZKoRUt7cyHlbxHYDZ1Fn3A+ByqGABdmd4z07+1TfVvpEQSpn2IVcV0mt6ff5kUUtGuVeSrqK1/ZDzWqhgg56vg==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      '@libp2p/interfaces': 2.0.4_undici@5.5.1
+      '@libp2p/interfaces': 2.0.4
       debug: 4.3.4
       interface-datastore: 6.1.1
       multiformats: 9.7.0
@@ -685,20 +686,20 @@ packages:
     resolution: {integrity: sha512-eMk0b9ReBbV23xXU693TAIrLyeO5iTgBZGSJfpqriG8UkYvr/hC9u9pyMlAakDNHWmbhMZCDs6KQO0jzKD8OTw==}
     dev: true
 
-  /@multiformats/multiaddr-to-uri/9.0.1_undici@5.5.1:
+  /@multiformats/multiaddr-to-uri/9.0.1:
     resolution: {integrity: sha512-kSyHZ2lKjoEzHu/TM4ZVwFj4AWV1B9qFBFJjYb/fK1NqrnrNb/M3uhoyckJvP7WZvpDsnEc7fUCpmPipDY6LMw==}
     dependencies:
-      '@multiformats/multiaddr': 10.3.3_undici@5.5.1
+      '@multiformats/multiaddr': 10.3.3
     transitivePeerDependencies:
       - supports-color
       - undici
     dev: false
 
-  /@multiformats/multiaddr/10.3.3_undici@5.5.1:
+  /@multiformats/multiaddr/10.3.3:
     resolution: {integrity: sha512-+LX9RovG7DJsANb+U6VchV/tApcdJzeafbi5+MPUam90oL91BbEh6ozNZOz4Qf5ZEeilexc12oomatmODJh1/w==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      dns-over-http-resolver: 2.1.0_undici@5.5.1
+      dns-over-http-resolver: 2.1.0
       err-code: 3.0.1
       is-ip: 4.0.0
       multiformats: 9.7.0
@@ -2161,12 +2162,12 @@ packages:
       - supports-color
     dev: true
 
-  /dns-over-http-resolver/2.1.0_undici@5.5.1:
+  /dns-over-http-resolver/2.1.0:
     resolution: {integrity: sha512-eb8RGy6k54JdD7Rjw8g65y1MyA4z3m3IIYh7uazkgZuKIdFn8gYt8dydMm3op+2UshDdk9EexrXcDluKNY/CDg==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
       debug: 4.3.4
-      native-fetch: 4.0.2_undici@5.5.1
+      native-fetch: 4.0.2
       receptacle: 1.3.2
     transitivePeerDependencies:
       - supports-color
@@ -3814,11 +3815,11 @@ packages:
     engines: {node: '>= 0.10'}
     dev: true
 
-  /ipfs-core-types/0.11.1_undici@5.5.1:
+  /ipfs-core-types/0.11.1:
     resolution: {integrity: sha512-K7ZSx9EPEvT4At2kExKyMCqY4Jo3Nb/VnC/iSWqFKRaqb0MTB4IJgvWrwwDuN541tn+dvUnTfOp2wWQSov1UAw==}
     dependencies:
       '@ipld/dag-pb': 2.1.17
-      '@multiformats/multiaddr': 10.3.3_undici@5.5.1
+      '@multiformats/multiaddr': 10.3.3
       interface-datastore: 6.1.1
       ipfs-unixfs: 6.0.9
       multiformats: 9.7.0
@@ -3866,17 +3867,17 @@ packages:
       - supports-color
     dev: true
 
-  /ipfs-core-utils/0.15.1_undici@5.5.1:
+  /ipfs-core-utils/0.15.1:
     resolution: {integrity: sha512-nZmUiLctJWMFrEciVkKdDUO2xLpXWy7Ilt0VMJ35Y5+OJznCXxMHUQo1WUALATlo9ziHgDdHFrAUuyW0yB2rww==}
     dependencies:
-      '@libp2p/logger': 1.1.6_undici@5.5.1
-      '@multiformats/multiaddr': 10.3.3_undici@5.5.1
-      '@multiformats/multiaddr-to-uri': 9.0.1_undici@5.5.1
+      '@libp2p/logger': 1.1.6
+      '@multiformats/multiaddr': 10.3.3
+      '@multiformats/multiaddr-to-uri': 9.0.1
       any-signal: 3.0.1
       blob-to-it: 1.0.4
       browser-readablestream-to-it: 1.0.3
       err-code: 3.0.1
-      ipfs-core-types: 0.11.1_undici@5.5.1
+      ipfs-core-types: 0.11.1
       ipfs-unixfs: 6.0.9
       ipfs-utils: 9.0.7
       it-all: 1.0.6
@@ -5126,12 +5127,10 @@ packages:
       node-fetch: 3.2.6
     dev: true
 
-  /native-fetch/4.0.2_undici@5.5.1:
+  /native-fetch/4.0.2:
     resolution: {integrity: sha512-4QcVlKFtv2EYVS5MBgsGX5+NWKtbDbIECdUXDBGDMAZXq3Jkv9zf+y8iS7Ub8fEdga3GpYeazp9gauNqXHJOCg==}
     peerDependencies:
       undici: '*'
-    dependencies:
-      undici: 5.5.1
     dev: false
 
   /natural-compare/1.4.0:
@@ -7023,6 +7022,7 @@ packages:
   /undici/5.5.1:
     resolution: {integrity: sha512-MEvryPLf18HvlCbLSzCW0U00IMftKGI5udnjrQbC5D4P0Hodwffhv+iGfWuJwg16Y/TK11ZFK8i+BPVW2z/eAw==}
     engines: {node: '>=12.18'}
+    dev: true
 
   /unique-string/2.0.0:
     resolution: {integrity: sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg==}

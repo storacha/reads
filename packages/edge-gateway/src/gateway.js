@@ -103,6 +103,8 @@ export async function gatewayGet (request, env, ctx) {
   // 2nd layer
   const dotstorageRes = await getFromDotstorage(request, env, cid, { pathname, search })
   if (dotstorageRes) {
+    ctx.waitUntil(putToCache(request, dotstorageRes.response, cache))
+
     return getResponseWithCustomHeaders(
       dotstorageRes.response,
       RESOLUTION_LAYERS.DOTSTORAGE_RACE,
