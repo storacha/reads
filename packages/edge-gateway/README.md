@@ -55,7 +55,7 @@ As a workaround, or to block content only relevant for dotstorage we can simply 
 
 ## Metrics
 
-Metrics are collected from logs pushed into Grafana Loki, as well as using Cloudflare Analytics engine.
+Metrics are collected from logs pushed into Grafana Loki, as well as using Cloudflare Analytics engine via Worker bindings.
 
 ## Contributing
 
