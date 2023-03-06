@@ -121,7 +121,7 @@ export async function gatewayGet (request, env, ctx) {
       `https://${cid}.ipfs.${env.ipfsGatewayRedirectHostname}${pathname}${search}`
     )
 
-    return Response.redirect(url.toString(), 303)
+    return Response.redirect(url.toString(), 307)
   }
 
   // 4th layer resolution - Public Gateways race

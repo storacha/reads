@@ -16,7 +16,7 @@ test('Redirects if redirect hostname set', async (t) => {
   const url = 'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787/'
   const response = await mf.dispatchFetch(url)
 
-  t.is(response.status, 303)
+  t.is(response.status, 307)
   t.is(
     response.headers.get('location'),
     url.replace('localhost:8787', IPFS_GATEWAY_REDIRECT_HOSTNAME)
@@ -28,7 +28,7 @@ test('Redirects if redirect hostname set with pathname', async (t) => {
   const url = 'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787/file.txt'
   const response = await mf.dispatchFetch(url)
 
-  t.is(response.status, 303)
+  t.is(response.status, 307)
   t.is(
     response.headers.get('location'),
     url.replace('localhost:8787', IPFS_GATEWAY_REDIRECT_HOSTNAME)
@@ -40,7 +40,7 @@ test('Redirects if redirect hostname set with query', async (t) => {
   const url = 'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787/?format=car'
   const response = await mf.dispatchFetch(url)
 
-  t.is(response.status, 303)
+  t.is(response.status, 307)
   t.is(
     response.headers.get('location'),
     url.replace('localhost:8787', IPFS_GATEWAY_REDIRECT_HOSTNAME)
@@ -52,7 +52,7 @@ test('Redirects if redirect hostname set with pathname and query', async (t) => 
   const url = 'https://bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u.ipfs.localhost:8787/file.txt?format=car'
   const response = await mf.dispatchFetch(url)
 
-  t.is(response.status, 303)
+  t.is(response.status, 307)
   t.is(
     response.headers.get('location'),
     url.replace('localhost:8787', IPFS_GATEWAY_REDIRECT_HOSTNAME)
