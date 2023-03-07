@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.3...edge-gateway-v1.10.0) (2023-03-07)
+
+
+### Features
+
+* add configurable redirect ([#142](https://github.com/web3-storage/reads/issues/142)) ([cfb8798](https://github.com/web3-storage/reads/commit/cfb87986491fc6aef342ad6a76e5f13b248c8a49)), closes [#141](https://github.com/web3-storage/reads/issues/141)
+
 ## [1.9.3](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.2...edge-gateway-v1.9.3) (2023-03-03)
 
 
