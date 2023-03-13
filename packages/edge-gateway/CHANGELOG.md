@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.10.0...edge-gateway-v1.10.1) (2023-03-13)
+
+
+### Bug Fixes
+
+* edge gateway error when only if cached request fails ([#109](https://github.com/web3-storage/reads/issues/109)) ([1a4cca0](https://github.com/web3-storage/reads/commit/1a4cca08701088e78f68d1e88a08479775b0a477)), closes [#108](https://github.com/web3-storage/reads/issues/108)
+
 ## [1.10.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.9.3...edge-gateway-v1.10.0) (2023-03-07)
 
 
