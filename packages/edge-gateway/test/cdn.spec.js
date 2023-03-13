@@ -97,7 +97,7 @@ test('Fail to resolve when only-if-cached and content is not cached', async (t) 
   })
   await response.waitUntil()
   t.is(response.ok, false)
-  t.is(response.status, 408)
+  t.is(response.status, 412)
 })
 
 test('Get content from cache when existing and only-if-cached cache control is provided', async (t) => {
