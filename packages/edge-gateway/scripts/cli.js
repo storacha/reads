@@ -4,7 +4,6 @@ import sade from 'sade'
 
 import { buildCmd } from './build.js'
 import { ipfsCmd } from './ipfs.js'
-import { denylistSyncCmd, denylistAddCmd } from './denylist.js'
 import { heartbeatCmd } from './heartbeat.js'
 
 const env = process.env.ENV || 'dev'
@@ -24,16 +23,5 @@ prog
   .option('--token', 'Opsgenie Token')
   .option('--name', 'Heartbeat Name')
   .action(heartbeatCmd)
-  .command('denylist sync')
-  .describe('Sync the gateway deny list with various sources.')
-  .option('--env', 'Wrangler environment to use.', env)
-  .action(denylistSyncCmd)
-  .command('denylist add <cid>')
-  .describe(
-    'Add a CID (or CID + path) to the local deny list. Note: we currently DO NOT support denying by CID + path in the API.'
-  )
-  .option('--status', 'HTTP status to send in response.')
-  .option('--reason', 'Reason for deny. Note: may be communicated in response')
-  .action(denylistAddCmd)
 
 prog.parse(process.argv)
