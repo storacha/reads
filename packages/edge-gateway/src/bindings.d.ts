@@ -30,6 +30,7 @@ export interface EnvInput {
   GATEWAY_HOSTNAME: string
   EDGE_GATEWAY_API_URL: string
   REQUEST_TIMEOUT?: number
+  CDN_REQUEST_TIMEOUT?: number
   SENTRY_DSN?: string
   LOKI_URL?: string
   LOKI_TOKEN?: string

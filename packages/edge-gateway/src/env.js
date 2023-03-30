@@ -23,6 +23,7 @@ import {
  */
 export function envAll (request, env, ctx) {
   env.REQUEST_TIMEOUT = env.REQUEST_TIMEOUT || 20000
+  env.CDN_REQUEST_TIMEOUT = env.CDN_REQUEST_TIMEOUT || 60000
   env.IPFS_GATEWAY_HOSTNAME = env.GATEWAY_HOSTNAME
   env.IPNS_GATEWAY_HOSTNAME = env.GATEWAY_HOSTNAME.replace('ipfs', 'ipns')
 
