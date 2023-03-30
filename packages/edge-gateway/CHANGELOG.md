@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.11.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.10.1...edge-gateway-v1.11.0) (2023-03-30)
+
+
+### Features
+
+* add different timeout for cdn gateway requests ([#153](https://github.com/web3-storage/reads/issues/153)) ([14702af](https://github.com/web3-storage/reads/commit/14702af9e4ecf983001b984a138289ff3de9f56e))
+
+
+### Bug Fixes
+
+* denylist needs to move to other package ([#150](https://github.com/web3-storage/reads/issues/150)) ([6eb9b3f](https://github.com/web3-storage/reads/commit/6eb9b3f99bb62ba0158c417623f0e98cf9a82ee2))
+
 ## [1.10.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.10.0...edge-gateway-v1.10.1) (2023-03-13)
 
 
