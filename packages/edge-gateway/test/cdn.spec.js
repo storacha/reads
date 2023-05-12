@@ -123,6 +123,23 @@ test('Get content from cache when existing and only-if-cached cache control is p
   )
 })
 
+test('Should not get content from Perma cache if disabled', async (t) => {
+  const mf = getMiniflare({
+    PERMA_CACHE_ENABLED: 'false',
+    IPFS_GATEWAYS_RACE_L1: '[]',
+    IPFS_GATEWAYS_RACE_L2: '[]'
+  })
+
+  // bafybeic2hr75ukgwhnasdl3sucxyfedfyp3dijq3oakzx6o24urcs4eige is in Perma Cache test bucket
+  const url =
+    'https://bafybeic2hr75ukgwhnasdl3sucxyfedfyp3dijq3oakzx6o24urcs4eige.ipfs.localhost:8787/'
+
+  const response = await mf.dispatchFetch(url)
+  await response.waitUntil()
+
+  t.is(response.ok, false)
+})
+
 test('Should not get from cache if no-cache cache control header is provided', async (t) => {
   const url =
     'https://bafybeic2hr75ukgwhnasdl3sucxyfedfyp3dijq3oakzx6o24urcs4eige.ipfs.localhost:8787/'

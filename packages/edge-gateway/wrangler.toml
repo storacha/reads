@@ -37,6 +37,7 @@ DENYLIST_URL = 'https://denylist.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "false"
 CID_VERIFIER_ENABLED = "false"
+PERMA_CACHE_ENABLED = "false"
 ENV = "production"
 
 # TODO: Should point to general API in the future
@@ -94,6 +95,7 @@ DENYLIST_URL = 'https://denylist-staging.dag.haus'
 EDGE_GATEWAY_API_URL = 'https://api.nftstorage.link'
 DEBUG = "true"
 CID_VERIFIER_ENABLED = "false"
+PERMA_CACHE_ENABLED = "false"
 ENV = "staging"
 
 # TODO: Should point to general API in the future
@@ -141,4 +143,5 @@ DENYLIST_URL = 'http://denylist.localhost:8787'
 EDGE_GATEWAY_API_URL = 'http://localhost:8787'
 DEBUG = "true"
 CID_VERIFIER_ENABLED = "true"
+PERMA_CACHE_ENABLED = "true"
 ENV = "test"

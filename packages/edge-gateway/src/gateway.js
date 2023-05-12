@@ -367,6 +367,10 @@ async function getFromCacheZone (request, cache) {
  * @return {Promise<ProxiedCDNResponse | undefined>}
  */
 async function getFromPermaCache (request, env) {
+  if (!env.isPermaCacheEnabled) {
+    return undefined
+  }
+
   const response = await env.API.fetch(
     `${env.EDGE_GATEWAY_API_URL}/perma-cache/${encodeURIComponent(
       request.url

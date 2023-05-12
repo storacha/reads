@@ -17,6 +17,7 @@ export interface AnalyticsEngineEvent {
 export interface EnvInput {
   ENV: string
   DEBUG: string
+  PERMA_CACHE_ENABLED: string
   CID_VERIFIER_AUTHORIZATION_TOKEN: string
   CID_VERIFIER_ENABLED: string
   CID_VERIFIER_URL: string
@@ -58,6 +59,7 @@ export interface EnvTransformed {
   gwRacerL2: IpfsGatewayRacer
   startTime: number
   isCidVerifierEnabled: boolean
+  isPermaCacheEnabled: boolean
 }
 
 export type Env = EnvInput & EnvTransformed
