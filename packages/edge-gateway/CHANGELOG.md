@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.11.0...edge-gateway-v1.12.0) (2023-05-12)
+
+
+### Features
+
+* support perma cache fetch disabled via env var ([#154](https://github.com/web3-storage/reads/issues/154)) ([164c177](https://github.com/web3-storage/reads/commit/164c177e8e4e175d0e0608b1910b94d71240a57d))
+
 ## [1.11.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.10.1...edge-gateway-v1.11.0) (2023-03-30)
 
 
