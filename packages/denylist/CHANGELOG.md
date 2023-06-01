@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/web3-storage/reads/compare/denylist-v1.0.0...denylist-v1.0.1) (2023-06-01)
+
+
+### Bug Fixes
+
+* denylist needs to move to other package ([#150](https://github.com/web3-storage/reads/issues/150)) ([6eb9b3f](https://github.com/web3-storage/reads/commit/6eb9b3f99bb62ba0158c417623f0e98cf9a82ee2))
+* mv denylist json file ([c445df9](https://github.com/web3-storage/reads/commit/c445df9fdbcb9fd8c2f9775a86f4554c297f67b3))
+
 ## 1.0.0 (2022-12-20)
 
 
