@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.12.0...edge-gateway-v1.12.1) (2023-06-02)
+
+
+### Bug Fixes
+
+* status code when in denylist ([#160](https://github.com/web3-storage/reads/issues/160)) ([35c0123](https://github.com/web3-storage/reads/commit/35c01238c63ba1d0d6cc274258d23c82681bdbbf))
+
 ## [1.12.0](https://github.com/web3-storage/reads/compare/edge-gateway-v1.11.0...edge-gateway-v1.12.0) (2023-05-12)
 
 
