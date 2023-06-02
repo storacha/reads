@@ -1,3 +1,5 @@
+/* global Response */
+
 import {
   ACCEPTABLE_CID_VERIFIER_STATUS_CODES,
   ACCEPTABLE_DENYLIST_STATUS_CODES
@@ -16,7 +18,7 @@ export async function getCidForbiddenResponse (cid, env) {
   ])
 
   if (!ACCEPTABLE_DENYLIST_STATUS_CODES.includes(cidDenylistResponse.status)) {
-    return cidDenylistResponse
+    return new Response('', { status: 410 })
   }
 
   // cidVerifierResponse will be null if env.isCidVerifierEnabled is false.
