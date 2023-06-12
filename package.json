@@ -33,7 +33,7 @@
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.*": "standard"
+    "*.js": "standard"
   },
   "devDependencies": {
     "lint-staged": "^12.3.7",
