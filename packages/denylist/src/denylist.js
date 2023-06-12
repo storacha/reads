@@ -4,6 +4,11 @@ import { normalizeCid } from './utils/cid'
 import { getFromDenyList } from './utils/denylist'
 import { JSONResponse } from '@web3-storage/worker-utils/response'
 
+/** Time in seconds to cache the response when it IS NOT on the deny list */
+const CACHE_TIME_RESOURCE_ALLOWED = 120 // 1 hour
+/** Time in seconds to cache the response when it IS on the deny list */
+const CACHE_TIME_RESOURCE_DENIED = 60 * 60 * 24 // 1 day (we don't usualy un-deny)
+
 /**
  * Returns badbits denylist results.
  * @param {import('itty-router').Request} request
@@ -26,11 +31,19 @@ export const denylistGet = async function (request, env) {
 
   if (denyListResource) {
     try {
-      return new JSONResponse(JSON.parse(denyListResource), { status: 200 })
+      const response = new JSONResponse(JSON.parse(denyListResource), {
+        status: 200,
+        headers: { 'Cache-Control': `max-age=${CACHE_TIME_RESOURCE_DENIED}` }
+      })
+      return response
     } catch (e) {
       env.log.log(`ERROR WHILE PARSING DENYLIST FOR CID "${cid}" ${e}`, 'error')
     }
   }
 
-  return new Response('Not Found', { status: 404 })
+  const response = new Response('Not Found', {
+    status: 404,
+    headers: { 'Cache-Control': `max-age=${CACHE_TIME_RESOURCE_ALLOWED}` }
+  })
+  return response
 }

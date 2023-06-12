@@ -8,19 +8,9 @@ import { toDenyListAnchor } from '../src/utils/denylist.js'
  */
 const createTestCid = async (s) => await Hash.of(s, { cidVersion: 1 })
 
-const cidNotInDenyList = await createTestCid('not in denylist')
-const cidInDenyList = await createTestCid('asdfasdf')
-const cidInDenyListBlockedForLeganReasons = await createTestCid('blocked for legal reasons')
-
 // Create a new Miniflare environment for each test
-test.before(async (t) => {
-  const mf = getMiniflare()
-  t.context = {
-    mf
-  }
-  const denylistKv = await mf.getKVNamespace('DENYLIST')
-  await denylistKv.put(await toDenyListAnchor(cidInDenyList), JSON.stringify({ status: 410, reason: 'bad' }))
-  await denylistKv.put(await toDenyListAnchor(cidInDenyListBlockedForLeganReasons), JSON.stringify({ status: 451, reason: 'blocked for legal reasons' }))
+test.before(t => {
+  t.context.mf = getMiniflare()
 })
 
 test('GET / handles invalid cid path param', async (t) => {
@@ -32,14 +22,19 @@ test('GET / handles invalid cid path param', async (t) => {
 
 test('GET / handles no matching cid in DENYLIST', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/${cidNotInDenyList}`)
+  const cid = await createTestCid('not in denylist')
+  const response = await mf.dispatchFetch(`http://localhost:8787/${cid}`)
   t.is(await response.text(), 'Not Found')
   t.is(response.status, 404)
 })
 
 test('GET / handles cids in DENYLIST', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/${cidInDenyList}`)
+  const cid = await createTestCid('asdfasdf')
+  const denylistKv = await mf.getKVNamespace('DENYLIST')
+  await denylistKv.put(await toDenyListAnchor(cid), JSON.stringify({ status: 410, reason: 'bad' }))
+
+  const response = await mf.dispatchFetch(`http://localhost:8787/${cid}`)
   const json = await response.json()
   t.deepEqual(json, { status: 410, reason: 'bad' })
   t.is(response.status, 200)
@@ -47,7 +42,34 @@ test('GET / handles cids in DENYLIST', async (t) => {
 
 test('GET / handles cids in DENYLIST blocked for legal reasons', async (t) => {
   const { mf } = t.context
-  const response = await mf.dispatchFetch(`http://localhost:8787/${cidInDenyListBlockedForLeganReasons}`)
+  const cid = await createTestCid('blocked for legal reasons')
+  const denylistKv = await mf.getKVNamespace('DENYLIST')
+  await denylistKv.put(await toDenyListAnchor(cid), JSON.stringify({ status: 451, reason: 'blocked for legal reasons' }))
+
+  const response = await mf.dispatchFetch(`http://localhost:8787/${cid}`)
   t.deepEqual(await response.json(), { status: 451, reason: 'blocked for legal reasons' })
   t.is(response.status, 200)
+})
+
+test('GET / caches response', async (t) => {
+  const { mf } = t.context
+  const cid = await createTestCid('CID CACHE TEST')
+  const denylistKv = await mf.getKVNamespace('DENYLIST')
+  await denylistKv.put(await toDenyListAnchor(cid), JSON.stringify({ status: 410, reason: 'blocked for testing the cache' }))
+
+  const res0 = await mf.dispatchFetch(`http://localhost:8787/${cid}`, {
+    headers: { 'Cache-Control': 'only-if-cached' }
+  })
+  t.is(res0.status, 412)
+
+  const res1 = await mf.dispatchFetch(`http://localhost:8787/${cid}`)
+  t.is(res1.status, 200)
+
+  // wait for cache to be written
+  await res1.waitUntil()
+
+  const res2 = await mf.dispatchFetch(`http://localhost:8787/${cid}`, {
+    headers: { 'Cache-Control': 'only-if-cached' }
+  })
+  t.is(res2.status, 200)
 })

@@ -6,6 +6,7 @@ import { denylistGet } from './denylist.js'
 import { versionGet } from './version.js'
 
 import { addCorsHeaders, withCorsHeaders } from './cors.js'
+import { withCdnCache } from './cache.js'
 import { errorHandler } from './error-handler.js'
 import { envAll } from './env.js'
 
@@ -17,7 +18,7 @@ const router = Router()
 router
   .all('*', envAll)
   .get('/version', withCorsHeaders(versionGet))
-  .get('/:cid', withCorsHeaders(denylistGet))
+  .get('/:cid', withCdnCache(withCorsHeaders(denylistGet)))
 
 /**
  * @param {Error} error
