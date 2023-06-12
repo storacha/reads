@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import anySignal from 'any-signal'
 import pAny, { AggregateError } from 'p-any'
 import { FilterError } from 'p-some'
@@ -41,17 +42,13 @@ export class IpfsGatewayRacer {
    * @param {IpfsGatewayRaceGetOptions} [options]
    * @return {Promise<Response>}
    */
-  async get (
-    cid,
-    {
-      pathname = '',
-      search = '',
-      headers = new Headers(),
-      noAbortRequestsOnWinner = false,
-      onRaceEnd = nop,
-      gatewaySignals = {}
-    } = {}
-  ) {
+  async get (cid, options = {}) {
+    const pathname = options.pathname || ''
+    const search = options.search || ''
+    const headers = options.headers || new Headers()
+    const noAbortRequestsOnWinner = Boolean(options.noAbortRequestsOnWinner)
+    const onRaceEnd = options.onRaceEnd || nop
+    const gatewaySignals = options.gatewaySignals || {}
     const raceWinnerController = new AbortController()
     /** @type {GatewayResponsePromise[]} */
     const gatewayResponsePromises = this.ipfsGateways.map((gwUrl) =>
@@ -138,8 +135,11 @@ export async function gatewayFetch (
   gwUrl,
   cid,
   pathname,
-  { headers, timeout = 60000, search = '', signal } = {}
+  options = {}
 ) {
+  const { headers, signal } = options
+  const timeout = options.timeout || 60000
+  const search = options.search || ''
   const timeoutController = new AbortController()
   const timer = setTimeout(() => timeoutController.abort(), timeout)
 
