@@ -23,7 +23,7 @@ jobs:
           version: 7
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm build:edge-gateway
@@ -39,7 +39,7 @@ jobs:
           version: 7
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm test:edge-gateway
@@ -55,7 +55,7 @@ jobs:
           version: 7
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
           cache: 'pnpm'
       - run: pnpm install
       - name: Publish app
@@ -98,7 +98,7 @@ jobs:
           version: 7
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 16
           cache: 'pnpm'
       - run: pnpm install
       - name: Deploy
