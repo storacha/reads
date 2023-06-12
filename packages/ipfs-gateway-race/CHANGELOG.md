@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.4.1...ipfs-gateway-race-v1.5.0) (2023-06-12)
+
+
+### Features
+
+* **denylist:** edge cached responses ([#162](https://github.com/web3-storage/reads/issues/162)) ([fc8b9f2](https://github.com/web3-storage/reads/commit/fc8b9f2cf823d7433d99e49fe5e56991fbf222e0))
+
 ## [1.4.1](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.4.0...ipfs-gateway-race-v1.4.1) (2023-02-07)
 
 
