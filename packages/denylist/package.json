@@ -14,7 +14,7 @@
     "test:setup": "npm run build"
   },
   "dependencies": {
-    "@web3-storage/worker-utils": "^0.3.0-dev",
+    "@web3-storage/worker-utils": "^0.5.1-dev",
     "ipfs-core-utils": "^0.15.0",
     "itty-router": "^2.4.5",
     "multiformats": "^9.6.4",
