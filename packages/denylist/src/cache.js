@@ -19,7 +19,6 @@ export function withCdnCache (handler) {
     let response
     // Get from cache and return if existent
     /** @type {Cache} */
-    // @ts-expect-error Cloudflare Workers runtime exposes a single global cache object.
     const cache = caches.default
     const cacheKey = new Request(request.url)
     response = await cache.match(cacheKey)
