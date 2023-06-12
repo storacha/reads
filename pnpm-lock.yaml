@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -31,7 +27,7 @@ importers:
         version: 0.3.0-dev
       ipfs-core-utils:
         specifier: ^0.15.0
-        version: 0.15.1(undici@5.8.0)
+        version: 0.15.1
       itty-router:
         specifier: ^2.4.5
         version: 2.6.1
@@ -47,9 +43,6 @@ importers:
       uint8arrays:
         specifier: ^3.0.0
         version: 3.0.0
-      undici:
-        specifier: ^5.8.0
-        version: 5.8.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^3.7.1
@@ -101,7 +94,7 @@ importers:
         version: 0.3.0-dev
       ipfs-core-utils:
         specifier: ^0.15.0
-        version: 0.15.1(undici@5.20.0)
+        version: 0.15.1
       itty-router:
         specifier: ^2.4.5
         version: 2.6.1
@@ -117,9 +110,6 @@ importers:
       uint8arrays:
         specifier: ^3.0.0
         version: 3.0.0
-      undici:
-        specifier: ^5.8.0
-        version: 5.20.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^3.7.1
@@ -171,7 +161,7 @@ importers:
         version: 0.3.0-dev
       ipfs-core-utils:
         specifier: ^0.15.0
-        version: 0.15.1(undici@5.8.0)
+        version: 0.15.1
       ipfs-gateway-race:
         specifier: link:../ipfs-gateway-race
         version: link:../ipfs-gateway-race
@@ -202,9 +192,6 @@ importers:
       uint8arrays:
         specifier: ^3.0.0
         version: 3.0.0
-      undici:
-        specifier: ^5.8.0
-        version: 5.8.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^3.7.1
@@ -419,7 +406,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       espree: 9.3.2
       globals: 13.16.0
       ignore: 5.2.0
@@ -436,7 +423,7 @@ packages:
     engines: {node: '>=10.10.0'}
     dependencies:
       '@humanwhocodes/object-schema': 1.2.1
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -469,11 +456,11 @@ packages:
     dependencies:
       multiformats: 9.7.0
 
-  /@libp2p/interfaces@2.0.4(undici@5.20.0):
+  /@libp2p/interfaces@2.0.4:
     resolution: {integrity: sha512-MfwkTFyHJtvwNxkjOjzkXyIVvKFtEW2Q3IGRJPyPQMrtB6ll0rGMTlyJ3BQS1bcD0YkNhggFm+8XiU2/0LCBhQ==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      '@multiformats/multiaddr': 10.3.3(undici@5.20.0)
+      '@multiformats/multiaddr': 10.3.3
       err-code: 3.0.1
       interface-datastore: 6.1.1
       it-pushable: 2.0.2
@@ -484,40 +471,12 @@ packages:
       - undici
     dev: false
 
-  /@libp2p/interfaces@2.0.4(undici@5.8.0):
-    resolution: {integrity: sha512-MfwkTFyHJtvwNxkjOjzkXyIVvKFtEW2Q3IGRJPyPQMrtB6ll0rGMTlyJ3BQS1bcD0YkNhggFm+8XiU2/0LCBhQ==}
-    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
-    dependencies:
-      '@multiformats/multiaddr': 10.3.3(undici@5.8.0)
-      err-code: 3.0.1
-      interface-datastore: 6.1.1
-      it-pushable: 2.0.2
-      it-stream-types: 1.0.4
-      multiformats: 9.7.0
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /@libp2p/logger@1.1.6(undici@5.20.0):
+  /@libp2p/logger@1.1.6:
     resolution: {integrity: sha512-ZKoRUt7cyHlbxHYDZ1Fn3A+ByqGABdmd4z07+1TfVvpEQSpn2IVcV0mt6ff5kUUtGuVeSrqK1/ZDzWqhgg56vg==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      '@libp2p/interfaces': 2.0.4(undici@5.20.0)
-      debug: 4.3.4(supports-color@9.2.2)
-      interface-datastore: 6.1.1
-      multiformats: 9.7.0
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /@libp2p/logger@1.1.6(undici@5.8.0):
-    resolution: {integrity: sha512-ZKoRUt7cyHlbxHYDZ1Fn3A+ByqGABdmd4z07+1TfVvpEQSpn2IVcV0mt6ff5kUUtGuVeSrqK1/ZDzWqhgg56vg==}
-    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
-    dependencies:
-      '@libp2p/interfaces': 2.0.4(undici@5.8.0)
-      debug: 4.3.4(supports-color@9.2.2)
+      '@libp2p/interfaces': 2.0.4
+      debug: 4.3.4
       interface-datastore: 6.1.1
       multiformats: 9.7.0
     transitivePeerDependencies:
@@ -999,44 +958,20 @@ packages:
     resolution: {integrity: sha512-eMk0b9ReBbV23xXU693TAIrLyeO5iTgBZGSJfpqriG8UkYvr/hC9u9pyMlAakDNHWmbhMZCDs6KQO0jzKD8OTw==}
     dev: true
 
-  /@multiformats/multiaddr-to-uri@9.0.1(undici@5.20.0):
+  /@multiformats/multiaddr-to-uri@9.0.1:
     resolution: {integrity: sha512-kSyHZ2lKjoEzHu/TM4ZVwFj4AWV1B9qFBFJjYb/fK1NqrnrNb/M3uhoyckJvP7WZvpDsnEc7fUCpmPipDY6LMw==}
     dependencies:
-      '@multiformats/multiaddr': 10.3.3(undici@5.20.0)
+      '@multiformats/multiaddr': 10.3.3
     transitivePeerDependencies:
       - supports-color
       - undici
     dev: false
 
-  /@multiformats/multiaddr-to-uri@9.0.1(undici@5.8.0):
-    resolution: {integrity: sha512-kSyHZ2lKjoEzHu/TM4ZVwFj4AWV1B9qFBFJjYb/fK1NqrnrNb/M3uhoyckJvP7WZvpDsnEc7fUCpmPipDY6LMw==}
-    dependencies:
-      '@multiformats/multiaddr': 10.3.3(undici@5.8.0)
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /@multiformats/multiaddr@10.3.3(undici@5.20.0):
+  /@multiformats/multiaddr@10.3.3:
     resolution: {integrity: sha512-+LX9RovG7DJsANb+U6VchV/tApcdJzeafbi5+MPUam90oL91BbEh6ozNZOz4Qf5ZEeilexc12oomatmODJh1/w==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      dns-over-http-resolver: 2.1.0(undici@5.20.0)
-      err-code: 3.0.1
-      is-ip: 4.0.0
-      multiformats: 9.7.0
-      uint8arrays: 3.0.0
-      varint: 6.0.0
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /@multiformats/multiaddr@10.3.3(undici@5.8.0):
-    resolution: {integrity: sha512-+LX9RovG7DJsANb+U6VchV/tApcdJzeafbi5+MPUam90oL91BbEh6ozNZOz4Qf5ZEeilexc12oomatmODJh1/w==}
-    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
-    dependencies:
-      dns-over-http-resolver: 2.1.0(undici@5.8.0)
+      dns-over-http-resolver: 2.1.0
       err-code: 3.0.1
       is-ip: 4.0.0
       multiformats: 9.7.0
@@ -1387,7 +1322,7 @@ packages:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
     engines: {node: '>= 6.0.0'}
     dependencies:
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1662,7 +1597,7 @@ packages:
       concordance: 5.0.4
       convert-source-map: 1.8.0
       currently-unhandled: 0.4.1
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       del: 6.1.1
       emittery: 0.8.1
       equal-length: 1.0.1
@@ -1887,6 +1822,7 @@ packages:
     engines: {node: '>=10.16.0'}
     dependencies:
       streamsearch: 1.1.0
+    dev: true
 
   /byline@5.0.0:
     resolution: {integrity: sha512-s6webAy+R4SR8XVuJWt2V2rGvhnrhxN+9S15GNuTK3wKPOXFF6RNc+8ug2XhH+2s4f+uudG4kUVYmYOQWL2g0Q==}
@@ -2370,6 +2306,17 @@ packages:
       ms: 2.1.3
     dev: true
 
+  /debug@4.3.4:
+    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
+    engines: {node: '>=6.0'}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.2
+
   /debug@4.3.4(supports-color@9.2.2):
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
     engines: {node: '>=6.0'}
@@ -2381,6 +2328,7 @@ packages:
     dependencies:
       ms: 2.1.2
       supports-color: 9.2.2
+    dev: true
 
   /decamelize-keys@1.1.0:
     resolution: {integrity: sha512-ocLWuYzRPoS9bfiSdDd3cxvrzovVMZnRDVEzAs+hWIVXGDbHxWMECij2OBuyB/An0FFW/nLuq6Kv1i/YC5Qfzg==}
@@ -2484,7 +2432,7 @@ packages:
   /dns-over-http-resolver@1.2.3(node-fetch@3.2.6):
     resolution: {integrity: sha512-miDiVSI6KSNbi4SVifzO/reD8rMnxgrlnkrlkugOLQpWQTe2qMdHsZp5DmfKjxNE+/T3VAAYLQUZMv9SMr6+AA==}
     dependencies:
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       native-fetch: 3.0.0(node-fetch@3.2.6)
       receptacle: 1.3.2
     transitivePeerDependencies:
@@ -2492,24 +2440,12 @@ packages:
       - supports-color
     dev: true
 
-  /dns-over-http-resolver@2.1.0(undici@5.20.0):
+  /dns-over-http-resolver@2.1.0:
     resolution: {integrity: sha512-eb8RGy6k54JdD7Rjw8g65y1MyA4z3m3IIYh7uazkgZuKIdFn8gYt8dydMm3op+2UshDdk9EexrXcDluKNY/CDg==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
     dependencies:
-      debug: 4.3.4(supports-color@9.2.2)
-      native-fetch: 4.0.2(undici@5.20.0)
-      receptacle: 1.3.2
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /dns-over-http-resolver@2.1.0(undici@5.8.0):
-    resolution: {integrity: sha512-eb8RGy6k54JdD7Rjw8g65y1MyA4z3m3IIYh7uazkgZuKIdFn8gYt8dydMm3op+2UshDdk9EexrXcDluKNY/CDg==}
-    engines: {node: '>=16.0.0', npm: '>=7.0.0'}
-    dependencies:
-      debug: 4.3.4(supports-color@9.2.2)
-      native-fetch: 4.0.2(undici@5.8.0)
+      debug: 4.3.4
+      native-fetch: 4.0.2
       receptacle: 1.3.2
     transitivePeerDependencies:
       - supports-color
@@ -2527,7 +2463,7 @@ packages:
     resolution: {integrity: sha512-x1E6jxWdtoK3+ifAUWj4w5egPdTDGBpesSCErm+aKET5BnnEOvDtTP6GxcnMB1zZiv2iQ0qJZvJie+1wfIRg6Q==}
     engines: {node: '>= 8.0'}
     dependencies:
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       readable-stream: 3.6.0
       split-ca: 1.0.1
       ssh2: 1.11.0
@@ -3379,7 +3315,7 @@ packages:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
@@ -4034,7 +3970,7 @@ packages:
     engines: {node: '>= 6'}
     dependencies:
       agent-base: 6.0.2
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -4177,24 +4113,11 @@ packages:
     engines: {node: '>= 0.10'}
     dev: true
 
-  /ipfs-core-types@0.11.1(undici@5.20.0):
+  /ipfs-core-types@0.11.1:
     resolution: {integrity: sha512-K7ZSx9EPEvT4At2kExKyMCqY4Jo3Nb/VnC/iSWqFKRaqb0MTB4IJgvWrwwDuN541tn+dvUnTfOp2wWQSov1UAw==}
     dependencies:
       '@ipld/dag-pb': 2.1.17
-      '@multiformats/multiaddr': 10.3.3(undici@5.20.0)
-      interface-datastore: 6.1.1
-      ipfs-unixfs: 6.0.9
-      multiformats: 9.7.0
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /ipfs-core-types@0.11.1(undici@5.8.0):
-    resolution: {integrity: sha512-K7ZSx9EPEvT4At2kExKyMCqY4Jo3Nb/VnC/iSWqFKRaqb0MTB4IJgvWrwwDuN541tn+dvUnTfOp2wWQSov1UAw==}
-    dependencies:
-      '@ipld/dag-pb': 2.1.17
-      '@multiformats/multiaddr': 10.3.3(undici@5.8.0)
+      '@multiformats/multiaddr': 10.3.3
       interface-datastore: 6.1.1
       ipfs-unixfs: 6.0.9
       multiformats: 9.7.0
@@ -4220,7 +4143,7 @@ packages:
       any-signal: 2.1.2
       blob-to-it: 1.0.4
       browser-readablestream-to-it: 1.0.3
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       err-code: 3.0.1
       ipfs-core-types: 0.9.0(node-fetch@3.2.6)
       ipfs-unixfs: 6.0.9
@@ -4242,45 +4165,17 @@ packages:
       - supports-color
     dev: true
 
-  /ipfs-core-utils@0.15.1(undici@5.20.0):
+  /ipfs-core-utils@0.15.1:
     resolution: {integrity: sha512-nZmUiLctJWMFrEciVkKdDUO2xLpXWy7Ilt0VMJ35Y5+OJznCXxMHUQo1WUALATlo9ziHgDdHFrAUuyW0yB2rww==}
     dependencies:
-      '@libp2p/logger': 1.1.6(undici@5.20.0)
-      '@multiformats/multiaddr': 10.3.3(undici@5.20.0)
-      '@multiformats/multiaddr-to-uri': 9.0.1(undici@5.20.0)
+      '@libp2p/logger': 1.1.6
+      '@multiformats/multiaddr': 10.3.3
+      '@multiformats/multiaddr-to-uri': 9.0.1
       any-signal: 3.0.1
       blob-to-it: 1.0.4
       browser-readablestream-to-it: 1.0.3
       err-code: 3.0.1
-      ipfs-core-types: 0.11.1(undici@5.20.0)
-      ipfs-unixfs: 6.0.9
-      ipfs-utils: 9.0.7
-      it-all: 1.0.6
-      it-map: 1.0.6
-      it-peekable: 1.0.3
-      it-to-stream: 1.0.0
-      merge-options: 3.0.4
-      multiformats: 9.7.0
-      nanoid: 3.3.4
-      parse-duration: 1.0.2
-      timeout-abort-controller: 3.0.0
-      uint8arrays: 3.0.0
-    transitivePeerDependencies:
-      - supports-color
-      - undici
-    dev: false
-
-  /ipfs-core-utils@0.15.1(undici@5.8.0):
-    resolution: {integrity: sha512-nZmUiLctJWMFrEciVkKdDUO2xLpXWy7Ilt0VMJ35Y5+OJznCXxMHUQo1WUALATlo9ziHgDdHFrAUuyW0yB2rww==}
-    dependencies:
-      '@libp2p/logger': 1.1.6(undici@5.8.0)
-      '@multiformats/multiaddr': 10.3.3(undici@5.8.0)
-      '@multiformats/multiaddr-to-uri': 9.0.1(undici@5.8.0)
-      any-signal: 3.0.1
-      blob-to-it: 1.0.4
-      browser-readablestream-to-it: 1.0.3
-      err-code: 3.0.1
-      ipfs-core-types: 0.11.1(undici@5.8.0)
+      ipfs-core-types: 0.11.1
       ipfs-unixfs: 6.0.9
       ipfs-utils: 9.0.7
       it-all: 1.0.6
@@ -4307,7 +4202,7 @@ packages:
       '@ipld/dag-pb': 2.1.17
       abort-controller: 3.0.0
       any-signal: 2.1.2
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       err-code: 3.0.1
       ipfs-core-types: 0.9.0(node-fetch@3.2.6)
       ipfs-core-utils: 0.13.0(node-fetch@3.2.6)
@@ -5582,20 +5477,10 @@ packages:
       node-fetch: 3.2.6
     dev: true
 
-  /native-fetch@4.0.2(undici@5.20.0):
+  /native-fetch@4.0.2:
     resolution: {integrity: sha512-4QcVlKFtv2EYVS5MBgsGX5+NWKtbDbIECdUXDBGDMAZXq3Jkv9zf+y8iS7Ub8fEdga3GpYeazp9gauNqXHJOCg==}
     peerDependencies:
       undici: '*'
-    dependencies:
-      undici: 5.20.0
-    dev: false
-
-  /native-fetch@4.0.2(undici@5.8.0):
-    resolution: {integrity: sha512-4QcVlKFtv2EYVS5MBgsGX5+NWKtbDbIECdUXDBGDMAZXq3Jkv9zf+y8iS7Ub8fEdga3GpYeazp9gauNqXHJOCg==}
-    peerDependencies:
-      undici: '*'
-    dependencies:
-      undici: 5.8.0
     dev: false
 
   /natural-compare@1.4.0:
@@ -6334,7 +6219,7 @@ packages:
     dependencies:
       '@assemblyscript/loader': 0.9.4
       bl: 5.0.0
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       minimist: 1.2.6
       node-fetch: 2.6.7
       readable-stream: 3.6.0
@@ -7078,6 +6963,7 @@ packages:
   /streamsearch@1.1.0:
     resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
     engines: {node: '>=10.0.0'}
+    dev: true
 
   /string-argv@0.3.1:
     resolution: {integrity: sha512-a1uQGz7IyVy9YwhqjZIZu1c8JO8dNIe20xBmSS6qu9kv++k3JGzCVmprbNN5Kn+BgzD5E7YYwg1CcjuJMRNsvg==}
@@ -7243,6 +7129,7 @@ packages:
   /supports-color@9.2.2:
     resolution: {integrity: sha512-XC6g/Kgux+rJXmwokjm9ECpD6k/smUoS5LKlUCcsYr4IY3rW0XyAympon2RmxGrlnZURMpg5T18gWDP9CsHXFA==}
     engines: {node: '>=12'}
+    dev: true
 
   /supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
@@ -7295,7 +7182,7 @@ packages:
       '@types/dockerode': 3.3.9
       archiver: 5.3.1
       byline: 5.0.0
-      debug: 4.3.4(supports-color@9.2.2)
+      debug: 4.3.4
       docker-compose: 0.23.17
       dockerode: 3.3.2
       get-port: 5.1.1
@@ -7524,16 +7411,12 @@ packages:
     engines: {node: '>=12.18'}
     dependencies:
       busboy: 1.6.0
+    dev: true
 
   /undici@5.5.1:
     resolution: {integrity: sha512-MEvryPLf18HvlCbLSzCW0U00IMftKGI5udnjrQbC5D4P0Hodwffhv+iGfWuJwg16Y/TK11ZFK8i+BPVW2z/eAw==}
     engines: {node: '>=12.18'}
     dev: true
-
-  /undici@5.8.0:
-    resolution: {integrity: sha512-1F7Vtcez5w/LwH2G2tGnFIihuWUlc58YidwLiCv+jR2Z50x0tNXpRRw7eOIJ+GvqCqIkg9SB7NWAJ/T9TLfv8Q==}
-    engines: {node: '>=12.18'}
-    dev: false
 
   /unique-string@2.0.0:
     resolution: {integrity: sha512-uNaeirEPvpZWSgzwsPGtU2zVSTrn/8L5q/IexZmH0eH6SA73CmAA5U4GwORTxQAZs95TAXLNqeLoPPNO5gZfWg==}
@@ -7944,3 +7827,7 @@ packages:
       compress-commons: 4.1.1
       readable-stream: 3.6.0
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
