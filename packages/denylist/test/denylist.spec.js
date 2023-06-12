@@ -67,7 +67,6 @@ test('GET / caches response', async (t) => {
 
   // wait for cache to be written
   await res1.waitUntil()
-  await new Promise(resolve => setTimeout(resolve, 1000))
 
   const res2 = await mf.dispatchFetch(`http://localhost:8787/${cid}`, {
     headers: { 'Cache-Control': 'only-if-cached' }
