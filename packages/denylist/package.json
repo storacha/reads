@@ -1,6 +1,6 @@
 {
   "name": "denylist",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Denylist data for dotstorage reads projects",
   "private": true,
   "type": "module",
