@@ -47,3 +47,35 @@ export const denylistGet = async function (request, env) {
   })
   return response
 }
+
+/**
+ * Batch denylist check. POST an Array of cid strings.
+ * Returns the subset of the Array that are on the deny list.
+ * @param {import('itty-router').Request} request
+ * @param {import('./env').Env} env
+ */
+export async function denylistPost (request, env) {
+  if (!request.json) {
+    return new Response('Unsupported Media Type', { status: 415 })
+  }
+
+  const checklist = await request.json()
+
+  if (!Array.isArray(checklist)) {
+    return new Response('Expected an array', { status: 400, statusText: 'Bad Request' })
+  }
+
+  if (checklist.length > 1000) {
+    return new Response('Too many items. Max 1000', { status: 400, statusText: 'Bad Request' })
+  }
+
+  const body = []
+  for (const item of checklist) {
+    const res = await getFromDenyList(item, env)
+    if (res) {
+      body.push(item)
+    }
+  }
+
+  return new JSONResponse(body)
+}

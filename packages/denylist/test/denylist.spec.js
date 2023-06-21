@@ -73,3 +73,34 @@ test('GET / caches response', async (t) => {
   })
   t.is(res2.status, 200)
 })
+
+test('POST / batch', async t => {
+  const { mf } = t.context
+  const cid = await createTestCid('CID CACHE TEST')
+  const denylistKv = await mf.getKVNamespace('DENYLIST')
+  await denylistKv.put(await toDenyListAnchor(cid), JSON.stringify({ status: 410, reason: 'blocked for testing the cache' }))
+
+  const checklist = ['QmSDeYAe9mga6NdTozAZuyGL3Q1XjsLtvX28XFxJH8oPjq', cid]
+  let res = await mf.dispatchFetch('http://localhost:8787/', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(checklist)
+  })
+  t.is(res.status, 200)
+  const denylist = await res.json()
+  t.is(denylist.length, 1)
+  t.is(denylist[0], cid)
+
+  // not really cids, but we're checking that a max length limit is applied here
+  const tooLong = [...Array(1001).keys()]
+  res = await mf.dispatchFetch('http://localhost:8787/', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(tooLong)
+  })
+  t.is(res.status, 400)
+})
