@@ -59,7 +59,12 @@ export async function denylistPost (request, env) {
     return new Response('Unsupported Media Type', { status: 415 })
   }
 
-  const checklist = await request.json()
+  let checklist
+  try {
+    checklist = await request.json()
+  } catch (err) {
+    return new Response('Invalid JSON', { status: 400, statusText: 'Bad Request' })
+  }
 
   if (!Array.isArray(checklist)) {
     return new Response('Expected an array', { status: 400, statusText: 'Bad Request' })

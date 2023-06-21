@@ -103,4 +103,13 @@ test('POST / batch', async t => {
     body: JSON.stringify(tooLong)
   })
   t.is(res.status, 400)
+
+  res = await mf.dispatchFetch('http://localhost:8787/', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify(checklist).slice(0, -1)
+  })
+  t.is(res.status, 400)
 })
