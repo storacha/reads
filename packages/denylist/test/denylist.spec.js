@@ -107,9 +107,18 @@ test('POST / batch', async t => {
   res = await mf.dispatchFetch('http://localhost:8787/', {
     method: 'POST',
     headers: {
-      'content-type': 'application/json'
+      'content-type': 'application/JSON'
     },
     body: JSON.stringify(checklist).slice(0, -1)
   })
   t.is(res.status, 400)
+
+  res = await mf.dispatchFetch('http://localhost:8787/', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/jsonp'
+    },
+    body: JSON.stringify(checklist)
+  })
+  t.is(res.status, 415, 'should error when content-type not json')
 })

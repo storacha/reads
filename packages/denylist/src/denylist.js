@@ -51,12 +51,16 @@ export const denylistGet = async function (request, env) {
 /**
  * Batch denylist check. POST an Array of cid strings.
  * Returns the subset of the Array that are on the deny list.
- * @param {import('itty-router').Request} request
+ * @param {Request} request
  * @param {import('./env').Env} env
  */
 export async function denylistPost (request, env) {
-  if (!request.json) {
-    return new Response('Unsupported Media Type', { status: 415 })
+  const contentType = request.headers.get('Content-Type')
+  if (contentType) {
+    const type = contentType.split(';').at(0)?.trim().toLowerCase()
+    if (type !== 'application/json') {
+      return new Response('Unsupported Media Type', { status: 415 })
+    }
   }
 
   let checklist
