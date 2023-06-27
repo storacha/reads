@@ -2,7 +2,7 @@
 
 import { Router } from 'itty-router'
 
-import { denylistGet } from './denylist.js'
+import { denylistGet, denylistPost } from './denylist.js'
 import { versionGet } from './version.js'
 
 import { addCorsHeaders, withCorsHeaders } from './cors.js'
@@ -19,6 +19,7 @@ router
   .all('*', envAll)
   .get('/version', withCorsHeaders(versionGet))
   .get('/:cid', withCdnCache(withCorsHeaders(denylistGet)))
+  .post('/', withCorsHeaders(denylistPost))
 
 /**
  * @param {Error} error
