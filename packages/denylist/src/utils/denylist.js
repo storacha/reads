@@ -8,9 +8,8 @@ import { sha256 } from 'multiformats/hashes/sha2'
  * @param {string} cid
  */
 export async function toDenyListAnchor (cid) {
-  const multihash = await sha256.digest(uint8arrays.fromString(`${cid}/`))
-  const digest = multihash.bytes.subarray(2)
-  return uint8arrays.toString(digest, 'hex')
+  const hash = await sha256.encode(uint8arrays.fromString(`${cid}/`))
+  return uint8arrays.toString(hash, 'hex')
 }
 
 /**
@@ -22,13 +21,16 @@ export async function toDenyListAnchor (cid) {
 export async function getFromDenyList (cid, env) {
   const datastore = env.DENYLIST
   if (!datastore) {
-    throw new Error('db not ready')
+    throw new Error('DENYLIST kv binding missing')
   }
 
   const anchor = await toDenyListAnchor(cid)
   // TODO: Remove once https://github.com/nftstorage/nftstorage.link/issues/51 is fixed
   return await pRetry(
     () => datastore.get(anchor),
-    { retries: 5 }
+    {
+      retries: 5,
+      onFailedAttempt: console.log
+    }
   )
 }
