@@ -1,0 +1,39 @@
+name: Update remote denylist
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        required: true
+        description: URL of the file to use to update denylist
+        type: string
+      operation:
+        required: true
+        description: Operation to be performed in the remote denylist. Default is add
+        options: 
+          - add
+          - delete
+        default: add
+
+jobs:
+  update:
+    name: Update remote denylist
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: ['staging', 'production']
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.32.x
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'pnpm'
+      - run: pnpm install
+      - name: Run job
+        env:
+          CF_API_TOKEN: ${{ secrets.CF_GATEWAY_TOKEN }}
+        run: node packages/denylist/scripts/cli.js denylist update-remote ${{ github.event.inputs.url }} --env ${{ matrix.env }} --operation ${{ github.event.inputs.operation }}
