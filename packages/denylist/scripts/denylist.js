@@ -58,7 +58,7 @@ export async function denylistSyncCmd ({ env }) {
 }
 
 export async function denylistUpdateRemoteCmd (url, { env, reason, operation }) {
-  if (operation !== 'add' && operation !== 'del') {
+  if (operation !== 'add' && operation !== 'delete') {
     throw new Error(`operation must be one of {add, delete}. Received: ${operation}`)
   }
   const {
@@ -74,7 +74,7 @@ export async function denylistUpdateRemoteCmd (url, { env, reason, operation }) 
   }))
   console.log(`update ${bulk.length} remote denylist: ${operation}`)
   await writeKVMulti(cfApiToken, cfAccountId, denyListKv.id, bulk, {
-    delete: operation === 'del'
+    delete: operation === 'delete'
   })
   console.log('✅ Done')
 }
