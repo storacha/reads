@@ -9,10 +9,10 @@ on:
         type: string
       operation:
         required: true
-        description: Operation to be performed in the remote denylist. Default is add
+        description: Operation to be performed in the remote denylist ("add" or "del"). Default is add
         options: 
           - add
-          - delete
+          - del
         default: add
 
 jobs:

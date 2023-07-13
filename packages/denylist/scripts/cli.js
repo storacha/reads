@@ -26,7 +26,7 @@ prog
   .action(denylistAddCmd)
   .command('denylist update-remote <url>')
   .option('--env', 'Wrangler environment to use.', env)
-  .option('--operation', 'Operation to be performed in the remote denylist for items in list ("add" or "delete")', 'add')
+  .option('--operation', 'Operation to be performed in the remote denylist for items in list ("add" or "del")', 'add')
   .describe(
     'Add the content of a given file to the remote deny list.'
   )
