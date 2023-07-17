@@ -78,13 +78,21 @@ export async function denylistPost (request, env) {
     return new Response('Too many items. Max 1000', { status: 400, statusText: 'Bad Request' })
   }
 
-  const body = []
-  for (const item of checklist) {
-    const res = await getFromDenyList(item, env)
-    if (res) {
-      body.push(item)
-    }
-  }
+  const res = await Promise.allSettled(checklist.map(item => inDenylist(item, env)))
+
+  // @ts-expect-error is ok that value is undefined for errors
+  const body = res.map(p => p.value).filter(i => !!i)
 
   return new JSONResponse(body)
+}
+
+/**
+ * @param {string} item
+ * @param {import('./env').Env} env
+ */
+async function inDenylist (item, env) {
+  const res = await getFromDenyList(item, env)
+  if (res) {
+    return item
+  }
 }
