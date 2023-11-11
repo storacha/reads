@@ -66,7 +66,7 @@ export async function denylistUpdateRemoteCmd (url, { env, reason, operation }) 
   } = await getDenylistProperties({ env })
 
   const entries = await getListFromUrl(url)
-  const bulk = await Promise.all(entries.map(async entry => {
+  const bulk = await Promise.all(entries.filter(Boolean).map(async entry => {
     return {
       key: (await cidToAnchor(entry)).anchor,
       value: { reason }
