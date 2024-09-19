@@ -102,7 +102,9 @@ export async function gatewayGet (request, env, ctx) {
   // 2nd layer
   const dotstorageRes = await getFromDotstorage(request, env, cid, { pathname, search })
   if (dotstorageRes) {
-    ctx.waitUntil(putToCache(request, dotstorageRes.response, cache))
+    if (isCachable(request, dotstorageRes.response)) {
+      ctx.waitUntil(cache.put(request, dotstorageRes.response.clone()))
+    }
 
     return getResponseWithCustomHeaders(
       dotstorageRes.response,
@@ -151,8 +153,8 @@ export async function gatewayGet (request, env, ctx) {
   }
 
   // Cache response
-  if (winnerGwResponse && winnerGwResponse.ok) {
-    ctx.waitUntil(putToCache(request, winnerGwResponse, cache))
+  if (winnerGwResponse && isCachable(request, winnerGwResponse)) {
+    ctx.waitUntil(cache.put(request, winnerGwResponse.clone()))
   }
 
   return getResponseWithCustomHeaders(
@@ -391,19 +393,23 @@ async function getFromPermaCache (request, env) {
 }
 
 /**
- * Put receives response to cache.
+ * Determine if a response is cachable in the Cloudflare cache.
  *
  * @param {Request} request
  * @param {Response} response
- * @param {Cache} cache
  */
-async function putToCache (request, response, cache) {
-  const contentLengthMb = Number(response.headers.get('content-length'))
-
-  // Cache request in Cloudflare CDN if smaller than CF_CACHE_MAX_OBJECT_SIZE
-  if (contentLengthMb <= CF_CACHE_MAX_OBJECT_SIZE) {
-    await cache.put(request, response.clone())
+function isCachable (request, response) {
+  // https://developers.cloudflare.com/workers/runtime-apis/cache/#invalid-parameters
+  if (!response.ok || request.method !== 'GET' || response.status === 206 || response.headers.get('Vary') === '*') {
+    return false
   }
+
+  const contentLength = parseInt(response.headers.get('content-length') ?? '')
+  if (isNaN(contentLength) || contentLength > CF_CACHE_MAX_OBJECT_SIZE) {
+    return false
+  }
+
+  return true
 }
 
 /**
