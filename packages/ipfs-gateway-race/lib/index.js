@@ -49,7 +49,7 @@ export class IpfsGatewayRacer {
     const noAbortRequestsOnWinner = Boolean(options.noAbortRequestsOnWinner)
     const onRaceEnd = options.onRaceEnd || nop
     const gatewaySignals = options.gatewaySignals || {}
-    const raceWinnerController = new AbortController()
+    const raceControllers = Object.fromEntries(this.ipfsGateways.map(gwUrl => [gwUrl, new AbortController()]))
     /** @type {GatewayResponsePromise[]} */
     const gatewayResponsePromises = this.ipfsGateways.map((gwUrl) =>
       gatewayFetch(gwUrl, cid, pathname, {
@@ -58,8 +58,8 @@ export class IpfsGatewayRacer {
         timeout: this.timeout,
         // Combine internal race winner controller signal with custom user signal
         signal: gatewaySignals[gwUrl]
-          ? anySignal([raceWinnerController.signal, gatewaySignals[gwUrl]])
-          : raceWinnerController.signal
+          ? anySignal([raceControllers[gwUrl].signal, gatewaySignals[gwUrl]])
+          : raceControllers[gwUrl].signal
       })
     )
 
@@ -73,7 +73,12 @@ export class IpfsGatewayRacer {
 
       // Abort race contestants once race has a winner
       if (!noAbortRequestsOnWinner) {
-        raceWinnerController.abort()
+        for (const [url, controller] of Object.entries(raceControllers)) {
+          // do not abort the winner though...
+          if (url !== winnerGwResponse.url) {
+            controller.abort()
+          }
+        }
       }
 
       // We should always have a response for winner gateway

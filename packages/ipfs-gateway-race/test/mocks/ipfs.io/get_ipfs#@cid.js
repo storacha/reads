@@ -41,6 +41,7 @@ module.exports = async ({ params, headers }) => {
 
   return {
     statusCode: 500,
+    body: undefined, // smoke ignores statusCode if body is not present!
     headers: responseHeaders
   }
 }

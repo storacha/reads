@@ -50,7 +50,7 @@ Relevant details:
 
 We rely on [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist together wtth our own denylist to prevent serving malicious content to dotstorage users.
 
-When new malicious content is discovered, it should be reported to [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist given it is shared among multiple gateways. When the reported CIDs are added into badbits, we just need to force our [denylist sync workflow](https://github.com/web3-storage/reads/actions/workflows/cron-denylist.yml) to run manually.
+When new malicious content is discovered, it should be reported to [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist given it is shared among multiple gateways. When the reported CIDs are added into badbits, we just need to force our [denylist sync workflow](https://github.com/storacha/reads/actions/workflows/cron-denylist.yml) to run manually.
 
 As a workaround, or to block content only relevant for dotstorage we can simply use our denylist as described in our [CLI documentation](./scripts/README.md).
 
@@ -60,10 +60,10 @@ Metrics are collected from logs pushed into Grafana Loki, as well as using Cloud
 
 ## Contributing
 
-Feel free to join in. All welcome. [Open an issue](https://github.com/web3-storage/reads/issues)!
+Feel free to join in. All welcome. [Open an issue](https://github.com/storacha/reads/issues)!
 
-If you're opening a pull request, please see the [guidelines in DEVELOPMENT.md](https://github.com/web3-storage/reads/blob/main/DEVELOPMENT.md#how-should-i-write-my-commits) on structuring your commit messages so that your PR will be compatible with our [release process](https://github.com/web3-storage/reads/blob/main/DEVELOPMENT.md#release).
+If you're opening a pull request, please see the [guidelines in DEVELOPMENT.md](https://github.com/storacha/reads/blob/main/DEVELOPMENT.md#how-should-i-write-my-commits) on structuring your commit messages so that your PR will be compatible with our [release process](https://github.com/storacha/reads/blob/main/DEVELOPMENT.md#release).
 
 ## License
 
-Dual-licensed under [MIT + Apache 2.0](https://github.com/web3-storage/reads/blob/main/LICENSE.md)
+Dual-licensed under [MIT + Apache 2.0](https://github.com/storacha/reads/blob/main/LICENSE.md)

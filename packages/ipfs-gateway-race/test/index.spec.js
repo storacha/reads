@@ -19,7 +19,7 @@ test.before(async (t) => {
   // Add fixtures
   await addFixtures(container.getMappedPort(5001))
 
-  const gateways = [`http://127.0.0.1:${container.getMappedPort(8080)}`, 'http://localhost:9082', 'http://localhost:9083']
+  const gateways = [`http://127.0.0.1:${container.getMappedPort(8080)}`, 'http://127.0.0.1:9082', 'http://127.0.0.1:9083']
   t.context = {
     container,
     gateways,
@@ -175,7 +175,7 @@ test('A subset of gateways in the race can fail', async t => {
   t.plan(5)
   const { gwRacer } = t.context
 
-  // gateway[1] will not be able to resolve this
+  // gateway[1] and gateway[2] will not be able to resolve this
   const cid = 'bafkreifbh4or5yoti7bahifd3gwx5m2qiwmrvpxsx3nsquf7r4wwkiruve'
 
   const response = await gwRacer.get(cid, {
@@ -187,7 +187,7 @@ test('A subset of gateways in the race can fail', async t => {
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
       t.is(responses.filter(r => r.value?.response).length, gwRequests.length)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
-      t.is(responses.filter(r => r.value?.response.status === 200).length, gwRequests.length - 1)
+      t.is(responses.filter(r => r.value?.response.status === 200).length, 1)
       defer.resolve()
     },
     noAbortRequestsOnWinner: true

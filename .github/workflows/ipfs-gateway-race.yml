@@ -20,13 +20,13 @@ jobs:
     name: Typecheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
-      - uses: actions/setup-node@v2
+          version: 9
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           cache: 'pnpm'
       - run: pnpm install
       - name: Typecheck
@@ -38,13 +38,13 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
-      - uses: actions/setup-node@v2
+          version: 9
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           cache: 'pnpm'
       - run: pnpm install
       - name: Test
@@ -57,7 +57,7 @@ jobs:
     outputs:
       releases_created: ${{ steps.tag-release.outputs.releases_created }}
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3
+      - uses: googleapis/release-please-action@v4
         id: tag-release
         with:
           path: packages/ipfs-gateway-race
@@ -74,13 +74,13 @@ jobs:
       - test
       - changelog
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
+          version: 9
       - uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org/
           cache: 'pnpm'
       - run: pnpm install
