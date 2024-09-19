@@ -249,9 +249,11 @@ async function getFromDotstorage (request, env, cid, options = {}) {
       }),
       ...env.cdnGateways.map(async (host) => {
         const gwResponse = await gatewayFetch(host, cid, pathname, {
+          method: request.method,
           timeout: env.CDN_REQUEST_TIMEOUT,
           headers: request.headers,
-          search
+          search,
+          TransformStream: IdentityTransformStream
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
@@ -308,7 +310,8 @@ async function getFromGatewayRacer (cid, pathname, search, headers, env, ctx) {
             reportRaceResults(env, gatewayResponsePromises, undefined, gatewayControllers)
           )
         }
-      }
+      },
+      TransformStream: IdentityTransformStream
     })
     if (!layerOneIsWinner) {
       throw new Error('no winner in the first race')

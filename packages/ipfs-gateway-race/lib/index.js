@@ -4,6 +4,7 @@ import pAny, { AggregateError } from 'p-any'
 import { FilterError } from 'p-some'
 import pSettle from 'p-settle'
 import fetch, { Headers } from '@web-std/fetch'
+import * as UnixFSDownloader from '@storacha/unixfs-dl'
 
 import {
   NotFoundError,
@@ -15,6 +16,7 @@ import {
   ABORT_CODE,
   DEFAULT_REQUEST_TIMEOUT
 } from './constants.js'
+import { isAlternateFormatRequest, isRangeRequest } from './request.js'
 
 const nop = () => {}
 
@@ -53,13 +55,15 @@ export class IpfsGatewayRacer {
     /** @type {GatewayResponsePromise[]} */
     const gatewayResponsePromises = this.ipfsGateways.map((gwUrl) =>
       gatewayFetch(gwUrl, cid, pathname, {
+        method: options.method,
         headers,
         search,
         timeout: this.timeout,
         // Combine internal race winner controller signal with custom user signal
         signal: gatewaySignals[gwUrl]
           ? anySignal([raceControllers[gwUrl].signal, gatewaySignals[gwUrl]])
-          : raceControllers[gwUrl].signal
+          : raceControllers[gwUrl].signal,
+        TransformStream: options.TransformStream
       })
     )
 
@@ -131,10 +135,12 @@ export function createGatewayRacer (ipfsGateways, options = {}) {
  * @param {string} cid
  * @param {string} pathname
  * @param {Object} [options]
+ * @param {string} [options.method]
  * @param {Headers} [options.headers]
  * @param {string} [options.search]
  * @param {number} [options.timeout]
  * @param {AbortSignal} [options.signal]
+ * @param {typeof TransformStream} [options.TransformStream]
  */
 export async function gatewayFetch (
   gwUrl,
@@ -142,21 +148,35 @@ export async function gatewayFetch (
   pathname,
   options = {}
 ) {
-  const { headers, signal } = options
+  const method = options.method || 'GET'
+  const headers = options.headers || new Headers()
   const timeout = options.timeout || 60000
   const search = options.search || ''
   const timeoutController = new AbortController()
   const timer = setTimeout(() => timeoutController.abort(), timeout)
+  // Combine timeout signal with done signal
+  const signal = options.signal
+    ? anySignal([timeoutController.signal, options.signal])
+    : timeoutController.signal
+  const url = new URL(`ipfs/${cid}${pathname}${search}`, gwUrl)
 
   let response
   try {
-    response = await fetch(new URL(`ipfs/${cid}${pathname}${search}`, gwUrl), {
-      // Combine timeout signal with done signal
-      signal: signal
-        ? anySignal([timeoutController.signal, signal])
-        : timeoutController.signal,
-      headers
-    })
+    // If this is an atypical request, i.e. it's a HEAD request, a range request
+    // or a request for a different format to UnixFS, then just make the request
+    // to the upstream as usual.
+    if (
+      method !== 'GET' ||
+      isRangeRequest(headers) ||
+      isAlternateFormatRequest(headers, url.searchParams)
+    ) {
+      response = await fetch(url, { signal, headers })
+    } else {
+      // Otherwise use the unixfs downloader to make byte range requests
+      // upstream allowing big files to be downloaded without exhausting
+      // the upstream worker's CPU budget.
+      response = await UnixFSDownloader.fetch(url, { signal, TransformStream: options.TransformStream })
+    }
   } catch (error) {
     if (timeoutController.signal.aborted) {
       return {
