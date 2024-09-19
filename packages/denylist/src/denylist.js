@@ -5,7 +5,7 @@ import { getFromDenyList } from './utils/denylist'
 import { JSONResponse } from '@web3-storage/worker-utils/response'
 
 /** Time in seconds to cache the response when it IS NOT on the deny list */
-const CACHE_TIME_RESOURCE_ALLOWED = 120 // 1 hour
+const CACHE_TIME_RESOURCE_ALLOWED = 60 * 60 // 1 hour
 /** Time in seconds to cache the response when it IS on the deny list */
 const CACHE_TIME_RESOURCE_DENIED = 60 * 60 * 24 // 1 day (we don't usually un-deny)
 
