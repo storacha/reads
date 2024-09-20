@@ -87,7 +87,7 @@ jobs:
       - run: pnpm install
       - name: NPM Publish
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
         run: |
           cd packages/ipfs-gateway-race/dist
           npm publish --access=public

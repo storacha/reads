@@ -65,7 +65,7 @@ jobs:
           SENTRY_TOKEN: ${{secrets.SENTRY_TOKEN}}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD }}
         with:
-          apiToken: ${{secrets.CF_GATEWAY_TOKEN }}
+          apiToken: ${{secrets.CF_TOKEN }}
           workingDirectory: 'packages/edge-gateway'
           environment: 'staging'
   changelog:
@@ -109,6 +109,6 @@ jobs:
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN }}
           SENTRY_UPLOAD: ${{ secrets.SENTRY_UPLOAD }}
         with:
-          apiToken: ${{ secrets.CF_GATEWAY_TOKEN }}
+          apiToken: ${{ secrets.CF_TOKEN }}
           workingDirectory: 'packages/edge-gateway'
           environment: 'production'

@@ -35,5 +35,5 @@ jobs:
       - run: pnpm install
       - name: Run job
         env:
-          CF_API_TOKEN: ${{ secrets.CF_GATEWAY_TOKEN }}
+          CF_API_TOKEN: ${{ secrets.CF_TOKEN }}
         run: node packages/denylist/scripts/cli.js denylist update-remote ${{ toJSON(github.event.inputs.url) }} --env ${{ matrix.env }} --operation ${{ github.event.inputs.operation }}
