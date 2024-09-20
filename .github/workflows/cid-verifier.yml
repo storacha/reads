@@ -72,6 +72,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     outputs:
       releases_created: ${{ steps.tag-release.outputs.releases_created }}
     steps:
@@ -81,8 +84,6 @@ jobs:
           path: packages/cid-verifier
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
-          monorepo-tags: true
-          package-name: cid-verifier
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
