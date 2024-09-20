@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Lint
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
-      - uses: actions/setup-node@v2
+          version: 9
+      - uses: actions/setup-node@v4
       - run: pnpm install
       - run: pnpm build:denylist
       - name: Lint
@@ -30,11 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Test
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
-      - uses: actions/setup-node@v2
+          version: 9
+      - uses: actions/setup-node@v4
       - run: pnpm install
       - run: pnpm test:denylist
   deploy-staging:
@@ -43,16 +43,16 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
-      - uses: actions/setup-node@v2
+          version: 9
+      - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
       - run: pnpm install
       - name: Publish app
-        uses: cloudflare/wrangler-action@2.0.0
+        uses: cloudflare/wrangler-action@v3
         env:
           ENV: 'staging' # inform the build process what the env is
           SENTRY_TOKEN: ${{secrets.SENTRY_TOKEN}}
@@ -68,7 +68,7 @@ jobs:
     outputs:
       releases_created: ${{ steps.tag-release.outputs.releases_created }}
     steps:
-      - uses: GoogleCloudPlatform/release-please-action@v3
+      - uses: googleapis/release-please-action@v4
         id: tag-release
         with:
           path: packages/denylist
@@ -85,18 +85,18 @@ jobs:
       - test
       - changelog
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          version: 6.32.x
-      - uses: actions/setup-node@v2
+          version: 9
+      - uses: actions/setup-node@v4
         with:
           cache: 'pnpm'
-          node-version: 18
+          node-version: 20
           registry-url: 'https://registry.npmjs.org'
       - run: pnpm install
       - name: Deploy
-        uses: cloudflare/wrangler-action@2.0.0
+        uses: cloudflare/wrangler-action@v3
         env:
           ENV: 'production' # inform the build process what the env is
           SENTRY_TOKEN: ${{ secrets.SENTRY_TOKEN }}

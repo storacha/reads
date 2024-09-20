@@ -12,7 +12,7 @@
     "test": "npm run test:setup && npm-run-all -p -r mock:google-cloud.io test:worker",
     "test:worker": "ava --verbose test/*.spec.js",
     "test:setup": "npm run build",
-    "mock:google-cloud.io": "smoke -p 9111 test/mocks/google-cloud.io"
+    "mock:google-cloud.io": "smoke -h 127.0.0.1 -p 9111 test/mocks/google-cloud.io"
   },
   "dependencies": {
     "@web3-storage/worker-utils": "^0.3.0-dev",

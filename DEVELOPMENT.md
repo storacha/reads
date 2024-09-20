@@ -1,4 +1,4 @@
-# @web3-storage/reads Developer's Guide
+# @storacha/reads Developer's Guide
 
 This doc should contain everything you need to know to get a working development environment up and running. If it doesn't and you know what's missing, please open a PR or issue to update the guide!
 
