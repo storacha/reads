@@ -41,7 +41,7 @@
     "rimraf": "^3.0.2",
     "simple-git-hooks": "^2.7.0",
     "standard": "^17.0.0",
-    "wrangler": "^2.0.23"
+    "wrangler": "^3.78.6"
   },
   "engines": {
     "node": ">=20"
