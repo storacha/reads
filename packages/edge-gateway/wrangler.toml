@@ -10,7 +10,6 @@ command = "npm run build"
 
 # miniflare
 [vars]
-IPFS_GATEWAYS = "[\"http://127.0.0.1:9081\"]"
 GATEWAY_HOSTNAME = 'ipfs.localhost:8787'
 EDGE_GATEWAY_API_URL = 'http://localhost:8787'
 DEBUG = "true"
