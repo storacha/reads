@@ -1,3 +1,4 @@
+// https://developers.cloudflare.com/cache/concepts/default-cache-behavior/#cacheable-size-limits
 export const CF_CACHE_MAX_OBJECT_SIZE = 512 * Math.pow(1024, 2) // 512MB to bytes
 
 export const ACCEPTABLE_DENYLIST_STATUS_CODES = [204, 400, 404]
