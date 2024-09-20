@@ -1,4 +1,4 @@
-import fetch, { Headers } from '@web-std/fetch'
+/* eslint-env browser */
 import path from 'path'
 import toml from 'toml'
 import { CID } from 'multiformats'
@@ -195,26 +195,37 @@ async function getDenylistProperties ({ env }) {
 }
 
 async function getDenyList (url) {
-  const headers = new Headers()
-  headers.append('cache-control', 'no-cache')
-  headers.append('pragma', 'no-cache')
+  let list
+  if (url.startsWith('file://')) {
+    list = JSON.parse(await fs.promises.readFile(url.replace('file://', ''), 'utf8'))
+  } else {
+    const headers = new Headers()
+    headers.append('cache-control', 'no-cache')
+    headers.append('pragma', 'no-cache')
 
-  const res = await fetch(url, {
-    headers
-  })
-  if (!res.ok) {
-    throw new Error(`unexpected status fetching denylist.json: ${res.status}`)
+    const res = await fetch(url, {
+      headers
+    })
+    if (!res.ok) {
+      throw new Error(`unexpected status fetching denylist.json: ${res.status}`)
+    }
+    list = await res.json()
   }
-  const list = await res.json()
   return list
 }
 
 async function getWranglerToml (url) {
-  const res = await fetch(url)
-  if (!res.ok) {
-    throw new Error(`unexpected status fetching wrangler.toml: ${res.status}`)
+  let txt
+  if (url.startsWith('file://')) {
+    txt = await fs.promises.readFile(url.replace('file://', ''), 'utf8')
+  } else {
+    const res = await fetch(url)
+    if (!res.ok) {
+      throw new Error(`unexpected status fetching wrangler.toml: ${res.status}`)
+    }
+    txt = await res.text()
   }
-  return toml.parse(await res.text())
+  return toml.parse(txt)
 }
 
 /**
