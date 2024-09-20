@@ -1,6 +1,6 @@
 {
   "name": "cid-verifier",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "Verify that a CID's content is safe for the web",
   "private": true,
   "type": "module",
