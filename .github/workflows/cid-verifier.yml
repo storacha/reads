@@ -84,6 +84,7 @@ jobs:
           path: packages/cid-verifier
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
+          include-component-in-tag: true
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
     name: Release
