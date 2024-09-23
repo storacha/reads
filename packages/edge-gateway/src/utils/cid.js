@@ -1,6 +1,6 @@
 import { Multibases } from 'ipfs-core-utils/multibases'
 import { bases } from 'multiformats/basics'
-import { CID } from 'multiformats/cid'
+import { parse } from 'multiformats/link'
 import * as uint8arrays from 'uint8arrays'
 import { sha256 } from 'multiformats/hashes/sha2'
 
@@ -31,14 +31,13 @@ export async function getCidFromSubdomainUrl (url) {
 }
 
 /**
- * Parse CID and return normalized b32 v1.
+ * Parse CID and return normalized v1.
  *
  * @param {string} cid
  */
 export async function normalizeCid (cid) {
   const baseDecoder = await getMultibaseDecoder(cid)
-  const c = CID.parse(cid, baseDecoder)
-  return c.toV1().toString()
+  return parse(cid, baseDecoder).toV1()
 }
 
 /**
@@ -61,10 +60,32 @@ async function getMultibaseDecoder (cid) {
 /**
  * Get denylist anchor with badbits format.
  *
- * @param {string} cid
+ * @param {import('multiformats').UnknownLink} cid
  */
 export async function toDenyListAnchor (cid) {
   const multihash = await sha256.digest(uint8arrays.fromString(`${cid}/`))
   const digest = multihash.bytes.subarray(2)
   return uint8arrays.toString(digest, 'hex')
+}
+
+/**
+ * Extracting resource CID from etag based on
+ * https://github.com/ipfs/specs/blob/main/http-gateways/PATH_GATEWAY.md#etag-response-header
+ *
+ * @param {string} etag
+ */
+export function getCidFromEtag (etag) {
+  let resourceCid = decodeURIComponent(etag)
+
+  // Handle weak etag
+  resourceCid = resourceCid.replace('W/', '')
+  resourceCid = resourceCid.replaceAll('"', '')
+
+  // Handle directory index generated
+  if (etag.includes('DirIndex')) {
+    const split = resourceCid.split('-')
+    resourceCid = split[split.length - 1]
+  }
+
+  return parse(resourceCid)
 }

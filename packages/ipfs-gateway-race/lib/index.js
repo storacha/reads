@@ -5,7 +5,7 @@ import { FilterError } from 'p-some'
 import pSettle from 'p-settle'
 import fetch, { Headers } from '@web-std/fetch'
 import * as UnixFSDownloader from '@storacha/unixfs-dl'
-
+import * as raw from 'multiformats/codecs/raw'
 import {
   NotFoundError,
   GatewayTimeoutError,
@@ -40,7 +40,7 @@ export class IpfsGatewayRacer {
   }
 
   /**
-   * @param {string} cid
+   * @param {import('multiformats').UnknownLink} cid
    * @param {IpfsGatewayRaceGetOptions} [options]
    * @return {Promise<Response>}
    */
@@ -132,7 +132,7 @@ export function createGatewayRacer (ipfsGateways, options = {}) {
  * Fetches given CID from given IPFS gateway URL.
  *
  * @param {string} gwUrl
- * @param {string} cid
+ * @param {import('multiformats').UnknownLink} cid
  * @param {string} pathname
  * @param {Object} [options]
  * @param {string} [options.method]
@@ -162,19 +162,20 @@ export async function gatewayFetch (
 
   let response
   try {
-    // If this is an atypical request, i.e. it's a HEAD request, a range request
-    // or a request for a different format to UnixFS, then just make the request
-    // to the upstream as usual.
+    // If this is an atypical request, i.e. a HEAD request, a range request, a
+    // request for a different format to UnixFS, or if the root CID is for a raw
+    // block then just make the request to the upstream as usual.
     if (
       method !== 'GET' ||
+      cid.code === raw.code ||
       isRangeRequest(headers) ||
       isAlternateFormatRequest(headers, url.searchParams)
     ) {
       response = await fetch(url, { signal, headers })
     } else {
       // Otherwise use the unixfs downloader to make byte range requests
-      // upstream allowing big files to be downloaded without exhausting
-      // the upstream worker's CPU budget.
+      // upstream allowing big files to be downloaded without exhausting the
+      // upstream worker's CPU budget.
       response = await UnixFSDownloader.fetch(url, { signal, TransformStream: options.TransformStream })
     }
   } catch (error) {
