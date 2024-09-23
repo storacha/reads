@@ -279,8 +279,8 @@ importers:
   packages/ipfs-gateway-race:
     dependencies:
       '@storacha/unixfs-dl':
-        specifier: ^1.4.0
-        version: 1.4.0
+        specifier: ^1.5.0
+        version: 1.5.0
       '@web-std/fetch':
         specifier: ^4.1.0
         version: 4.1.0
@@ -834,8 +834,8 @@ packages:
     resolution: {integrity: sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==}
     engines: {node: '>=6'}
 
-  '@storacha/unixfs-dl@1.4.0':
-    resolution: {integrity: sha512-dp9S4j/AHxeSykfud6xmIKjdeqcw+AWK/ywWqmG6R+8hMP1VS+eGS12OyYiMEZO68pr6GlteL4tnoVRzHqMvkw==}
+  '@storacha/unixfs-dl@1.5.0':
+    resolution: {integrity: sha512-9unDTc2A5X9Dcwa/FdfKc/W5682cxoGdUfOfU4Uo10jkHI7pjt8LiKEwpUWi0Wh6LZ+9Qfhz0KkFy0fja5QX/Q==}
 
   '@szmarczak/http-timer@1.1.2':
     resolution: {integrity: sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==}
@@ -5126,7 +5126,7 @@ snapshots:
 
   '@sindresorhus/is@0.14.0': {}
 
-  '@storacha/unixfs-dl@1.4.0': {}
+  '@storacha/unixfs-dl@1.5.0': {}
 
   '@szmarczak/http-timer@1.1.2':
     dependencies:

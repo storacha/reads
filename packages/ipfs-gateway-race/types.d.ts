@@ -10,7 +10,7 @@ export interface IpfsGatewayRaceGetOptions {
   noAbortRequestsOnWinner?: boolean
   onRaceEnd?: (gatewayResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
   gatewaySignals?: Record<string, AbortSignal>
-  TransformStream?: typeof TransformStream
+  IdentityTransformStream?: typeof TransformStream
 }
 
 // Gateway Race Responses

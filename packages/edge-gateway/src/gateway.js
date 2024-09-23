@@ -254,7 +254,10 @@ async function getFromDotstorage (request, env, cid, options = {}) {
           timeout: env.CDN_REQUEST_TIMEOUT,
           headers: request.headers,
           search,
-          TransformStream: IdentityTransformStream
+          // Cloudflare's IdentityTransformStream provides a zero copy
+          // passthrough alternative to TransformStream.
+          // https://developers.cloudflare.com/workers/runtime-apis/streams/transformstream/#identitytransformstream
+          IdentityTransformStream: IdentityTransformStream
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
@@ -312,7 +315,10 @@ async function getFromGatewayRacer (cid, pathname, search, headers, env, ctx) {
           )
         }
       },
-      TransformStream: IdentityTransformStream
+      // Cloudflare's IdentityTransformStream provides a zero copy
+      // passthrough alternative to TransformStream.
+      // https://developers.cloudflare.com/workers/runtime-apis/streams/transformstream/#identitytransformstream
+      IdentityTransformStream: IdentityTransformStream
     })
     if (!layerOneIsWinner) {
       throw new Error('no winner in the first race')

@@ -63,7 +63,7 @@ export class IpfsGatewayRacer {
         signal: gatewaySignals[gwUrl]
           ? anySignal([raceControllers[gwUrl].signal, gatewaySignals[gwUrl]])
           : raceControllers[gwUrl].signal,
-        TransformStream: options.TransformStream
+        IdentityTransformStream: options.IdentityTransformStream
       })
     )
 
@@ -140,7 +140,7 @@ export function createGatewayRacer (ipfsGateways, options = {}) {
  * @param {string} [options.search]
  * @param {number} [options.timeout]
  * @param {AbortSignal} [options.signal]
- * @param {typeof TransformStream} [options.TransformStream]
+ * @param {typeof TransformStream} [options.IdentityTransformStream]
  */
 export async function gatewayFetch (
   gwUrl,
@@ -176,7 +176,7 @@ export async function gatewayFetch (
       // Otherwise use the unixfs downloader to make byte range requests
       // upstream allowing big files to be downloaded without exhausting the
       // upstream worker's CPU budget.
-      response = await UnixFSDownloader.fetch(url, { signal, TransformStream: options.TransformStream })
+      response = await UnixFSDownloader.fetch(url, { signal, headers, IdentityTransformStream: options.IdentityTransformStream })
     }
   } catch (error) {
     if (timeoutController.signal.aborted) {
