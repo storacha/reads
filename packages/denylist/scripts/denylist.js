@@ -6,6 +6,7 @@ import { base32 } from 'multiformats/bases/base32'
 import { sha256 } from 'multiformats/hashes/sha2'
 import fs from 'fs'
 import * as uint8arrays from 'uint8arrays'
+import retry from 'p-retry'
 
 /**
  * @typedef {{ id: string, title: string }} Namespace
@@ -105,24 +106,30 @@ async function writeKVMulti (apiToken, accountId, nsId, kvs, options = {}) {
   const chunkSize = 10000
   for (let i = 0; i < kvs.length; i += chunkSize) {
     const kvsChunk = kvs.slice(i, i + chunkSize)
-    const res = await fetch(url, {
-      method: isDelete ? 'DELETE' : 'PUT',
-      headers: {
-        Authorization: `Bearer ${apiToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(kvsChunk)
+    await retry(async () => {
+      const res = await fetch(url, {
+        method: isDelete ? 'DELETE' : 'PUT',
+        headers: {
+          Authorization: `Bearer ${apiToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(kvsChunk)
+      })
+      if (!res.ok) {
+        throw new Error(`unexpected status: ${res.status}`)
+      }
+      const { success, errors } = await res.json()
+      if (!success) {
+        const error = Array.isArray(errors) && errors[0]
+        throw new Error(
+          error ? `${error.code}: ${error.message}` : 'failed to write to KV'
+        )
+      }
+    }, {
+      onFailedAttempt: err => {
+        console.warn(`failed ${isDelete ? 'deleting' : 'putting'} ${kvsChunk.length} KV values`, err)
+      }
     })
-    const { success, errors } = await res.json()
-    if (!success) {
-      const error = Array.isArray(errors) && errors[0]
-      throw new Error(
-        error ? `${error.code}: ${error.message}` : 'failed to write to KV'
-      )
-    }
-
-    // Delay to avoid going into
-    await new Promise(resolve => setTimeout(() => resolve(true), 10000))
   }
 }
 
