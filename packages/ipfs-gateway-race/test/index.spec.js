@@ -7,6 +7,7 @@ import pSettle from 'p-settle'
 import * as Link from 'multiformats/link'
 import { createGatewayRacer } from '../lib/index.js'
 import { ABORT_CODE, TIMEOUT_CODE } from '../lib/constants.js'
+import { bigData } from './mocks/fixtures.js'
 
 test.before(async (t) => {
   const container = await new GenericContainer('ipfs/go-ipfs:v0.13.0')
@@ -41,6 +42,20 @@ test('Gets response from cid only', async (t) => {
   t.is(response.status, 200)
   t.is(response.headers.get('content-length'), '23')
   t.is(await response.text(), 'Hello dot.storage! 😎')
+})
+
+// Results in HEAD request, and then multiple byte-range GET requests.
+// The mock ipfs.io gateway implements this for the `bigData` CID.
+test('Gets response from cid only (big data)', async (t) => {
+  const { gwRacer } = t.context
+
+  const cid = Link.parse(bigData.cid)
+  const response = await gwRacer.get(cid)
+
+  t.assert(response)
+  t.is(response.status, 200)
+  t.is(response.headers.get('content-length'), bigData.bytes.length.toString())
+  t.is(await response.text(), new TextDecoder().decode(bigData.bytes))
 })
 
 test('Gets response from cid and pathname', async (t) => {

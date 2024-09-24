@@ -30,7 +30,7 @@
     "gateway"
   ],
   "dependencies": {
-    "@storacha/unixfs-dl": "^1.5.0",
+    "@storacha/unixfs-dl": "^1.5.1",
     "@web-std/fetch": "^4.1.0",
     "any-signal": "^3.0.1",
     "multiformats": "^13.3.0",
