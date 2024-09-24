@@ -171,7 +171,7 @@ export async function gatewayFetch (
       isRangeRequest(headers) ||
       isAlternateFormatRequest(headers, url.searchParams)
     ) {
-      response = await fetch(url, { signal, headers })
+      response = await fetch(url, { method, signal, headers })
     } else {
       // Otherwise use the unixfs downloader to make byte range requests
       // upstream allowing big files to be downloaded without exhausting the
