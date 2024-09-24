@@ -42,7 +42,7 @@ import {
  */
 
 /**
- * Handle gateway GET request.
+ * Handle gateway request.
  *
  * @param {Request} request
  * @param {Env} env
