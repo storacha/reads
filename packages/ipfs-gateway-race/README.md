@@ -20,7 +20,7 @@ const gwRacer = createGatewayRacer(
 
 ## Get
 
-Get IPFS response by given CID.
+Get a IPFS response by given CID.
 
 ```ts
 interface IpfsGatewayRaceGetOptions {
@@ -38,15 +38,11 @@ Example:
 ```js
 import { createGatewayRacer } from 'ipfs-gateway-race'
 
-const gwRacer = createGatewayRacer(
-  ['https://ipfs.io', 'https://cf-ipfs.com']
-)
+const gwRacer = createGatewayRacer(['https://ipfs.io', 'https://cf-ipfs.com'])
 
 const response = await gwRacer.get(
   'bafybeiedv7sowwxamly4oicivudp45rsfvbklnf3fvbvonxrwoxqylhtwq',
-  {
-    pathname: '/0.json'
-  }
+  { pathname: '/0.json' }
 )
 ```
 

@@ -28,7 +28,7 @@ The IPFS edge gateway for dotstorage reads pipeline. It is not "another IPFS gat
 
 The dotstorage IPFS edge gateway is serverless code running across the globe to provide exceptional performance, reliability, and scale. It is powered by Cloudflare workers running as close as possible to end users.
 
-Thanks to IPFS immutable nature, a CDN cache is an excellent fit for content retrieval as a given request URL will always return the same response.
+Thanks to the immutable nature of IPFS, a CDN cache is an excellent fit for content retrieval as a given request URL will always return the same response.
 
 Content resolution can be decoupled into different layers. In the first resolution layer, the edge gateway leverages Cloudflare [Cache API](https://developers.cloudflare.com/workers/runtime-apis/cache) and a PermaCache to look up for content previously cached in Cloudflare CDN (based on geolocation of the end user). In the event of content not being already cached, a race with multiple IPFS gateways is performed as a second resolution layer. As soon as one gateway successfully responds, its response is forwarded to the user and stored into Cloudflare Cache.
 
