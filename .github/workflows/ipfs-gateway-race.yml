@@ -66,6 +66,7 @@ jobs:
           include-component-in-tag: true
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
+          release-as: '1.6.0'
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(fromJson(needs.changelog.outputs.paths_released), 'packages/ipfs-gateway-race')
     name: Release
