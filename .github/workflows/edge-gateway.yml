@@ -86,7 +86,7 @@ jobs:
           release-type: node
           include-component-in-tag: true
   release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' &&  && contains(fromJson(needs.changelog.outputs.paths_released), 'packages/edge-gateway')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(fromJson(needs.changelog.outputs.paths_released), 'packages/edge-gateway')
     name: Release
     runs-on: ubuntu-latest
     needs:
