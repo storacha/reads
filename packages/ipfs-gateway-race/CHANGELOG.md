@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.6.0](https://github.com/storacha/reads/compare/ipfs-gateway-race-v1.5.0...ipfs-gateway-race-v1.6.0) (2024-09-25)
+
+
+### Features
+
+* use big file downloader ([#180](https://github.com/storacha/reads/issues/180)) ([57832cc](https://github.com/storacha/reads/commit/57832cccb6981a7c2dc7e0cee9046e88cd0401fa))
+
+
+### Fixes
+
+* maybe do not use path ([070abcf](https://github.com/storacha/reads/commit/070abcfe91775b86cc6a7e8280c538cb49c7ba45))
+* use bootstrap sha ([05182c6](https://github.com/storacha/reads/commit/05182c68c83e35cb4bab2969ea7a50737b1727da))
+
+
+### Other Changes
+
+* trigger release ([c05de73](https://github.com/storacha/reads/commit/c05de73d36525ce97e95650b228806435e513fe0))
+* trigger release ([3661323](https://github.com/storacha/reads/commit/3661323801a744eff7830e3cdcce41d57ca7b314))
+* update repo ([#179](https://github.com/storacha/reads/issues/179)) ([1d99326](https://github.com/storacha/reads/commit/1d99326d8d21af17460c763d5ab28fd8d3e65336))
+
 ## [1.5.0](https://github.com/web3-storage/reads/compare/ipfs-gateway-race-v1.4.1...ipfs-gateway-race-v1.5.0) (2023-06-12)
 
 
