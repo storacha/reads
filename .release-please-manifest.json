@@ -2,5 +2,5 @@
   "packages/cid-verifier": "1.2.0",
   "packages/denylist": "1.1.0",
   "packages/edge-gateway": "1.12.1",
-  "packages/ipfs-gateway-race": "1.5.0"
+  "packages/ipfs-gateway-race": "1.0.0"
 }
