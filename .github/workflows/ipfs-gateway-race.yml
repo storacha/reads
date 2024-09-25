@@ -14,7 +14,6 @@ on:
       - 'packages/ipfs-gateway-race/**'
       - '.github/workflows/ipfs-gateway-race.yml'
       - 'pnpm-lock.yaml'
-
 jobs:
   check:
     name: Typecheck

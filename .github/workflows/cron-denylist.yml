@@ -1,5 +1,4 @@
-name: Cron sync deny list
-
+name: Cron sync denylist
 on:
   schedule:
     - cron: '13 0,5,10,15,20 * * *'
@@ -9,7 +8,6 @@ on:
       - main
     paths:
       - 'packages/denylist/denylist.json'
-
 jobs:
   update:
     name: Sync deny list with KV store

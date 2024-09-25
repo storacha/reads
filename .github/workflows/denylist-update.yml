@@ -1,5 +1,4 @@
 name: Update remote denylist
-
 on:
   workflow_dispatch:
     inputs:
@@ -14,7 +13,6 @@ on:
           - add
           - delete
         default: add
-
 jobs:
   update:
     name: Update remote denylist

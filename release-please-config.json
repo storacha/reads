@@ -1,0 +1,14 @@
+{
+  "separate-pull-requests": true,
+  "changelog-sections": [
+    { "type": "feat", "section": "Features", "hidden": false },
+    { "type": "fix", "section": "Fixes", "hidden": false },
+    { "type": "chore", "section": "Other Changes", "hidden": false }
+  ],
+  "packages": {
+    "packages/cid-verifier": {},
+    "packages/denylist": {},
+    "packages/edge-gateway": {},
+    "packages/ipfs-gateway-race": {}
+  }
+}
