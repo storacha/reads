@@ -2,7 +2,7 @@
 
 ## Install
 
-```console
+```sh
 npm install ipfs-gateway-race
 ```
 

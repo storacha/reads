@@ -48,7 +48,7 @@ Relevant details:
 
 ## Deny List
 
-We rely on [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist together wtth our own denylist to prevent serving malicious content to dotstorage users.
+We rely on [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist together wtth our own denylist to prevent serving malicious content to gateway users.
 
 When new malicious content is discovered, it should be reported to [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist given it is shared among multiple gateways. When the reported CIDs are added into badbits, we just need to force our [denylist sync workflow](https://github.com/storacha/reads/actions/workflows/cron-denylist.yml) to run manually.
 
