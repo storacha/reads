@@ -1,6 +1,6 @@
 # IPFS edge gateway
 
-> The IPFS edge gateway for dotstorage reads pipeline. It is not "another IPFS gateway", but an edge layer sitting on top of existing IPFS public gateways with augmented caching capabilities.
+The IPFS edge gateway for dotstorage reads pipeline. It is not "another IPFS gateway", but an edge layer sitting on top of existing IPFS public gateways with augmented caching capabilities.
 
 ## Getting started
 

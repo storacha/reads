@@ -20,7 +20,7 @@ const gwRacer = createGatewayRacer(
 
 ## Get
 
-> Get IPFS response by given CID.
+Get IPFS response by given CID.
 
 ```ts
 interface IpfsGatewayRaceGetOptions {
