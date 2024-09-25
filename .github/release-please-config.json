@@ -9,11 +9,7 @@
   "packages": {
     "packages/cid-verifier": {},
     "packages/denylist": {},
-    "packages/edge-gateway": {
-      "release-as": "1.13.0"
-    },
-    "packages/ipfs-gateway-race": {
-      "release-as": "1.6.0"
-    }
+    "packages/edge-gateway": {},
+    "packages/ipfs-gateway-race": {}
   }
 }
