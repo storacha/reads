@@ -18,7 +18,7 @@ const gwRacer = createGatewayRacer(
 )
 ```
 
-## Get
+### Get
 
 Get a IPFS response by given CID.
 
@@ -30,7 +30,7 @@ interface IpfsGatewayRaceGetOptions {
   onRaceEnd?: (gwResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
 }
 
-get(cid: string,  options: IpfsGatewayRaceGetOptions): Promise<Response>
+get(cid: string, options: IpfsGatewayRaceGetOptions): Promise<Response>
 ```
 
 Example:

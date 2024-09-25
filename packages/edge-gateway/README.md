@@ -46,7 +46,7 @@ Relevant details:
 - Cloudflare Cache is an LRU Cache
 - This is an internal service to be used by dotstorage products. Accordingly, public traffic is blocked by a Firewall. If you are looking for a IPFS gateway to use, please use one of the dotstorage products ([nftstorage.link](nftstorage.link) or [w3s.link](w3s.link)).
 
-## Deny List
+## Deny list
 
 We rely on [badbits](https://github.com/protocol/badbits.dwebops.pub) denylist together wtth our own denylist to prevent serving malicious content to gateway users.
 
