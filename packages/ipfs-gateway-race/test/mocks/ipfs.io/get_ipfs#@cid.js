@@ -1,3 +1,5 @@
+const { bigData } = require('../fixtures.js')
+
 /**
  * https://github.com/sinedied/smoke#javascript-mocks
  */
@@ -36,6 +38,18 @@ module.exports = async ({ params, headers }) => {
         etag: cid,
         'cache-control': 'public, max-age=29030400, immutable'
       }
+    }
+  }
+
+  if (cid === bigData.cid) {
+    const [start, end] = headers.range.split('bytes=')[1].split('-').map(s => parseInt(s))
+    responseHeaders['Content-Length'] = end - start + 1
+    responseHeaders['Content-Range'] = `bytes ${start}-${end}/${bigData.bytes.length}`
+    return {
+      statusCode: 206,
+      headers: responseHeaders,
+      body: Buffer.from(bigData.bytes.slice(start, end + 1)).toString('base64'),
+      buffer: true
     }
   }
 

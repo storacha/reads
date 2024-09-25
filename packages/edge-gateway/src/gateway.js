@@ -1,5 +1,5 @@
 /* eslint-env serviceworker, browser */
-/* global Response caches */
+/* global Response caches, IdentityTransformStream */
 
 import pAny, { AggregateError } from 'p-any'
 import pDefer from 'p-defer'
@@ -9,7 +9,8 @@ import { gatewayFetch } from 'ipfs-gateway-race'
 
 import {
   getCidFromSubdomainUrl,
-  toDenyListAnchor
+  toDenyListAnchor,
+  getCidFromEtag
 } from './utils/cid.js'
 import { getHeaders } from './utils/headers.js'
 import { getCidForbiddenResponse } from './utils/verification.js'
@@ -133,7 +134,7 @@ export async function gatewayGet (request, env, ctx) {
   } = await getFromGatewayRacer(cid, pathname, search, getHeaders(request), env, ctx)
 
   // Validation layer - resource CID
-  const resourceCid = pathname !== '/' ? getCidFromEtag(winnerGwResponse.headers.get('etag') || cid) : cid
+  const resourceCid = pathname !== '/' ? getCidFromEtag(winnerGwResponse.headers.get('etag') || `"${cid}"`) : cid
   if (winnerGwResponse && pathname !== '/' && resourceCid) {
     const resourceCidForbiddenResponse = await getCidForbiddenResponse(resourceCid, env)
     if (resourceCidForbiddenResponse) {
@@ -206,7 +207,7 @@ async function getFromCdn (request, env, cache) {
 /**
  * @param {Request} request
  * @param {Env} env
- * @param {string} cid
+ * @param {import('multiformats').UnknownLink} cid
  * @param {{ pathname?: string, search?: string }} [options]
  * @return {Promise<ProxiedCDNResponse | undefined>}
  */
@@ -249,9 +250,14 @@ async function getFromDotstorage (request, env, cid, options = {}) {
       }),
       ...env.cdnGateways.map(async (host) => {
         const gwResponse = await gatewayFetch(host, cid, pathname, {
+          method: request.method,
           timeout: env.CDN_REQUEST_TIMEOUT,
           headers: request.headers,
-          search
+          search,
+          // Cloudflare's IdentityTransformStream provides a zero copy
+          // passthrough alternative to TransformStream.
+          // https://developers.cloudflare.com/workers/runtime-apis/streams/transformstream/#identitytransformstream
+          IdentityTransformStream: IdentityTransformStream
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
@@ -274,7 +280,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
 
 /**
  *
- * @param {string} cid
+ * @param {import('multiformats').UnknownLink} cid
  * @param {string} pathname
  * @param {string} search
  * @param {Headers} headers
@@ -308,7 +314,11 @@ async function getFromGatewayRacer (cid, pathname, search, headers, env, ctx) {
             reportRaceResults(env, gatewayResponsePromises, undefined, gatewayControllers)
           )
         }
-      }
+      },
+      // Cloudflare's IdentityTransformStream provides a zero copy
+      // passthrough alternative to TransformStream.
+      // https://developers.cloudflare.com/workers/runtime-apis/streams/transformstream/#identitytransformstream
+      IdentityTransformStream: IdentityTransformStream
     })
     if (!layerOneIsWinner) {
       throw new Error('no winner in the first race')
@@ -441,28 +451,6 @@ function getResponseWithCustomHeaders (
   }
 
   return clonedResponse
-}
-
-/**
- * Extracting resource CID from etag based on
- * https://github.com/ipfs/specs/blob/main/http-gateways/PATH_GATEWAY.md#etag-response-header
- *
- * @param {string} etag
- */
-function getCidFromEtag (etag) {
-  let resourceCid = decodeURIComponent(etag)
-
-  // Handle weak etag
-  resourceCid = resourceCid.replace('W/', '')
-  resourceCid = resourceCid.replaceAll('"', '')
-
-  // Handle directory index generated
-  if (etag.includes('DirIndex')) {
-    const split = resourceCid.split('-')
-    resourceCid = split[split.length - 1]
-  }
-
-  return resourceCid
 }
 
 /**

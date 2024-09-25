@@ -3,12 +3,14 @@ export interface IpfsGatewayRacerOptions {
 }
 
 export interface IpfsGatewayRaceGetOptions {
+  method?: string
   pathname?: string
   search?: string
   headers?: Headers
   noAbortRequestsOnWinner?: boolean
   onRaceEnd?: (gatewayResponsePromises: GatewayResponsePromise[], winnerResponse: GatewayResponse | undefined) => void
   gatewaySignals?: Record<string, AbortSignal>
+  IdentityTransformStream?: typeof TransformStream
 }
 
 // Gateway Race Responses

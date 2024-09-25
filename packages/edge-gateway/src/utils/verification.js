@@ -8,7 +8,7 @@ import {
 /**
  * Checks to see if denylist or cid-verifier forbid this CID from being served.
  *
- * @param {string} cid
+ * @param {import('multiformats').UnknownLink} cid
  * @param {import('../env').Env} env
  */
 export async function getCidForbiddenResponse (cid, env) {

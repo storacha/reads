@@ -174,7 +174,7 @@ importers:
         version: 0.3.0-dev
       ipfs-core-utils:
         specifier: ^0.15.0
-        version: 0.15.1(undici@5.20.0)
+        version: 0.15.1(undici@5.28.4)
       ipfs-gateway-race:
         specifier: link:../ipfs-gateway-race
         version: link:../ipfs-gateway-race
@@ -182,8 +182,8 @@ importers:
         specifier: ^2.4.5
         version: 2.6.1
       multiformats:
-        specifier: ^9.6.4
-        version: 9.7.0
+        specifier: ^13.3.0
+        version: 13.3.0
       p-any:
         specifier: ^4.0.0
         version: 4.0.0
@@ -207,7 +207,7 @@ importers:
         version: 3.0.0
       undici:
         specifier: ^5.8.0
-        version: 5.20.0
+        version: 5.28.4
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^3.7.1
@@ -241,7 +241,7 @@ importers:
         version: 3.0.2
       ipfs-http-client:
         specifier: ^60.0.1
-        version: 60.0.1(encoding@0.1.13)(undici@5.20.0)
+        version: 60.0.1(encoding@0.1.13)(undici@5.28.4)
       ipfs-utils:
         specifier: ^9.0.4
         version: 9.0.7
@@ -278,6 +278,9 @@ importers:
 
   packages/ipfs-gateway-race:
     dependencies:
+      '@storacha/unixfs-dl':
+        specifier: ^1.5.1
+        version: 1.5.1
       '@web-std/fetch':
         specifier: ^4.1.0
         version: 4.1.0
@@ -285,8 +288,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       multiformats:
-        specifier: ^9.6.4
-        version: 9.7.0
+        specifier: ^13.3.0
+        version: 13.3.0
       p-any:
         specifier: ^4.0.0
         version: 4.0.0
@@ -311,7 +314,7 @@ importers:
         version: 2.1.1
       ipfs-http-client:
         specifier: ^60.0.1
-        version: 60.0.1(encoding@0.1.13)(undici@5.20.0)
+        version: 60.0.1(encoding@0.1.13)(undici@5.28.4)
       ipfs-utils:
         specifier: ^9.0.4
         version: 9.0.7
@@ -830,6 +833,9 @@ packages:
   '@sindresorhus/is@0.14.0':
     resolution: {integrity: sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==}
     engines: {node: '>=6'}
+
+  '@storacha/unixfs-dl@1.5.1':
+    resolution: {integrity: sha512-8ezzSSRpn4slMFvlovzcGbKlcv9bcfcgseswRVBi3HdQeFQjSu/r8lBfbzo0B6BrnUYU9M5YEJ5gbI3blePxLA==}
 
   '@szmarczak/http-timer@1.1.2':
     resolution: {integrity: sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==}
@@ -4790,11 +4796,33 @@ snapshots:
       - supports-color
       - undici
 
+  '@libp2p/interfaces@2.0.4(undici@5.28.4)':
+    dependencies:
+      '@multiformats/multiaddr': 10.3.3(undici@5.28.4)
+      err-code: 3.0.1
+      interface-datastore: 6.1.1
+      it-pushable: 2.0.2
+      it-stream-types: 1.0.4
+      multiformats: 9.7.0
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
   '@libp2p/interfaces@3.3.2': {}
 
   '@libp2p/logger@1.1.6(undici@5.20.0)':
     dependencies:
       '@libp2p/interfaces': 2.0.4(undici@5.20.0)
+      debug: 4.3.4(supports-color@9.2.2)
+      interface-datastore: 6.1.1
+      multiformats: 9.7.0
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
+  '@libp2p/logger@1.1.6(undici@5.28.4)':
+    dependencies:
+      '@libp2p/interfaces': 2.0.4(undici@5.28.4)
       debug: 4.3.4(supports-color@9.2.2)
       interface-datastore: 6.1.1
       multiformats: 9.7.0
@@ -4956,6 +4984,13 @@ snapshots:
       - supports-color
       - undici
 
+  '@multiformats/multiaddr-to-uri@9.0.1(undici@5.28.4)':
+    dependencies:
+      '@multiformats/multiaddr': 10.3.3(undici@5.28.4)
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
   '@multiformats/multiaddr@10.3.3(undici@5.20.0)':
     dependencies:
       dns-over-http-resolver: 2.1.0(undici@5.20.0)
@@ -4968,10 +5003,22 @@ snapshots:
       - supports-color
       - undici
 
-  '@multiformats/multiaddr@11.6.1(undici@5.20.0)':
+  '@multiformats/multiaddr@10.3.3(undici@5.28.4)':
+    dependencies:
+      dns-over-http-resolver: 2.1.0(undici@5.28.4)
+      err-code: 3.0.1
+      is-ip: 4.0.0
+      multiformats: 9.7.0
+      uint8arrays: 3.0.0
+      varint: 6.0.0
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
+  '@multiformats/multiaddr@11.6.1(undici@5.28.4)':
     dependencies:
       '@chainsafe/is-ip': 2.0.2
-      dns-over-http-resolver: 2.1.0(undici@5.20.0)
+      dns-over-http-resolver: 2.1.0(undici@5.28.4)
       err-code: 3.0.1
       multiformats: 11.0.2
       uint8arrays: 4.0.10
@@ -5078,6 +5125,8 @@ snapshots:
       tslib: 1.14.1
 
   '@sindresorhus/is@0.14.0': {}
+
+  '@storacha/unixfs-dl@1.5.1': {}
 
   '@szmarczak/http-timer@1.1.2':
     dependencies:
@@ -5924,6 +5973,15 @@ snapshots:
     dependencies:
       debug: 4.3.4(supports-color@9.2.2)
       native-fetch: 4.0.2(undici@5.20.0)
+      receptacle: 1.3.2
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
+  dns-over-http-resolver@2.1.0(undici@5.28.4):
+    dependencies:
+      debug: 4.3.4(supports-color@9.2.2)
+      native-fetch: 4.0.2(undici@5.28.4)
       receptacle: 1.3.2
     transitivePeerDependencies:
       - supports-color
@@ -6859,14 +6917,25 @@ snapshots:
       - supports-color
       - undici
 
-  ipfs-core-types@0.14.1(undici@5.20.0):
+  ipfs-core-types@0.11.1(undici@5.28.4):
+    dependencies:
+      '@ipld/dag-pb': 2.1.17
+      '@multiformats/multiaddr': 10.3.3(undici@5.28.4)
+      interface-datastore: 6.1.1
+      ipfs-unixfs: 6.0.9
+      multiformats: 9.7.0
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
+  ipfs-core-types@0.14.1(undici@5.28.4):
     dependencies:
       '@ipld/dag-pb': 4.1.2
       '@libp2p/interface-keychain': 2.0.5
       '@libp2p/interface-peer-id': 2.0.2
       '@libp2p/interface-peer-info': 1.0.10
       '@libp2p/interface-pubsub': 3.0.7
-      '@multiformats/multiaddr': 11.6.1(undici@5.20.0)
+      '@multiformats/multiaddr': 11.6.1(undici@5.28.4)
       '@types/node': 18.0.1
       interface-datastore: 7.0.4
       ipfs-unixfs: 9.0.1
@@ -6901,16 +6970,42 @@ snapshots:
       - supports-color
       - undici
 
-  ipfs-core-utils@0.18.1(encoding@0.1.13)(undici@5.20.0):
+  ipfs-core-utils@0.15.1(undici@5.28.4):
+    dependencies:
+      '@libp2p/logger': 1.1.6(undici@5.28.4)
+      '@multiformats/multiaddr': 10.3.3(undici@5.28.4)
+      '@multiformats/multiaddr-to-uri': 9.0.1(undici@5.28.4)
+      any-signal: 3.0.1
+      blob-to-it: 1.0.4
+      browser-readablestream-to-it: 1.0.3
+      err-code: 3.0.1
+      ipfs-core-types: 0.11.1(undici@5.28.4)
+      ipfs-unixfs: 6.0.9
+      ipfs-utils: 9.0.7
+      it-all: 1.0.6
+      it-map: 1.0.6
+      it-peekable: 1.0.3
+      it-to-stream: 1.0.0
+      merge-options: 3.0.4
+      multiformats: 9.7.0
+      nanoid: 3.3.4
+      parse-duration: 1.0.2
+      timeout-abort-controller: 3.0.0
+      uint8arrays: 3.0.0
+    transitivePeerDependencies:
+      - supports-color
+      - undici
+
+  ipfs-core-utils@0.18.1(encoding@0.1.13)(undici@5.28.4):
     dependencies:
       '@libp2p/logger': 2.1.1
-      '@multiformats/multiaddr': 11.6.1(undici@5.20.0)
-      '@multiformats/multiaddr-to-uri': 9.0.1(undici@5.20.0)
+      '@multiformats/multiaddr': 11.6.1(undici@5.28.4)
+      '@multiformats/multiaddr-to-uri': 9.0.1(undici@5.28.4)
       any-signal: 3.0.1
       blob-to-it: 2.0.7
       browser-readablestream-to-it: 2.0.7
       err-code: 3.0.1
-      ipfs-core-types: 0.14.1(undici@5.20.0)
+      ipfs-core-types: 0.14.1(undici@5.28.4)
       ipfs-unixfs: 9.0.1
       ipfs-utils: 9.0.14(encoding@0.1.13)
       it-all: 2.0.1
@@ -6928,19 +7023,19 @@ snapshots:
       - supports-color
       - undici
 
-  ipfs-http-client@60.0.1(encoding@0.1.13)(undici@5.20.0):
+  ipfs-http-client@60.0.1(encoding@0.1.13)(undici@5.28.4):
     dependencies:
       '@ipld/dag-cbor': 9.2.1
       '@ipld/dag-json': 10.2.2
       '@ipld/dag-pb': 4.1.2
       '@libp2p/logger': 2.1.1
       '@libp2p/peer-id': 2.0.4
-      '@multiformats/multiaddr': 11.6.1(undici@5.20.0)
+      '@multiformats/multiaddr': 11.6.1(undici@5.28.4)
       any-signal: 3.0.1
       dag-jose: 4.0.0
       err-code: 3.0.1
-      ipfs-core-types: 0.14.1(undici@5.20.0)
-      ipfs-core-utils: 0.18.1(encoding@0.1.13)(undici@5.20.0)
+      ipfs-core-types: 0.14.1(undici@5.28.4)
+      ipfs-core-utils: 0.18.1(encoding@0.1.13)(undici@5.28.4)
       ipfs-utils: 9.0.14(encoding@0.1.13)
       it-first: 2.0.1
       it-last: 2.0.1
@@ -7719,6 +7814,10 @@ snapshots:
   native-fetch@4.0.2(undici@5.20.0):
     dependencies:
       undici: 5.20.0
+
+  native-fetch@4.0.2(undici@5.28.4):
+    dependencies:
+      undici: 5.28.4
 
   natural-compare@1.4.0: {}
 

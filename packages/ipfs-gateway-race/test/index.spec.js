@@ -4,9 +4,10 @@ import { Headers } from '@web-std/fetch'
 import { GenericContainer, Wait } from 'testcontainers'
 import pDefer from 'p-defer'
 import pSettle from 'p-settle'
-
+import * as Link from 'multiformats/link'
 import { createGatewayRacer } from '../lib/index.js'
 import { ABORT_CODE, TIMEOUT_CODE } from '../lib/constants.js'
+import { bigData } from './mocks/fixtures.js'
 
 test.before(async (t) => {
   const container = await new GenericContainer('ipfs/go-ipfs:v0.13.0')
@@ -34,7 +35,7 @@ test.after(async (t) => {
 test('Gets response from cid only', async (t) => {
   const { gwRacer } = t.context
 
-  const cid = 'bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u'
+  const cid = Link.parse('bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u')
   const response = await gwRacer.get(cid)
 
   t.assert(response)
@@ -43,10 +44,24 @@ test('Gets response from cid only', async (t) => {
   t.is(await response.text(), 'Hello dot.storage! 😎')
 })
 
+// Results in HEAD request, and then multiple byte-range GET requests.
+// The mock ipfs.io gateway implements this for the `bigData` CID.
+test('Gets response from cid only (big data)', async (t) => {
+  const { gwRacer } = t.context
+
+  const cid = Link.parse(bigData.cid)
+  const response = await gwRacer.get(cid)
+
+  t.assert(response)
+  t.is(response.status, 200)
+  t.is(response.headers.get('content-length'), bigData.bytes.length.toString())
+  t.is(await response.text(), new TextDecoder().decode(bigData.bytes))
+})
+
 test('Gets response from cid and pathname', async (t) => {
   const { gwRacer } = t.context
 
-  const cid = 'bafybeih74zqc6kamjpruyra4e4pblnwdpickrvk4hvturisbtveghflovq'
+  const cid = Link.parse('bafybeih74zqc6kamjpruyra4e4pblnwdpickrvk4hvturisbtveghflovq')
   const pathname = '/path'
   const response = await gwRacer.get(cid, { pathname })
 
@@ -69,7 +84,7 @@ test('Gets response from cid and pathname', async (t) => {
  */
 test('Gets 304 response from cid and valid if-none-match header', async (t) => {
   const { gwRacer } = t.context
-  const cid = 'bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga'
+  const cid = Link.parse('bafkreidwgoyc2f7n5vmwbcabbckwa6ejes4ujyncyq6xec5gt5nrm5hzga')
   const headers = new Headers({ 'if-none-match': `"${cid}"` })
   const response = await gwRacer.get(cid, { headers })
 
@@ -83,7 +98,7 @@ test('Aborts other race contestants once there is a winner', async (t) => {
   const defer = pDefer()
   t.plan(5)
 
-  const cid = 'bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u'
+  const cid = Link.parse('bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u')
   const response = await gwRacer.get(cid, {
     onRaceEnd: async (gwRequests, winnerGwResponse) => {
       t.assert(winnerGwResponse)
@@ -107,13 +122,13 @@ test('Disables abort of other race contestants once there is a winner', async (t
   const defer = pDefer()
   t.plan(5)
 
-  const cid = 'bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u'
+  const cid = Link.parse('bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u')
   const response = await gwRacer.get(cid, {
     onRaceEnd: async (gwRequests, winnerGwResponse) => {
       t.assert(winnerGwResponse)
       const responses = await pSettle(gwRequests)
 
-      t.is(responses.filter(r => !!r.isFulfilled).length, gwRequests.length)
+      t.is(responses.filter(r => r.isFulfilled).length, gwRequests.length)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
       t.is(responses.filter(r => r.value?.response).length, gwRequests.length)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
@@ -142,7 +157,7 @@ test('Can abort other race contestants only after all promises are resolved and 
     gatewaySignals[gateway] = abortController.signal
   })
 
-  const cid = 'bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u'
+  const cid = Link.parse('bafkreihl44bu5rqxctfvl3ahcln7gnjgmjqi7v5wfwojqwriqnq7wo4n7u')
   const response = await gwRacer.get(cid, {
     onRaceEnd: async (gwRequests, winnerGwResponse) => {
       t.assert(winnerGwResponse)
@@ -176,14 +191,14 @@ test('A subset of gateways in the race can fail', async t => {
   const { gwRacer } = t.context
 
   // gateway[1] and gateway[2] will not be able to resolve this
-  const cid = 'bafkreifbh4or5yoti7bahifd3gwx5m2qiwmrvpxsx3nsquf7r4wwkiruve'
+  const cid = Link.parse('bafkreifbh4or5yoti7bahifd3gwx5m2qiwmrvpxsx3nsquf7r4wwkiruve')
 
   const response = await gwRacer.get(cid, {
     onRaceEnd: async (gwRequests, winnerGwResponse) => {
       t.assert(winnerGwResponse)
       const responses = await pSettle(gwRequests)
 
-      t.is(responses.filter(r => !!r.isFulfilled).length, gwRequests.length)
+      t.is(responses.filter(r => r.isFulfilled).length, gwRequests.length)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
       t.is(responses.filter(r => r.value?.response).length, gwRequests.length)
       // @ts-ignore Property 'value' does not exist on type 'PromiseRejectedResult'
@@ -207,7 +222,7 @@ test('Can decrease race timeout to not have winner', async t => {
   )
 
   // gateway[1] delays 300ms before resolving this
-  const cid = 'bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr53uqu'
+  const cid = Link.parse('bafkreibehzafi6gdvlyue5lzxa3rfobvp452kylox6f4vwqpd4xbr53uqu')
 
   const error = await t.throwsAsync(async () => {
     await gwRacer.get(cid, {
