@@ -2,7 +2,7 @@
  * Determine if the request is for a specific byte range.
  * @param {Headers} headers
  */
-export const isRangeRequest = headers => headers.get('Range') != null
+export const isRangeRequest = headers => headers.get('Range') !== null
 
 /**
  * Determine if the request is for an alternative format, like an IPLD block or
