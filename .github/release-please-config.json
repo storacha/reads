@@ -1,4 +1,5 @@
 {
+  "release-type": "node",
   "separate-pull-requests": true,
   "changelog-sections": [
     { "type": "feat", "section": "Features", "hidden": false },
@@ -8,7 +9,11 @@
   "packages": {
     "packages/cid-verifier": {},
     "packages/denylist": {},
-    "packages/edge-gateway": {},
-    "packages/ipfs-gateway-race": {}
+    "packages/edge-gateway": {
+      "release-as": "1.13.0"
+    },
+    "packages/ipfs-gateway-race": {
+      "release-as": "1.6.0"
+    }
   }
 }
