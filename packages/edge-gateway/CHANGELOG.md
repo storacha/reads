@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.13.0](https://github.com/storacha/reads/compare/edge-gateway-v1.12.1...edge-gateway-v1.13.0) (2024-09-25)
+
+
+### Features
+
+* use big file downloader ([#180](https://github.com/storacha/reads/issues/180)) ([57832cc](https://github.com/storacha/reads/commit/57832cccb6981a7c2dc7e0cee9046e88cd0401fa))
+
+
+### Fixes
+
+* maybe do not use path ([070abcf](https://github.com/storacha/reads/commit/070abcfe91775b86cc6a7e8280c538cb49c7ba45))
+* org slug ([65b8494](https://github.com/storacha/reads/commit/65b849482cc02e75f3d081267bd89af7ff09a4dd))
+* remove unused env var ([177ac95](https://github.com/storacha/reads/commit/177ac95c44e61356e6658013d3359880663c8f13))
+* stricter requirements for cache ([#178](https://github.com/storacha/reads/issues/178)) ([3dc5c15](https://github.com/storacha/reads/commit/3dc5c15a5640411628431b03110d81dd68e21120))
+* use bootstrap sha ([05182c6](https://github.com/storacha/reads/commit/05182c68c83e35cb4bab2969ea7a50737b1727da))
+
+
+### Other Changes
+
+* trigger release ([c05de73](https://github.com/storacha/reads/commit/c05de73d36525ce97e95650b228806435e513fe0))
+* trigger release ([3661323](https://github.com/storacha/reads/commit/3661323801a744eff7830e3cdcce41d57ca7b314))
+* update repo ([#179](https://github.com/storacha/reads/issues/179)) ([1d99326](https://github.com/storacha/reads/commit/1d99326d8d21af17460c763d5ab28fd8d3e65336))
+
 ## [1.12.1](https://github.com/web3-storage/reads/compare/edge-gateway-v1.12.0...edge-gateway-v1.12.1) (2023-06-02)
 
 
