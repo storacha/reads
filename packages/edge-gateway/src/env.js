@@ -68,7 +68,13 @@ export function envAll (request, env, ctx) {
     branch: env.BRANCH,
     worker: 'edge-gateway',
     env: env.ENV,
-    sentry: env.sentry
+    sentry: env.sentry,
+    filterFields: (log) => {
+      const { metadata } = log
+      const { cf, ...filteredFields } = metadata
+
+      return { ...log, metadata: filteredFields }
+    }
   })
   env.log.time('request')
 }
