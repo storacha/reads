@@ -68,12 +68,7 @@ export function envAll (request, env, ctx) {
     worker: 'edge-gateway',
     env: env.ENV,
     sentry: env.sentry,
-    /**
-     *
-     * @param {import('@web3-storage/worker-utils/loki').Log} log
-     * @returns object
-     */
-    filterFields: (log) => {
+    logDataTransformer: (log) => {
       const { metadata } = log
       const { request, ...restMetadata } = metadata
 
