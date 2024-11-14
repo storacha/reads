@@ -1,10 +1,9 @@
 /* global BRANCH, VERSION, COMMITHASH, SENTRY_RELEASE */
-import Toucan from 'toucan-js'
+import { Toucan, RewriteFrames } from 'toucan-js'
 
 import { Logging } from '@web3-storage/worker-utils/loki'
 import { createGatewayRacer } from 'ipfs-gateway-race'
 
-import pkg from '../package.json'
 import {
   DEFAULT_RACE_L1_GATEWAYS,
   DEFAULT_RACE_L2_GATEWAYS,
@@ -69,11 +68,22 @@ export function envAll (request, env, ctx) {
     worker: 'edge-gateway',
     env: env.ENV,
     sentry: env.sentry,
+    /**
+     *
+     * @param {import('@web3-storage/worker-utils/loki').Log} log
+     * @returns object
+     */
     filterFields: (log) => {
       const { metadata } = log
-      const { cf, ...filteredFields } = metadata
+      const { request, ...restMetadata } = metadata
 
-      return { ...log, metadata: filteredFields }
+      // Destructure to omit the `cf` field from `request`
+      const { cf, ...filteredRequest } = request
+
+      return {
+        ...log,
+        metadata: { ...restMetadata, request: filteredRequest }
+      }
     }
   })
   env.log.time('request')
@@ -117,15 +127,13 @@ function getSentry (request, env, ctx) {
     request,
     dsn: env.SENTRY_DSN,
     context: ctx,
-    allowedHeaders: ['user-agent'],
-    allowedSearchParams: /(.*)/,
+    requestDataOptions: {
+      allowedHeaders: ['user-agent'],
+      allowedSearchParams: /(.*)/
+    },
+    integrations: [new RewriteFrames({ root: '/' })],
     debug: false,
     environment: env.ENV || 'dev',
-    rewriteFrames: {
-      // sourcemaps only work if stack filepath are absolute like `/worker.js`
-      root: '/'
-    },
-    release: env.SENTRY_RELEASE,
-    pkg
+    release: env.SENTRY_RELEASE
   })
 }
