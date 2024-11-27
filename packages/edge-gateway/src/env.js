@@ -1,9 +1,8 @@
 /* global BRANCH, VERSION, COMMITHASH, SENTRY_RELEASE */
-import Toucan from 'toucan-js'
+import { Toucan, RewriteFrames } from 'toucan-js'
 
 import { createGatewayRacer } from 'ipfs-gateway-race'
 
-import pkg from '../package.json'
 import {
   DEFAULT_RACE_L1_GATEWAYS,
   DEFAULT_RACE_L2_GATEWAYS,
@@ -96,15 +95,13 @@ function getSentry (request, env, ctx) {
     request,
     dsn: env.SENTRY_DSN,
     context: ctx,
-    allowedHeaders: ['user-agent'],
-    allowedSearchParams: /(.*)/,
+    requestDataOptions: {
+      allowedHeaders: ['user-agent'],
+      allowedSearchParams: /(.*)/
+    },
+    integrations: [new RewriteFrames({ root: '/' })],
     debug: false,
     environment: env.ENV || 'dev',
-    rewriteFrames: {
-      // sourcemaps only work if stack filepath are absolute like `/worker.js`
-      root: '/'
-    },
-    release: env.SENTRY_RELEASE,
-    pkg
+    release: env.SENTRY_RELEASE
   })
 }

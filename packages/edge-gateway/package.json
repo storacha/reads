@@ -1,6 +1,6 @@
 {
   "name": "edge-gateway",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "IPFS edge gateway for dotstorage",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
     "mock:cf-ipfs.com": "smoke -p 9083 test/mocks/cf-ipfs.com"
   },
   "dependencies": {
-    "@web3-storage/worker-utils": "^0.3.0-dev",
+    "@web3-storage/worker-utils": "^0.6.0-dev",
     "ipfs-core-utils": "^0.15.0",
     "ipfs-gateway-race": "link:../ipfs-gateway-race",
     "itty-router": "^2.4.5",
@@ -28,12 +28,12 @@
     "p-retry": "^5.0.0",
     "p-settle": "^5.0.0",
     "p-some": "^5.0.0",
-    "toucan-js": "^2.5.0",
+    "toucan-js": "^3.4.0",
     "uint8arrays": "^3.0.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.7.1",
-    "@sentry/cli": "^1.71.0",
+    "@sentry/cli": "^2.7.0",
     "@types/git-rev-sync": "^2.0.0",
     "@web-std/fetch": "^4.0.0",
     "ava": "^3.15.0",

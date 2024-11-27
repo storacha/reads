@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.13.1](https://github.com/storacha/reads/compare/edge-gateway-v1.13.0...edge-gateway-v1.13.1) (2024-11-18)
+
+
+### Fixes
+
+* trigger release ([74f1e14](https://github.com/storacha/reads/commit/74f1e1443f5eb6bb86042e126923deed5fb6d6b5))
+
 ## [1.13.0](https://github.com/storacha/reads/compare/edge-gateway-v1.12.1...edge-gateway-v1.13.0) (2024-09-25)
 
 

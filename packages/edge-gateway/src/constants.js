@@ -24,10 +24,12 @@ export const RESOLUTION_IDENTIFIERS = {
 /** @type {string[]} */
 export const DEFAULT_CDN_GATEWAYS = []
 
+/** @type {string[]} */
 export const DEFAULT_RACE_L1_GATEWAYS = [
   'https://ipfs.io'
 ]
 
+/** @type {string[]} */
 export const DEFAULT_RACE_L2_GATEWAYS = [
   'https://cf.dag.haus',
   'https://w3link.mypinata.cloud'
