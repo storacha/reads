@@ -39,13 +39,8 @@ export default {
   async fetch (request, env, ctx) {
     try {
       const res = await router.handle(request, env, ctx)
-      env.log.timeEnd('request')
-      return env.log.end(res)
+      return res
     } catch (/** @type {any} */ error) {
-      if (env.log) {
-        env.log.timeEnd('request')
-        return env.log.end(serverError(error, request, env))
-      }
       return serverError(error, request, env)
     }
   }

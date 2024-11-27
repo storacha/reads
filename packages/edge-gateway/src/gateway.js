@@ -463,7 +463,7 @@ function getResponseWithCustomHeaders (
  */
 async function reportRaceResults (env, gatewayResponsePromises, winnerUrl, gatewayControllers) {
   if (!env.PUBLIC_RACE_WINNER) {
-    env.log.warn('No bindings for PUBLIC_RACE_WINNER Analytics')
+    console.warn('No bindings for PUBLIC_RACE_WINNER Analytics')
     return
   }
 

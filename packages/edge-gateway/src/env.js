@@ -1,7 +1,6 @@
 /* global BRANCH, VERSION, COMMITHASH, SENTRY_RELEASE */
 import Toucan from 'toucan-js'
 
-import { Logging } from '@web3-storage/worker-utils/loki'
 import { createGatewayRacer } from 'ipfs-gateway-race'
 
 import pkg from '../package.json'
@@ -57,20 +56,6 @@ export function envAll (request, env, ctx) {
 
   env.isCidVerifierEnabled = env.CID_VERIFIER_ENABLED === 'true'
   env.isPermaCacheEnabled = env.PERMA_CACHE_ENABLED === 'true'
-
-  env.log = new Logging(request, ctx, {
-    // @ts-ignore TODO: url should be optional together with token
-    url: env.LOKI_URL,
-    token: env.LOKI_TOKEN,
-    debug: Boolean(env.DEBUG),
-    version: env.VERSION,
-    commit: env.COMMITHASH,
-    branch: env.BRANCH,
-    worker: 'edge-gateway',
-    env: env.ENV,
-    sentry: env.sentry
-  })
-  env.log.time('request')
 }
 
 /**
@@ -88,7 +73,7 @@ function parseGatewayUrls (input, defaultValue, env) {
     }
     list.forEach(gwUrl => new URL(gwUrl))
   } catch (err) {
-    env.log && env.log.warn(`Invalid JSON string with race Gateways: ${input}`)
+    console.warn(`Invalid JSON string with race Gateways: ${input}`)
     list = defaultValue
   }
 
