@@ -38,8 +38,7 @@ export default {
    */
   async fetch (request, env, ctx) {
     try {
-      const res = await router.handle(request, env, ctx)
-      return res
+      return await router.handle(request, env, ctx)
     } catch (/** @type {any} */ error) {
       return serverError(error, request, env)
     }
