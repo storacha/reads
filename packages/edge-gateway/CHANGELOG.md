@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.14.0](https://github.com/storacha/reads/compare/edge-gateway-v1.13.1...edge-gateway-v1.14.0) (2024-12-02)
+
+
+### Features
+
+* remove Loki logging ([#199](https://github.com/storacha/reads/issues/199)) ([f188985](https://github.com/storacha/reads/commit/f18898558db4ab1150b5cb069ba412b8c1eaa975))
+
 ## [1.13.1](https://github.com/storacha/reads/compare/edge-gateway-v1.13.0...edge-gateway-v1.13.1) (2024-11-18)
 
 
