@@ -257,7 +257,7 @@ async function getFromDotstorage (request, env, cid, options = {}) {
           // Cloudflare's IdentityTransformStream provides a zero copy
           // passthrough alternative to TransformStream.
           // https://developers.cloudflare.com/workers/runtime-apis/streams/transformstream/#identitytransformstream
-          IdentityTransformStream: IdentityTransformStream
+          IdentityTransformStream
         })
 
         // @ts-ignore 'response' does not exist on type 'GatewayResponseFailure'
@@ -318,7 +318,7 @@ async function getFromGatewayRacer (cid, pathname, search, headers, env, ctx) {
       // Cloudflare's IdentityTransformStream provides a zero copy
       // passthrough alternative to TransformStream.
       // https://developers.cloudflare.com/workers/runtime-apis/streams/transformstream/#identitytransformstream
-      IdentityTransformStream: IdentityTransformStream
+      IdentityTransformStream
     })
     if (!layerOneIsWinner) {
       throw new Error('no winner in the first race')
