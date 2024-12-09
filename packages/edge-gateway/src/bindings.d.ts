@@ -29,6 +29,7 @@ export interface EnvInput {
   IPFS_GATEWAYS_RACE_L1: string
   IPFS_GATEWAYS_RACE_L2: string
   GATEWAY_HOSTNAME: string
+  UCANTO_SERVER_URL: string
   EDGE_GATEWAY_API_URL: string
   REQUEST_TIMEOUT?: number
   CDN_REQUEST_TIMEOUT?: number

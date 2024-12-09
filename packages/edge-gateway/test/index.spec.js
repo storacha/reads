@@ -1,6 +1,6 @@
 import { base32 } from 'multiformats/bases/base32'
 import { base16 } from 'multiformats/bases/base16'
-
+import http from 'node:http'
 import { test, getMiniflare } from './utils/setup.js'
 import { addFixtures } from './utils/fixtures.js'
 import { GenericContainer, Wait } from 'testcontainers'
@@ -8,6 +8,17 @@ import { GenericContainer, Wait } from 'testcontainers'
 import { createErrorHtmlContent } from '../src/errors.js'
 
 test.before(async (t) => {
+  const ucantoServer = http.createServer((req, res) => {
+    if (req.method === 'POST') {
+      res.setHeader('X-Proxied-By', 'TestUcantoServer')
+      res.end()
+    } else {
+      res.statusCode = 405
+      res.end('Method Not Allowed')
+    }
+  })
+  await new Promise(resolve => ucantoServer.listen(8000, () => resolve(undefined)))
+
   const container = await new GenericContainer('ipfs/go-ipfs:v0.13.0')
     .withExposedPorts(
       {
@@ -191,4 +202,14 @@ test('Gets 304 response from upstream when if-none-match request header sent wit
   t.not(response.headers.get('x-dotstorage-resolution-id'), 'if-none-match')
   const body = await response.text()
   t.is(body, '')
+})
+
+test('Proxies POST requests to the UCANTO Server', async t => {
+  const res = await t.context.mf.dispatchFetch('http://localhost:8787', {
+    method: 'POST',
+    body: JSON.stringify({ key: 'value' })
+  })
+
+  t.is(res.headers.get('X-Proxied-By'), 'TestUcantoServer')
+  t.true(res.ok)
 })

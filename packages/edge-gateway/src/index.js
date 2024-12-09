@@ -16,6 +16,7 @@ const router = Router()
 
 router
   .all('*', envAll)
+  .post('*', withCorsHeaders(proxyPostRequest))
   .get('/version', withCorsHeaders(versionGet))
   .get('*', withCorsHeaders(gatewayGet))
   .head('*', withCorsHeaders(gatewayGet))
@@ -27,6 +28,21 @@ router
  */
 function serverError (error, request, env) {
   return addCorsHeaders(request, errorHandler(error, env))
+}
+
+/**
+ * Proxy POST requests to the UCANTO Server defined in the environment.
+ *
+ * @param {Request} request
+ * @param {import('./env').Env} env
+ * @returns {Promise<Response>}
+ */
+async function proxyPostRequest (request, env) {
+  const originRequest = new Request(request)
+  const url = new URL(request.url)
+  const targetUrl = `${env.UCANTO_SERVER_URL}${url.pathname}`
+  const response = await fetch(targetUrl, originRequest)
+  return response
 }
 
 export default {
