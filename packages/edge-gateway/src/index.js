@@ -5,7 +5,7 @@ import { Router } from 'itty-router'
 import { gatewayGet } from './gateway.js'
 import { versionGet } from './version.js'
 
-import { addCorsHeaders, withCorsHeaders } from './cors.js'
+import { addCorsHeaders, withCorsHeaders, corsPreflightRequest } from './cors.js'
 import { errorHandler } from './error-handler.js'
 import { envAll } from './env.js'
 
@@ -16,6 +16,7 @@ const router = Router()
 
 router
   .all('*', envAll)
+  .options('*', corsPreflightRequest)
   .get('/version', withCorsHeaders(versionGet))
   .get('*', withCorsHeaders(gatewayGet))
   .head('*', withCorsHeaders(gatewayGet))
