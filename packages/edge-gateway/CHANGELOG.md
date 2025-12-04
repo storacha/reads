@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.15.0](https://github.com/storacha/reads/compare/edge-gateway-v1.14.0...edge-gateway-v1.15.0) (2025-12-04)
+
+
+### Features
+
+* proxy DID document ([8c62914](https://github.com/storacha/reads/commit/8c629147814e3ebde68b58ffb8e0315188855c31))
+
 ## [1.14.0](https://github.com/storacha/reads/compare/edge-gateway-v1.13.1...edge-gateway-v1.14.0) (2024-12-02)
 
 
