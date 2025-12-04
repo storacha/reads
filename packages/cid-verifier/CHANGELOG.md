@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.1](https://github.com/storacha/reads/compare/cid-verifier-v1.2.0...cid-verifier-v1.2.1) (2025-12-04)
+
+
+### Fixes
+
+* org slug ([65b8494](https://github.com/storacha/reads/commit/65b849482cc02e75f3d081267bd89af7ff09a4dd))
+* uniform response for malicious content ([#110](https://github.com/storacha/reads/issues/110)) ([762982a](https://github.com/storacha/reads/commit/762982a4b8539eaf0a102589e626412fff62b6b0))
+
+
+### Other Changes
+
+* update repo ([#179](https://github.com/storacha/reads/issues/179)) ([1d99326](https://github.com/storacha/reads/commit/1d99326d8d21af17460c763d5ab28fd8d3e65336))
+
 ## [1.2.0](https://github.com/web3-storage/reads/compare/cid-verifier-v1.1.0...cid-verifier-v1.2.0) (2022-12-20)
 
 
